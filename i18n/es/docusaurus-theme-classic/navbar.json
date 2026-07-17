@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Openbeehive",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Openbeehive",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Docs": {
+    "message": "Documentación",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.Open app": {
+    "message": "Abrir aplicación",
+    "description": "Navbar item with label Open app"
+  },
+  "item.label.Website": {
+    "message": "Sitio web",
+    "description": "Navbar item with label Website"
+  }
+}
