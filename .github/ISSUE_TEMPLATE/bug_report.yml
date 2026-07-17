@@ -1,0 +1,25 @@
+name: 🐛 Docs issue
+description: Report an error, gap, or confusing section in the documentation.
+labels: ["documentation", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's wrong or missing?
+      description: Describe the error, outdated info, or unclear explanation.
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Affected page
+      placeholder: "e.g. https://docs.openbeehive.org/self-hosting/docker"
+  - type: input
+    id: version
+    attributes:
+      label: Docs version
+      placeholder: "e.g. 0.1.0 or Next"
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix

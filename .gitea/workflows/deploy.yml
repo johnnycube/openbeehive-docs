@@ -1,0 +1,68 @@
+# Gitea Actions — build the docs on every branch and PR, deploy on release tags.
+# The Docusaurus build is the sanity check (onBrokenLinks: 'throw' fails the
+# build on dead internal links). Deployment runs ONLY when a v* tag (e.g.
+# v0.1.0, always tagged on main) is pushed and uploads the static build to
+# the web host (docs.openbeehive.org).
+#
+# Secrets needed (Settings → Actions → Secrets):
+#   DEPLOY_SSH_PASSWORD, DEPLOY_SSH_HOST, DEPLOY_SSH_USER, DEPLOY_PATH
+#   (DEPLOY_PATH is the absolute remote directory to rsync into, with a
+#    trailing slash, e.g. /www/htdocs/<account>/docs.openbeehive.org/)
+
+name: Check and deploy
+
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build docs
+        # onBrokenLinks: 'throw' makes this fail on dead internal links.
+        run: npm run build
+
+      - name: Install rsync + sshpass
+        # Deploy only on v* release tags — never from branches or PRs.
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        run: |
+          if ! command -v rsync >/dev/null || ! command -v sshpass >/dev/null; then
+            apt-get update -qq
+            apt-get install -y rsync sshpass
+          fi
+
+      - name: Upload to web host
+        # Deploy only on v* release tags — never from branches or PRs.
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        env:
+          SSHPASS: ${{ secrets.DEPLOY_SSH_PASSWORD }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          sshpass -e rsync -avz --delete \
+            --chmod=D755,F644 \
+            build/ \
+            "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH"
