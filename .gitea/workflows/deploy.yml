@@ -64,5 +64,7 @@ jobs:
           ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
           sshpass -e rsync -avz --delete \
             --chmod=D755,F644 \
+            --filter='protect /logs/' \
+            --exclude='/logs/' \
             build/ \
             "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH"
