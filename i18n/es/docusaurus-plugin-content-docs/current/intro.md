@@ -12,6 +12,7 @@ aficionados como profesionales. La aplicación lo guarda todo localmente y
 sincroniza con el servidor, de modo que funciona en el colmenar con o sin señal.
 
 - 🐝 **Usa la aplicación:** [app.openbeehive.org](https://app.openbeehive.org)
+- 🍯 **Prueba la demo:** [demo.openbeehive.org](https://demo.openbeehive.org)
 - 🌐 **Sitio del proyecto:** [openbeehive.org](https://openbeehive.org)
 - 💻 **Código fuente:** [github.com/johnnycube/openbeehive-app](https://github.com/johnnycube/openbeehive-app)
 
