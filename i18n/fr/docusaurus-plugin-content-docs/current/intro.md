@@ -13,6 +13,7 @@ tout localement et se synchronise avec le serveur, de sorte qu'elle fonctionne a
 rucher avec ou sans signal.
 
 - 🐝 **Utiliser l'application :** [app.openbeehive.org](https://app.openbeehive.org)
+- 🍯 **Essayer la démo :** [demo.openbeehive.org](https://demo.openbeehive.org)
 - 🌐 **Site du projet :** [openbeehive.org](https://openbeehive.org)
 - 💻 **Code source :** [github.com/johnnycube/openbeehive-app](https://github.com/johnnycube/openbeehive-app)
 

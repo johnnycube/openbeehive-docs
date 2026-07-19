@@ -12,6 +12,7 @@ hobbisti che professionisti. L'app memorizza tutto in locale e si sincronizza co
 il server, così funziona in apiario con o senza segnale.
 
 - 🐝 **Usa l'app:** [app.openbeehive.org](https://app.openbeehive.org)
+- 🍯 **Prova la demo:** [demo.openbeehive.org](https://demo.openbeehive.org)
 - 🌐 **Home del progetto:** [openbeehive.org](https://openbeehive.org)
 - 💻 **Codice sorgente:** [github.com/johnnycube/openbeehive-app](https://github.com/johnnycube/openbeehive-app)
 

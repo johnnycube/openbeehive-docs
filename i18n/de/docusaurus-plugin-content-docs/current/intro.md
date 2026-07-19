@@ -13,6 +13,7 @@ synchronisiert mit dem Server, sodass sie am Bienenstand mit oder ohne Signal
 funktioniert.
 
 - 🐝 **App nutzen:** [app.openbeehive.org](https://app.openbeehive.org)
+- 🍯 **Demo ausprobieren:** [demo.openbeehive.org](https://demo.openbeehive.org)
 - 🌐 **Projekt-Website:** [openbeehive.org](https://openbeehive.org)
 - 💻 **Quellcode:** [github.com/johnnycube/openbeehive-app](https://github.com/johnnycube/openbeehive-app)
 

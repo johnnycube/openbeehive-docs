@@ -12,6 +12,7 @@ alike. The app stores everything locally and syncs to the server, so it works in
 the bee yard with or without a signal.
 
 - 🐝 **Use the app:** [app.openbeehive.org](https://app.openbeehive.org)
+- 🍯 **Try the demo:** [demo.openbeehive.org](https://demo.openbeehive.org)
 - 🌐 **Project home:** [openbeehive.org](https://openbeehive.org)
 - 💻 **Source code:** [github.com/johnnycube/openbeehive-app](https://github.com/johnnycube/openbeehive-app)
 
