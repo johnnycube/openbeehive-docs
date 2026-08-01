@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Documentation content is also versioned in-site via Docusaurus (see
 `versions.json`).
 
+## [0.2.0] - 2026-08-01
+
+Documents app release 0.2.0 (offline-storage self-repair, sync resilience,
+visible save/geocoding feedback).
+
+### Added
+
+- **Using the app → Apiaries:** the map pin / address lookup and the four
+  status states shown under the map (searching, location set, no match,
+  search unavailable).
+- **Using the app → Offline & sync:** new section "If something cannot be
+  saved" — failed local writes are reported instead of failing silently, and
+  demo-account changes stay on the device because the demo server is
+  read-only.
+- **Knowledge base → Troubleshooting:** entry for the
+  `SQLITE_CANTOPEN: unable to open database file` error (storage-slot
+  exhaustion) fixed by app 0.2.0's automatic pool repair.
+- Versioned docs snapshot `0.2.0`, all five languages.
+
 ## [0.1.1] - 2026-07-19
 
 ### Added
