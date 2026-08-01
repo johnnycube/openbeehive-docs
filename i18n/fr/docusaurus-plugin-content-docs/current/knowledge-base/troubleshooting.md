@@ -43,7 +43,7 @@ Les outils de navigateur qui « effacent les données du site », « effacent le
 
 ### « unable to open database file » ou un bouton qui ne fait rien
 
-Les versions antérieures à la 0.2.0 pouvaient épuiser les emplacements réservés du stockage local ; chaque enregistrement échouait alors avec `SQLITE_CANTOPEN: unable to open database file` — visible comme un bouton qui semblait ne rien faire. Depuis la 0.2.0, l'application réserve d'emblée assez d'emplacements et répare automatiquement le stockage quand il vient à manquer. Si l'erreur persiste, rechargez l'application deux fois (pour que la nouvelle version prenne le relais) et réessayez ; les enregistrements déjà sauvegardés ne sont pas affectés.
+Les versions antérieures à la 0.2.2 pouvaient épuiser les emplacements réservés du stockage local ; chaque enregistrement échouait alors avec `SQLITE_CANTOPEN: unable to open database file` — visible comme un bouton qui semblait ne rien faire. Depuis la 0.2.2, l'application réserve d'emblée assez d'emplacements et répare automatiquement le stockage quand il vient à manquer. Si l'erreur persiste, rechargez l'application deux fois (pour que la nouvelle version prenne le relais) et réessayez ; les enregistrements déjà sauvegardés ne sont pas affectés.
 
 ## Effacer ou réinstaller l'application
 

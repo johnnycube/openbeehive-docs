@@ -43,7 +43,7 @@ Gli strumenti del browser che "cancellano i dati del sito", "cancellano cookie e
 
 ### "unable to open database file" o un pulsante che non fa nulla
 
-Le versioni dell'app precedenti alla 0.2.0 potevano esaurire gli slot riservati dell'archiviazione locale; da quel momento ogni salvataggio falliva con `SQLITE_CANTOPEN: unable to open database file` — visibile come un pulsante che sembrava non fare nulla. Dalla 0.2.0 l'app riserva in anticipo slot sufficienti e ripara automaticamente l'archiviazione quando scarseggia. Se vedi ancora questo errore, ricarica l'app due volte (così la nuova versione subentra) e riprova; i dati salvati in precedenza non sono interessati.
+Le versioni dell'app precedenti alla 0.2.2 potevano esaurire gli slot riservati dell'archiviazione locale; da quel momento ogni salvataggio falliva con `SQLITE_CANTOPEN: unable to open database file` — visibile come un pulsante che sembrava non fare nulla. Dalla 0.2.2 l'app riserva in anticipo slot sufficienti e ripara automaticamente l'archiviazione quando scarseggia. Se vedi ancora questo errore, ricarica l'app due volte (così la nuova versione subentra) e riprova; i dati salvati in precedenza non sono interessati.
 
 ## Cancellare o reinstallare l'app
 

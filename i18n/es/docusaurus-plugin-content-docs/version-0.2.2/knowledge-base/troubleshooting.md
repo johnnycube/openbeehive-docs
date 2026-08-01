@@ -43,7 +43,7 @@ Las herramientas del navegador que "borran los datos del sitio", "borran cookies
 
 ### «unable to open database file» o un botón que no hace nada
 
-Las versiones anteriores a la 0.2.0 podían agotar las ranuras reservadas del almacenamiento local; a partir de ahí cada guardado fallaba con `SQLITE_CANTOPEN: unable to open database file` — visible como un botón que parecía no hacer nada. Desde la 0.2.0 la aplicación reserva suficientes ranuras de antemano y repara el almacenamiento automáticamente cuando escasea. Si sigues viendo este error, recarga la aplicación dos veces (para que la nueva versión tome el control) e inténtalo de nuevo; los registros guardados antes no se ven afectados.
+Las versiones anteriores a la 0.2.2 podían agotar las ranuras reservadas del almacenamiento local; a partir de ahí cada guardado fallaba con `SQLITE_CANTOPEN: unable to open database file` — visible como un botón que parecía no hacer nada. Desde la 0.2.2 la aplicación reserva suficientes ranuras de antemano y repara el almacenamiento automáticamente cuando escasea. Si sigues viendo este error, recarga la aplicación dos veces (para que la nueva versión tome el control) e inténtalo de nuevo; los registros guardados antes no se ven afectados.
 
 ## Borrar o reinstalar la aplicación
 

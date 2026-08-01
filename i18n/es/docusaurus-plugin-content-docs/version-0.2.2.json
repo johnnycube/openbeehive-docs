@@ -1,54 +1,54 @@
 {
   "version.label": {
-    "message": "0.2.0",
-    "description": "The label for version 0.2.0"
+    "message": "0.2.2",
+    "description": "The label for version 0.2.2"
   },
   "sidebar.tutorialSidebar.category.Using the app": {
-    "message": "App verwenden",
+    "message": "Uso de la aplicación",
     "description": "The label for category 'Using the app' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the app.link.generated-index.description": {
-    "message": "Erfahren Sie, wie Sie Ihre Imkerei-Aufzeichnungen in Openbeehive führen — Bienenstände, Bienenstöcke, Königinnen, Durchsichten, Ernten und mehr.",
+    "message": "Aprende a llevar tus registros de apicultura en Openbeehive: colmenares, colmenas, reinas, inspecciones, cosechas y mucho más.",
     "description": "The generated-index page description for category 'Using the app' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Self-hosting": {
-    "message": "Selbst hosten",
+    "message": "Autoalojamiento",
     "description": "The label for category 'Self-hosting' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Self-hosting.link.generated-index.description": {
-    "message": "Betreiben Sie Ihre eigene Openbeehive-Instanz — von einer einzelnen Binärdatei bis hin zu einem Postgres- + MinIO-Deployment mit Docker.",
+    "message": "Ejecuta tu propia instancia de Openbeehive: desde un único binario hasta un despliegue con Postgres + MinIO mediante Docker.",
     "description": "The generated-index page description for category 'Self-hosting' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Beekeeping basics": {
-    "message": "Imkerei-Grundlagen",
+    "message": "Conceptos básicos de apicultura",
     "description": "The label for category 'Beekeeping basics' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Beekeeping basics.link.generated-index.description": {
-    "message": "Eine praktische Einführung in die Bienenhaltung — das Volk, das Imkerjahr, Durchsichten, Schwärmen, Varroa und die Honigernte.",
+    "message": "Una introducción práctica a la cría de abejas: la colonia, el año apícola, las inspecciones, la enjambrazón, la varroa y la cosecha de miel.",
     "description": "The generated-index page description for category 'Beekeeping basics' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Knowledge base": {
-    "message": "Wissensdatenbank",
+    "message": "Base de conocimientos",
     "description": "The label for category 'Knowledge base' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Knowledge base.link.generated-index.description": {
-    "message": "Referenzmaterial: Glossar, Beutentypen, Königinnen-Markierungsfarben, Krankheiten und Schädlinge, FAQs und Fehlerbehebung.",
+    "message": "Material de referencia: glosario, tipos de colmena, colores de marcado de reinas, enfermedades y plagas, preguntas frecuentes y resolución de problemas.",
     "description": "The generated-index page description for category 'Knowledge base' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Developers": {
-    "message": "Entwickler",
+    "message": "Desarrolladores",
     "description": "The label for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Developers.link.generated-index.description": {
-    "message": "Architektur und Interna — das Offline-First-Synchronisationsmodell, das Event-/Verlaufsdesign und QR-Deeplinks.",
+    "message": "Arquitectura e interioridades: el modelo de sincronización offline-first, el diseño de eventos/historial y los enlaces profundos por QR.",
     "description": "The generated-index page description for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API": {
-    "message": "Die API verwenden",
+    "message": "Uso de la API",
     "description": "The label for category 'Using the API' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API.link.generated-index.description": {
-    "message": "Openbeehive ist API-first und offen: Alles, was die App tut, läuft über eine öffentliche Connect-RPC API (gRPC und einfaches HTTP/JSON). Erstellen Sie Integrationen, Skripte, Dashboards und automatisierte Sensoren auf Basis desselben Vertrags, den auch die App verwendet.",
+    "message": "Openbeehive es abierto y prioriza la API: todo lo que hace la aplicacion se ejecuta a traves de una API publica Connect-RPC (gRPC y HTTP/JSON plano). Crea integraciones, scripts, paneles y sensores automatizados sobre el mismo contrato que usa la aplicacion.",
     "description": "The generated-index page description for category 'Using the API' in sidebar 'tutorialSidebar'"
   }
 }

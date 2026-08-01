@@ -43,7 +43,7 @@ Browser tools that "clear site data", "clear cookies and storage", or private/in
 
 ### "unable to open database file" or a button that does nothing
 
-App versions before 0.2.0 could run out of reserved local-storage slots, after which every save failed with `SQLITE_CANTOPEN: unable to open database file` — visible as a button that seemed to do nothing. Since 0.2.0 the app reserves enough slots up front and repairs the storage pool automatically when it runs low. If you still see this error, reload the app twice (so the new version takes over) and try again; records you saved earlier are unaffected.
+App versions before 0.2.2 could run out of reserved local-storage slots, after which every save failed with `SQLITE_CANTOPEN: unable to open database file` — visible as a button that seemed to do nothing. Since 0.2.2 the app reserves enough slots up front and repairs the storage pool automatically when it runs low. If you still see this error, reload the app twice (so the new version takes over) and try again; records you saved earlier are unaffected.
 
 ## Clearing or reinstalling the app
 

@@ -43,7 +43,7 @@ Browser-Werkzeuge, die „Websitedaten löschen“, „Cookies und Speicher lös
 
 ### „unable to open database file" oder ein Knopf, der nichts tut
 
-App-Versionen vor 0.2.0 konnten die reservierten lokalen Speicher-Slots aufbrauchen; danach schlug jedes Speichern mit `SQLITE_CANTOPEN: unable to open database file` fehl — sichtbar als Knopf, der scheinbar nichts tat. Seit 0.2.0 reserviert die App von vornherein genug Slots und repariert den Speicherpool automatisch, wenn er knapp wird. Siehst du den Fehler weiterhin, lade die App zweimal neu (damit die neue Version übernimmt) und versuche es erneut; früher gespeicherte Einträge sind nicht betroffen.
+App-Versionen vor 0.2.2 konnten die reservierten lokalen Speicher-Slots aufbrauchen; danach schlug jedes Speichern mit `SQLITE_CANTOPEN: unable to open database file` fehl — sichtbar als Knopf, der scheinbar nichts tat. Seit 0.2.2 reserviert die App von vornherein genug Slots und repariert den Speicherpool automatisch, wenn er knapp wird. Siehst du den Fehler weiterhin, lade die App zweimal neu (damit die neue Version übernimmt) und versuche es erneut; früher gespeicherte Einträge sind nicht betroffen.
 
 ## Die App leeren oder neu installieren
 
