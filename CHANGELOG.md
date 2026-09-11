@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Documentation content is also versioned in-site via Docusaurus (see
 `versions.json`).
 
+## [0.2.3] - 2026-09-11
+
+Documents app release 0.2.3 (first-sync feedback, progressive pulls, reload
+resilience) and brings the self-hosting reference back in line with the
+server's actual configuration.
+
+### Added
+
+- **Self-hosting → Configuration:** the HTTP timeout variables
+  (`BEEHIVE_HTTP_*`), `BEEHIVE_BLOB_PUBLIC_URL`, the dedicated instance
+  administrator (`BEEHIVE_ADMIN_EMAIL` / `BEEHIVE_ADMIN_PASSWORD`),
+  `BEEHIVE_DEMO_AUTOLOGIN`, the per-provider `BEEHIVE_OIDC_<NAME>_*`
+  variables, and the previously missing defaults for MinIO, WebAuthn and the
+  OIDC redirect URL.
+- **Self-hosting → Authentication:** how the administrator account is
+  guaranteed on every start and why registration never grants the admin role.
+- **Self-hosting → Demo:** the administrator requirement in demo mode and the
+  "Showcase hosts" auto-login option.
+- **Self-hosting → Storage:** serving stored files through a different public
+  URL.
+- **Using the app → Offline & sync:** "Your first sync on a new device"
+  (skeletons, the syncing hint, progressive fills) and the volatile-storage
+  warning.
+- **Knowledge base → Troubleshooting:** entries for "Storage is unavailable"
+  and for the syncing hint that will not go away.
+- Versioned docs snapshot `0.2.3`, all five languages.
+
+### Changed
+
+- The first registered account is no longer described as the administrator;
+  the admin comes from the environment.
+
 ## [0.2.2] - 2026-08-01
 
 Documents app release 0.2.2 (offline-storage self-repair, sync resilience,

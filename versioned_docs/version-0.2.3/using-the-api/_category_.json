@@ -1,0 +1,5 @@
+{
+  "label": "Using the API",
+  "position": 3,
+  "link": { "type": "generated-index", "description": "Openbeehive is API-first and open: everything the app does runs over a public Connect-RPC API (gRPC and plain HTTP/JSON). Build integrations, scripts, dashboards and automated sensors on the same contract the app uses." }
+}
