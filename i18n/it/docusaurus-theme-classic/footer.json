@@ -54,5 +54,9 @@
   "copyright": {
     "message": "Copyright © 2026 Openbeehive · Concesso in licenza secondo AGPL-3.0",
     "description": "The footer copyright"
+  },
+  "link.item.label.All versions": {
+    "message": "Tutte le versioni",
+    "description": "The label of footer link with label=All versions linking to /versions"
   }
 }

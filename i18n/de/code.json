@@ -1,0 +1,58 @@
+{
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Sie lesen die Dokumentation zur Version {versionLabel}.",
+    "description": "Banner on a documentation version that is not the newest release"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Zur aktuellen Version: {latestVersionLink} ({versionLabel}).",
+    "description": "Banner hint pointing at the newest release"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Sie lesen unveröffentlichte Dokumentation. Was hier beschrieben wird, kann sich bis zur Veröffentlichung noch ändern.",
+    "description": "Banner on the unreleased Next version"
+  },
+  "versions.title": {
+    "message": "Dokumentationsversionen",
+    "description": "Title of the /versions page"
+  },
+  "versions.description": {
+    "message": "Jede Openbeehive-Version hat ihre eigene Kopie der Dokumentation.",
+    "description": "Meta description of the /versions page"
+  },
+  "versions.intro": {
+    "message": "Jede Openbeehive-Version behält eine eigene, eingefrorene Kopie dieser Dokumentation. Wählen Sie die Version, die zu Ihrer App passt; standardmäßig zeigt die Seite die neueste Version, und der Schalter in der Navigationsleiste wechselt die gerade geöffnete Seite zu einer anderen Version.",
+    "description": "Intro paragraph of the /versions page"
+  },
+  "versions.current": {
+    "message": "Aktuelle Version",
+    "description": "Heading: current release"
+  },
+  "versions.next": {
+    "message": "Next (unveröffentlicht)",
+    "description": "Heading: unreleased Next version"
+  },
+  "versions.nextIntro": {
+    "message": "Dokumentation für Änderungen, die noch nicht Teil einer Version sind. Was hier beschrieben wird, kann sich bis zur Veröffentlichung noch ändern.",
+    "description": "Paragraph under the Next heading"
+  },
+  "versions.past": {
+    "message": "Frühere Versionen",
+    "description": "Heading: previous releases"
+  },
+  "versions.pastIntro": {
+    "message": "Eingefroren zum Zeitpunkt der jeweiligen Veröffentlichung, für alle, die noch eine ältere App verwenden.",
+    "description": "Paragraph under the previous releases heading"
+  },
+  "versions.link.docs": {
+    "message": "Dokumentation",
+    "description": "Link to a version's documentation"
+  },
+  "versions.link.notes": {
+    "message": "Versionshinweise",
+    "description": "Link to a version's release notes"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "neueste Dokumentation",
+    "description": "Link text inside the version banner pointing at the newest release"
+  }
+}

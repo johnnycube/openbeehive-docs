@@ -1,0 +1,54 @@
+{
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Estás leyendo la documentación de la versión {versionLabel}.",
+    "description": "Banner on a documentation version that is not the newest release"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Para la versión actual, consulta la {latestVersionLink} ({versionLabel}).",
+    "description": "Banner hint pointing at the newest release"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Estás leyendo documentación sin publicar. Lo que se describe aquí puede cambiar antes de publicarse.",
+    "description": "Banner on the unreleased Next version"
+  },
+  "versions.title": {
+    "message": "Versiones de la documentación",
+    "description": "Title of the /versions page"
+  },
+  "versions.description": {
+    "message": "Cada versión de Openbeehive conserva su propia copia de la documentación.",
+    "description": "Meta description of the /versions page"
+  },
+  "versions.intro": {
+    "message": "Cada versión de Openbeehive conserva una copia congelada de esta documentación. Elige la versión que corresponde a la aplicación que usas; el sitio muestra por defecto la versión más reciente, y el selector de la barra de navegación cambia la página que estás leyendo a otra versión.",
+    "description": "Intro paragraph of the /versions page"
+  },
+  "versions.current": {
+    "message": "Versión actual",
+    "description": "Heading: current release"
+  },
+  "versions.next": {
+    "message": "Next (sin publicar)",
+    "description": "Heading: unreleased Next version"
+  },
+  "versions.nextIntro": {
+    "message": "Documentación de cambios que todavía no forman parte de una versión. Lo que se describe aquí puede cambiar antes de publicarse.",
+    "description": "Paragraph under the Next heading"
+  },
+  "versions.past": {
+    "message": "Versiones anteriores",
+    "description": "Heading: previous releases"
+  },
+  "versions.pastIntro": {
+    "message": "Congeladas en el momento de cada publicación, para quienes aún usan una aplicación más antigua.",
+    "description": "Paragraph under the previous releases heading"
+  },
+  "versions.link.docs": {
+    "message": "Documentación",
+    "description": "Link to a version's documentation"
+  },
+  "versions.link.notes": {
+    "message": "Notas de la versión",
+    "description": "Link to a version's release notes"
+  }
+}

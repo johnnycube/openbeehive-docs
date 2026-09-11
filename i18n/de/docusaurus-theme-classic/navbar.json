@@ -18,5 +18,9 @@
   "item.label.Website": {
     "message": "Website",
     "description": "Navbar item with label Website"
+  },
+  "item.label.All versions": {
+    "message": "Alle Versionen",
+    "description": "Navbar item with label All versions"
   }
 }

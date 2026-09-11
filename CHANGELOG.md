@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Documentation content is also versioned in-site via Docusaurus (see
 `versions.json`).
 
+## [0.2.3.1] - 2026-09-11
+
+Site only, no content change: a version switch in the navbar (with an "All
+versions" entry), the `/versions` overview page, and clearer banners on older
+snapshots, all translated for the five languages. The newest release is the
+default everywhere.
+
 ## [0.2.3] - 2026-09-11
 
 Documents app release 0.2.3 (first-sync feedback, progressive pulls, reload

@@ -49,6 +49,14 @@ const config: Config = {
           routeBasePath: '/', // docs-only site: docs served at the root
           editUrl:
             'https://github.com/johnnycube/openbeehive-docs/edit/main/',
+          // Versioned docs: every app release gets a frozen snapshot under
+          // versioned_docs/ and i18n/<locale>/.../version-X.Y.Z
+          // (npx docusaurus docs:version X.Y.Z). The newest entry in
+          // versions.json is served at the site root; docs/ is the unreleased
+          // "Next" tree under /next/. Switch in the navbar, overview at /versions.
+          versions: {
+            current: {label: 'Next', path: 'next', banner: 'unreleased'},
+          },
         },
         blog: false,
         theme: {
@@ -76,7 +84,16 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
-        {type: 'docsVersionDropdown', position: 'right'},
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          className: 'navbar-version-switch',
+          dropdownActiveClassDisabled: true,
+          dropdownItemsAfter: [
+            {type: 'html', value: '<hr class="dropdown-separator">'},
+            {to: '/versions', label: 'All versions'},
+          ],
+        },
         {type: 'localeDropdown', position: 'right'},
         {
           href: 'https://app.openbeehive.org',
@@ -106,6 +123,7 @@ const config: Config = {
             {label: 'Using the app', to: '/using-the-app/dashboard'},
             {label: 'Self-hosting', to: '/self-hosting/quick-start'},
             {label: 'Beekeeping basics', to: '/beekeeping/getting-started'},
+            {label: 'All versions', to: '/versions'},
           ],
         },
         {

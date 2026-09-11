@@ -1,0 +1,54 @@
+{
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Vous consultez la documentation de la version {versionLabel}.",
+    "description": "Banner on a documentation version that is not the newest release"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Pour la version actuelle, consultez la {latestVersionLink} ({versionLabel}).",
+    "description": "Banner hint pointing at the newest release"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Vous consultez une documentation non publiée. Ce qui est décrit ici peut encore évoluer avant la publication.",
+    "description": "Banner on the unreleased Next version"
+  },
+  "versions.title": {
+    "message": "Versions de la documentation",
+    "description": "Title of the /versions page"
+  },
+  "versions.description": {
+    "message": "Chaque version d’Openbeehive conserve sa propre copie de la documentation.",
+    "description": "Meta description of the /versions page"
+  },
+  "versions.intro": {
+    "message": "Chaque version d’Openbeehive conserve une copie figée de cette documentation. Choisissez la version qui correspond à l’application que vous utilisez ; le site affiche par défaut la version la plus récente, et le sélecteur de la barre de navigation bascule la page en cours vers une autre version.",
+    "description": "Intro paragraph of the /versions page"
+  },
+  "versions.current": {
+    "message": "Version actuelle",
+    "description": "Heading: current release"
+  },
+  "versions.next": {
+    "message": "Next (non publiée)",
+    "description": "Heading: unreleased Next version"
+  },
+  "versions.nextIntro": {
+    "message": "Documentation des changements qui ne font pas encore partie d’une version. Ce qui est décrit ici peut encore évoluer avant la publication.",
+    "description": "Paragraph under the Next heading"
+  },
+  "versions.past": {
+    "message": "Versions précédentes",
+    "description": "Heading: previous releases"
+  },
+  "versions.pastIntro": {
+    "message": "Figées au moment de chaque publication, pour celles et ceux qui utilisent encore une application plus ancienne.",
+    "description": "Paragraph under the previous releases heading"
+  },
+  "versions.link.docs": {
+    "message": "Documentation",
+    "description": "Link to a version's documentation"
+  },
+  "versions.link.notes": {
+    "message": "Notes de version",
+    "description": "Link to a version's release notes"
+  }
+}

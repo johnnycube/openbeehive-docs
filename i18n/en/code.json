@@ -1,0 +1,54 @@
+{
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "You are reading the documentation for release {versionLabel}.",
+    "description": "Banner on a documentation version that is not the newest release"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "For the current release, see the {latestVersionLink} ({versionLabel}).",
+    "description": "Banner hint pointing at the newest release"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "You are reading unreleased documentation. What is described here may still change before it ships.",
+    "description": "Banner on the unreleased Next version"
+  },
+  "versions.title": {
+    "message": "Documentation versions",
+    "description": "Title of the /versions page"
+  },
+  "versions.description": {
+    "message": "Every Openbeehive release keeps its own copy of the documentation.",
+    "description": "Meta description of the /versions page"
+  },
+  "versions.intro": {
+    "message": "Every Openbeehive release keeps its own frozen copy of this documentation. Pick the version that matches the app you run; the newest release is what the site shows by default, and the switch in the navbar moves the page you are reading to another version.",
+    "description": "Intro paragraph of the /versions page"
+  },
+  "versions.current": {
+    "message": "Current release",
+    "description": "Heading: current release"
+  },
+  "versions.next": {
+    "message": "Next (unreleased)",
+    "description": "Heading: unreleased Next version"
+  },
+  "versions.nextIntro": {
+    "message": "Documentation for changes that are not part of a release yet. Things described here may still change before they ship.",
+    "description": "Paragraph under the Next heading"
+  },
+  "versions.past": {
+    "message": "Previous releases",
+    "description": "Heading: previous releases"
+  },
+  "versions.pastIntro": {
+    "message": "Frozen at the time of each release, for anyone still running an older app.",
+    "description": "Paragraph under the previous releases heading"
+  },
+  "versions.link.docs": {
+    "message": "Documentation",
+    "description": "Link to a version's documentation"
+  },
+  "versions.link.notes": {
+    "message": "Release notes",
+    "description": "Link to a version's release notes"
+  }
+}
