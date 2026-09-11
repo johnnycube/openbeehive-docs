@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Documentation content is also versioned in-site via Docusaurus (see
 `versions.json`).
 
+## [0.2.3.2] - 2026-09-12
+
+Deployment only: the site is now published through the current central deploy
+workflow. No content change.
+
 ## [0.2.3.1] - 2026-09-11
 
 Site only, no content change: a version switch in the navbar (with an "All
