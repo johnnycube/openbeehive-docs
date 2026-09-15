@@ -37,8 +37,8 @@ What to do:
 - Apply your chosen swarm-control method if cells appear (see [Swarming](/beekeeping/swarming)).
 - Consider raising new queens or making increase from strong stock (see [Queen rearing](/beekeeping/queen-rearing)).
 
-:::tip Use a weekly task to stay on rhythm
-The seven-day inspection cycle is easy to lose track of across several hives. Create a recurring inspection task per apiary so the next visit is always on your list. See [Tasks](/using-the-app/tasks).
+:::tip Use tasks to stay on rhythm
+The seven-day cycle is easy to lose track of across several hives. Add a task with a due date for the next visit, and when you tick it off, add the next one. See [Tasks](/using-the-app/tasks).
 :::
 
 ## Summer: the honey flow

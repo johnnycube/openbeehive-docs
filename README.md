@@ -18,15 +18,16 @@ npm run build      # static output in ./build
 npm run serve      # serve the production build locally
 ```
 
-The `build/` directory is static HTML — host it on any static host or CDN.
+The `build/` directory is static HTML; host it on any static host or CDN.
 
 ## Versioning
 
-Docs are versioned. The current released snapshot is **0.1.0**. To snapshot the
-current (`Next`) docs as a new released version when the app cuts a release:
+Docs are versioned; `versions.json` lists the released snapshots and the newest
+one is the default. To snapshot the current (`Next`) docs when the app cuts a
+release:
 
 ```bash
-npm run docusaurus docs:version 0.2.0
+npm run docusaurus docs:version <app version>
 ```
 
 Existing snapshots live in `versioned_docs/`. Always edit `docs/` (the `Next`
@@ -38,12 +39,13 @@ version), never the frozen snapshots.
 docs/                       current (Next) docs, grouped into sections:
   intro.md                    getting started (served at /)
   using-the-app/              how to use the app
+  using-the-api/              calling the Connect-RPC API
   self-hosting/               running your own instance
   beekeeping/                 beekeeping basics
   knowledge-base/             glossary, references, FAQ, troubleshooting
   developers/                 architecture & internals
   <section>/_category_.json   sidebar label, order, and generated index
-versioned_docs/             released snapshots (version-0.1.0)
+versioned_docs/             released snapshots (version-<x.y.z>)
 versioned_sidebars/         sidebars for each snapshot
 versions.json               list of released versions
 docusaurus.config.ts        site config (url, navbar, footer, links to app + site)

@@ -5,7 +5,7 @@ title: "Configuration"
 
 # Configuration
 
-Openbeehive is configured entirely through environment variables. This page is the complete reference, grouped exactly as they appear in `.env.example`.
+Openbeehive is configured entirely through environment variables. This page is the complete reference.
 
 You can set these variables in your shell, in a `.env` file alongside the binary, in your `docker compose` file, or through your hosting platform's secrets manager. The server reads them once at start-up, so changes take effect after a restart.
 
@@ -39,15 +39,15 @@ The two profiles are documented in depth on their own pages: [Single binary](/se
 | Variable          | Default                  | Description                                                                 |
 | ----------------- | ------------------------ | --------------------------------------------------------------------------- |
 | `BEEHIVE_ADDR`            | `:8080`                  | Address and port the server listens on. Use `127.0.0.1:8080` to bind only to localhost behind a reverse proxy. |
-| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | The public URL where users reach the app. Used for QR deep links, OIDC redirects and absolute links. Set this to your real domain in production. |
+| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | The public URL where users reach the app. Used for OIDC redirects, invite and verification links, and passkey defaults. Set this to your real domain in production. |
 | `BEEHIVE_HTTP_READ_HEADER_TIMEOUT` | `10s` | Time allowed to read a request's headers. |
-| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Whole-request read limit; `0` means none, which the streaming sync subscription needs. |
-| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Response write limit; `0` means none, for the same reason. |
+| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Whole-request read limit; `0` means none. |
+| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Response write limit; `0` means none. |
 | `BEEHIVE_HTTP_IDLE_TIMEOUT` | `120s` | How long an idle keep-alive connection stays open. |
 | `BEEHIVE_HTTP_SHUTDOWN_TIMEOUT` | `15s` | Grace period for in-flight requests on shutdown. |
 
 :::caution
-`BEEHIVE_PUBLIC_BASE_URL` must match the address users actually visit. If it is wrong, QR labels, login redirects and shared links will point to the wrong place.
+`BEEHIVE_PUBLIC_BASE_URL` must match the address users actually visit. If it is wrong, login redirects and invite links point to the wrong place.
 :::
 
 ## Embedded web app
@@ -144,7 +144,7 @@ to sign up. See [Authentication](/self-hosting/authentication).
 | `BEEHIVE_PASSWORD_AUTH` | on for `cloud`, off for `selfhost` | Enable email/password sign-up and sign-in. Also implied by `BEEHIVE_DEMO=true`. |
 | `BEEHIVE_ADMIN_EMAIL` | (empty) | Email of the instance admin. **Required whenever password auth is enabled.** The account is ensured on every start: created if missing and its role forced to admin. Sign-up never grants the admin role. |
 | `BEEHIVE_ADMIN_PASSWORD` | (empty) | Password of the instance admin, at least 8 characters. Authoritative on every start: the stored password is reset to this value, which doubles as password recovery. |
-| `BEEHIVE_REGISTRATION` | `true` | Open self-registration. Set to `false` for an invite-only instance: beyond the first-run admin, accounts can only be created via invite links, and the sign-in screen shows an invite-only notice. |
+| `BEEHIVE_REGISTRATION` | `true` | Open self-registration. Set to `false` for an invite-only instance: apart from the configured admin, accounts can only be created via invite links, and the sign-in screen shows an invite-only notice. |
 | `BEEHIVE_EMAIL_VERIFICATION` | `false` | Require email confirmation before a new account can sign in. |
 | `BEEHIVE_SMTP_HOST` | (empty) | SMTP server for verification/invite emails. If empty, links are written to the log instead. |
 | `BEEHIVE_SMTP_PORT` | `587` | SMTP port. |
@@ -203,7 +203,7 @@ BEEHIVE_OIDC_KEYCLOAK_CLIENT_SECRET=...
 ```
 
 :::tip Single-user, no login
-For a personal self-hosted instance you can skip login entirely. Leave `BEEHIVE_OIDC_PROVIDERS` empty **and** set `BEEHIVE_WEBAUTHN_ENABLED=false`. The app then runs in single-user mode with no sign-in step.
+For a personal self-hosted instance you can skip login entirely: leave `BEEHIVE_PASSWORD_AUTH` off (the selfhost default), `BEEHIVE_OIDC_PROVIDERS` empty and `BEEHIVE_WEBAUTHN_ENABLED=false`. The app then runs in single-user mode with no sign-in step.
 :::
 
 For provider set-up walkthroughs, redirect URLs and security advice, see [Authentication](/self-hosting/authentication).

@@ -2,13 +2,7 @@
 
 ## Supported versions
 
-Openbeehive is in early development. Security fixes are provided for the latest
-released version only.
-
-| Version | Supported |
-| ------- | --------- |
-| 0.1.x   | ✅        |
-| < 0.1   | ❌        |
+Security fixes are provided for the latest released version only.
 
 ## Reporting a vulnerability
 

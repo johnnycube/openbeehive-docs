@@ -20,7 +20,7 @@ You will need a few build tools installed on the machine that compiles the binar
 | Tool | Version | Purpose |
 | --- | --- | --- |
 | Go | 1.25+ | Compiles the server |
-| Node.js | 20+ | Builds the SvelteKit web app |
+| Node.js | 24+ | Builds the SvelteKit web app |
 | buf | latest | Generates the Connect-RPC code from the protobuf definitions |
 
 Once built, the binary itself has no runtime dependencies - you can copy it to a server that has none of the above installed.
@@ -29,7 +29,7 @@ Once built, the binary itself has no runtime dependencies - you can copy it to a
 
 ```bash
 git clone https://github.com/johnnycube/openbeehive-app.git
-cd openbeehive
+cd openbeehive-app
 ```
 
 ## Configure
@@ -63,10 +63,10 @@ openssl rand -base64 32
 Paste the result into `BEEHIVE_SESSION_SECRET=`.
 
 :::note No login by default
-Leave `BEEHIVE_OIDC_PROVIDERS` empty **and** `BEEHIVE_WEBAUTHN_ENABLED=false` to run as a single user with no sign-in step. When you are ready to add accounts or passkeys, see [Authentication](/self-hosting/authentication).
+The selfhost profile enables no login method: `BEEHIVE_PASSWORD_AUTH` is off, `BEEHIVE_OIDC_PROVIDERS` is empty and `BEEHIVE_WEBAUTHN_ENABLED=false`. Leave them that way to run as a single user with no sign-in step. When you want accounts, passkeys or a provider, see [Authentication](/self-hosting/authentication).
 :::
 
-If you intend to reach the instance from another device on your network, set `BEEHIVE_PUBLIC_BASE_URL` to an address that device can actually resolve (for example `http://192.168.1.20:8080` or your domain behind a [reverse proxy](/self-hosting/reverse-proxy)). This value is also baked into the deep links used by [QR labels](/using-the-app/qr-labels).
+If you intend to reach the instance from another device on your network, set `BEEHIVE_PUBLIC_BASE_URL` to an address that device can actually resolve (for example `http://192.168.1.20:8080` or your domain behind a [reverse proxy](/self-hosting/reverse-proxy)). QR labels encode the address you open the app at, so use that same address consistently.
 
 ## Build
 

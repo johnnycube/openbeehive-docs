@@ -8,7 +8,7 @@ title: "Equipment & hive types"
 Beekeeping does not demand a great deal of kit, but a few good tools make every visit calmer, safer and quicker. This page covers the essentials, then gives an overview of the main hive systems so you can choose the one that suits you and record it correctly in Openbeehive.
 
 :::tip
-When you create a hive in Openbeehive, you pick its type (Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar or Other). Choosing the right one keeps your frame counts and equipment notes consistent across your apiary. See [Hives](/using-the-app/hives).
+When you create a hive in Openbeehive, you pick its type (Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar or Other). Choosing the right one keeps your frame counts and equipment notes consistent across your apiary. See [Hives](/using-the-app/hives).
 :::
 
 ## The essentials
@@ -75,7 +75,7 @@ The hive types differ mainly in box and frame dimensions, which determine how mu
 
 Movable-frame systems (Langstroth, Dadant, Zander, Deutsch Normal) all work in the same broad way — vertical stacks of boxes with full rectangular frames — and differ mostly in dimensions. **Top-bar** and **Warré** hives take a lower-intervention approach: bees build comb from simple bars, which means gentler management but no honey extractor (comb is usually crushed and strained).
 
-If your hive does not match any of these, choose **Other** in Openbeehive and note the details in the hive's description.
+If your hive does not match any of these, choose **Other** in Openbeehive and note the details in a visit note.
 
 :::note
 There is no single "best" hive. The most practical choice is usually whatever your **local association and nearby beekeepers** use, so you can borrow equipment, swap frames and get hands-on help. For a deeper comparison and frame dimensions, see [Hive types](/knowledge-base/hive-types).

@@ -100,9 +100,3 @@ Even healthy-looking colonies can die over winter from starvation, disease or a 
 :::note Regional variation
 Colony behaviour varies with climate and subspecies. The cycle above describes a temperate-climate colony; in warmer regions brood rearing may never fully stop, and timings shift accordingly. Always calibrate to your own location and local mentors.
 :::
-
-## Where to go next
-
-- New to bees? Start with [Getting started](/beekeeping/getting-started).
-- Ready to look inside? Read [Inspecting](/beekeeping/inspecting).
-- Curious about the kit? See [Equipment](/beekeeping/equipment).

@@ -49,6 +49,8 @@ The diagram below shows how a change travels from a tap in the interface out to 
 
 The sync engine exchanges only the records that belong to the scopes a user can access, so a device never downloads the whole world: just the apiaries it is entitled to.
 
+Scripts and sensors enter the same picture through the server's CRUD services ([Using the API](/using-the-api/overview)). Their writes do not bypass this flow: the server applies each one with the same per-field merge and appends it to the same change log as a pushed change, so a reading posted by a hive scale is just another change that devices pull on their next sync.
+
 ## Conflict resolution
 
 Two devices can edit the same hive while both are offline. When they reconnect, Openbeehive merges their changes deterministically, with no manual conflict prompts. Three techniques make this conflict-free.
@@ -63,11 +65,11 @@ For simple scalar fields, such as a hive's name, type, or a queen's marking colo
 
 ### OR-Sets for list fields
 
-List-like fields, such as tags, use an observed-remove set (OR-Set) with add-wins semantics. Concurrent additions all survive, and a removal only takes effect against the specific entries it observed. This avoids the classic problem where one person's addition silently erases another's.
+List-like fields (currently only the photo keys on an inspection) use an observed-remove set (OR-Set) with add-wins semantics. Concurrent additions all survive, and a removal only takes effect against the specific entries it observed. This avoids the classic problem where one person's addition silently erases another's.
 
 ### Append-only events
 
-Records that describe things that happened, such as inspections, events, harvests, and treatments, are append-only. New entries are simply added; they are never edited in place by the sync layer, so they cannot conflict. The result is an immutable, ordered history. See [history and events](/developers/history-and-events) for detail.
+The `event` table is append-only by convention: every history write inserts a new row with a fresh id and nothing edits or deletes one, so two devices adding events offline never touch the same row. See [history and events](/developers/history-and-events) for detail.
 
 :::tip
 Because merges are deterministic, any two devices that have seen the same set of changes will always compute exactly the same result, regardless of the order in which those changes arrived.
@@ -88,10 +90,6 @@ The app is a Progressive Web App, designed first for the phone in your pocket at
 - A **service worker** caches the application shell and assets so the app loads instantly and runs fully offline after the first visit.
 - **SQLite-WASM on OPFS** provides a real relational database in the browser, with durable, origin-private storage that survives reloads.
 - The app is installable to the home screen and behaves like a native app, including the QR scanning flow that opens the app at a specific hive.
-
-:::note
-For users who want a packaged app from the app stores, the same codebase can be wrapped with **Capacitor** to ship native iOS and Android builds. This is optional; the PWA is the primary delivery channel.
-:::
 
 ## How it fits together
 

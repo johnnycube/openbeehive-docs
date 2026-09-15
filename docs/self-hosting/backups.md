@@ -8,7 +8,7 @@ title: "Backups & restore"
 A few minutes spent setting up backups now will save you a great deal of worry later. This page covers what to back up, how to do it safely, and how to restore when you need to.
 
 :::tip The server is the source of truth
-Openbeehive is offline-first, so every device that uses your hive keeps a full local copy of its data in the browser. That copy is a convenience, not a backup: it lives in the browser's storage and can be wiped by clearing site data, reinstalling, or losing the device.
+Every device that uses your instance keeps a local copy of its data in the browser. That copy is a convenience, not a backup: it can be wiped by clearing site data, reinstalling, or losing the device.
 
 For anything shared across people or devices, the **server** is the authoritative copy. Back up the server, and you protect everyone's records at once.
 :::
@@ -148,9 +148,3 @@ The `%` characters must be escaped as `\%` inside crontab. For Postgres, swap th
 :::tip Test your restores
 A backup you have never restored is only a hope. Every so often, restore into a throwaway directory or test instance and confirm you can open the app and see your hives. Keep at least a few days of dated copies, and store one off-site (an external drive or remote bucket).
 :::
-
-## Where to go next
-
-- Set or check `BEEHIVE_DATABASE_DSN` and `BEEHIVE_BLOB_DIR` on the [Configuration](/self-hosting/configuration) page.
-- Plan version updates on the [Upgrading](/self-hosting/upgrading) page — always back up first.
-- Return to the [Self-hosting overview](/category/self-hosting) for the full deployment picture.

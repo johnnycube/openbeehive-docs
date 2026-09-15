@@ -35,7 +35,7 @@ When you add a treatment to a hive, capture as much of the following as applies.
 | Date applied | When you treated the colony. |
 | Withdrawal until | The date honey from this hive is safe to harvest again. |
 | Reason | What you treated for (e.g. varroa). |
-| Notes | Weather, brood status, observed results, or anything else worth remembering. |
+| Note | Weather, brood status, observed results, or anything else worth remembering. |
 
 :::tip
 Record the batch number straight from the packaging at the time you treat. It is almost impossible to reconstruct later, and it is exactly the detail an inspector or auditor will ask for.
@@ -44,12 +44,12 @@ Record the batch number straight from the packaging at the time you treat. It is
 ## Adding a treatment
 
 1. Open the hive you treated.
-2. Choose **Add treatment** (treatments can also be logged from an inspection if you treat during a visit).
-3. Enter the product, dose, method and date, and the batch number if you have it.
+2. Tap **Record treatment** under **Treatments**.
+3. Enter the date, product, active ingredient, method, dose, batch number and reason.
 4. Set the **withdrawal until** date if the product specifies a withdrawal period.
 5. Save.
 
-Because Openbeehive is offline-first, you can do this hive-side with no signal. The record is written to the local database instantly and syncs to the server in the background once you are back online. Nothing is lost if you log treatments standing in the apiary.
+Works offline; see [Offline & sync](/using-the-app/offline-and-sync).
 
 ## Withdrawal periods and harvesting
 
@@ -70,14 +70,8 @@ A few habits keep your records trustworthy.
 - **Don't edit history to tidy it.** If something changed, add a follow-up rather than rewriting the past.
 - **Treat every hive individually.** Even when you apply the same product across an apiary, log it per hive so doses and withdrawal windows are accurate for each colony.
 
-Because treatment entries sync across your devices, the log you build in the field is the same one you can review later at home, or share with anyone who has access to the apiary.
+Because treatment entries sync across your devices, the log you build in the field is the same one you review at home, and the one other members of your tenant see.
 
 ## Treatments and varroa
 
 The varroa mite is the reason most beekeepers reach for a treatment in the first place, and getting the timing right across the season is its own subject. For a fuller picture of monitoring mite levels, choosing an approach, and planning treatments around the beekeeping year, see [the varroa guide](/beekeeping/varroa).
-
-## Related pages
-
-- [Inspections](/using-the-app/inspections) record what you see; treatments record what you do about it.
-- [Harvests](/using-the-app/harvests) is where withdrawal periods matter most.
-- [The varroa guide](/beekeeping/varroa) covers monitoring and timing.

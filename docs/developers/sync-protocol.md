@@ -5,199 +5,223 @@ title: "Sync protocol"
 
 # Sync protocol
 
-Openbeehive is [offline-first](/using-the-app/offline-and-sync). Every read and write happens
-against a local SQLite-WASM database on the device, and a background process
-reconciles that local state with the server. This page documents the wire
-protocol that makes reconciliation work: the Connect-RPC service, its three
-methods, and the rules both sides apply when merging changes.
-
-If you have not yet read the [sync model overview](/category/developers), start there.
-This page assumes you already know that Openbeehive uses Hybrid Logical Clocks
-(HLC), per-field last-writer-wins (LWW) for scalars, OR-Sets (add-wins) for list
-fields, and append-only events that never conflict.
+The app reads and writes a local SQLite-WASM database and reconciles it with
+the server through `SyncService`. This page documents the wire contract from
+`proto/openbeehive/v1/sync.proto` and the merge rules in
+`server/internal/sync/merge.go` and `app/src/lib/local/merge.ts`.
 
 ## The service
 
-Sync is exposed as a Connect-RPC service, so every method is reachable as both
-gRPC and plain HTTP/JSON. There are three methods:
+```protobuf
+service SyncService {
+  rpc Pull(PullRequest) returns (PullResponse);
+  rpc Push(PushRequest) returns (PushResponse);
+  rpc Subscribe(SubscribeRequest) returns (stream SubscribeEvent);
+}
+```
 
-| Method | Direction | Purpose |
-| --- | --- | --- |
-| `Pull` | client ← server | Fetch changes the client has not seen yet |
-| `Push` | client → server | Send local changes to the server |
-| `Subscribe` | server → client (stream) | Optional near-real-time "poke" when new changes land |
+The client loop (`app/src/lib/local/sync.ts`, `syncOnce`): push the outbox,
+then pull until `has_more` is false. It runs every 15 seconds, after every
+local write, and on the browser's `online` event. Runs are serialised; a call
+that arrives while one is in flight schedules one more pass. The client does
+not call `Subscribe`.
 
-A typical client loops: `Push` its local outbox, then `Pull` everything new,
-then idle until `Subscribe` pokes it (or a timer fires) and repeat.
+## Change
 
-## Cursors versus the HLC
+Every row edit travels as one `Change`:
 
-The most important idea in this protocol is that the **sync cursor is not the
-HLC**.
+```protobuf
+enum ChangeOp {
+  CHANGE_OP_UNSPECIFIED = 0;
+  CHANGE_OP_UPSERT = 1;
+  CHANGE_OP_DELETE = 2;
+}
 
-The HLC is a *logical timestamp* attached to every field write. It decides
-*which value wins* during a merge — it answers "is this edit newer than the one I
-already have?". HLCs come from many devices, can move slightly out of order
-relative to wall-clock time, and are not globally monotonic in arrival order.
+message Change {
+  string entity = 1;       // table name: apiary, hive, queen, inspection, task,
+                           // placement, harvest, treatment, event
+  string entity_id = 2;    // row id (UUID minted on the device)
+  string scope_id = 3;     // apiary id, or "user:<id>"
+  ChangeOp op = 4;
+  string payload_json = 5; // JSON object of changed columns; ignored on delete
+  string hlc = 6;          // Hybrid Logical Clock of the write
+  string author_id = 7;    // user id of the device or API caller that wrote it
+}
+```
 
-The cursor is a *server-assigned receive sequence* — a single, strictly
-increasing integer (`seq`) that the server stamps onto every change as it is
-durably accepted. It answers a completely different question: "what have I
-already handed to this client?".
+`payload_json` is a partial delta, not the whole row: the client's `patch()`
+writes only the columns it changed. Keys are the `snake_case` column names
+from the [data model](/developers/data-model). A row created on the device is
+a delta containing every column. A delete is `op = CHANGE_OP_DELETE`; the
+receiver sets `deleted = true` and ignores the payload.
 
-Using the receive sequence as the cursor gives us two guarantees the HLC cannot:
+Set columns (currently only `inspection.photo_keys`) use a different payload
+shape:
 
-- **Total order of delivery.** Because `seq` is assigned in the order the server
-  accepts writes, a client can ask for "everything after seq N" and be certain
-  it misses nothing, even if those changes carry out-of-order HLCs.
-- **Replay safety.** A client can persist its cursor and resume from exactly
-  where it left off after going offline, crashing, or reinstalling.
+```json
+{ "photo_keys": { "add": ["k1"] } }
+{ "photo_keys": { "remove": ["k2"], "removed_tags": { "k2": ["<hlc>", "<hlc>"] } } }
+```
 
-:::note
-Never use an HLC as a pagination cursor. Two devices can legitimately produce
-the same HLC region while offline, and HLCs are not assigned in arrival order —
-paging by HLC would skip or duplicate changes. Page by `seq`, merge by HLC.
-:::
+`removed_tags` lists the add-tags the removing device had observed. Deltas
+without it (older clients) remove every tag the receiver holds.
+
+### HLC format
+
+`"<ms:15>:<counter:5>:<node>"`, for example
+`001781234567890:00003:a1b2c3d4`. Millisecond wall clock zero-padded to 15
+digits, a 5-digit counter, then a node id (8 random characters stored in
+`localStorage` on the device; `BEEHIVE_NODE_ID`, default `server`, on the
+server). Plain string comparison orders HLCs. Both sides call `recv()` on
+every incoming HLC so their clocks stay ahead of anything they have seen.
 
 ## Pull
 
-`Pull` returns the changes the client has not seen, in `seq` order, plus the
-cursor to use next time.
-
-```text
-Pull(PullRequest { since_cursor: int64, limit: int32 })
-  -> PullResponse { changes: Change[], next_cursor: int64, has_more: bool }
-```
-
-- `since_cursor` is the last cursor the client successfully applied. Send `0`
-  for a first, full sync.
-- `changes` are returned ordered by ascending `seq`, restricted to scopes the
-  caller may read (see **Partial replication**).
-- `next_cursor` is the highest `seq` included in this page. Persist it only
-  after the whole page has been applied locally.
-- `has_more` is `true` when the result was truncated by `limit`; the client
-  should immediately `Pull` again with the new `next_cursor`.
-
-A single `Change` carries enough to merge it independently:
-
-```json
-{
-  "entity": "hive",
-  "entity_id": "01HZX...",
-  "scope_id": "apiary-01HZ...",
-  "kind": "field",
-  "field": "name",
-  "value": "Hive 3 (north row)",
-  "hlc": "2026-06-19T09:14:02.117Z-0003-nodeA",
-  "seq": 48213
+```protobuf
+message PullRequest {
+  string cursor = 1; // last seen server sequence, "" for a first sync
+  int32 limit = 2;   // 0 = server default (200), max 500
+}
+message PullResponse {
+  repeated Change changes = 1;
+  string next_cursor = 2;
+  bool has_more = 3;
 }
 ```
 
-`kind` distinguishes the three merge strategies: `field` (scalar LWW),
-`set_add` / `set_remove` (OR-Set membership), and `event` (append-only).
+The cursor is the decimal string of the server's receive sequence
+(`change_log.seq`), not an HLC. The server returns rows with
+`seq > cursor` whose `scope_id` is in the caller's scope set, ordered by
+`seq`, and sets `next_cursor` to the last `seq` returned (or echoes the
+request cursor when nothing matched). Persist `next_cursor` only after
+applying the whole page. `has_more` means the page was cut at `limit`; pull
+again immediately.
+
+Rows in scopes you cannot read still consume sequence numbers, so the values
+you see have gaps.
 
 ## Push
 
-`Push` sends a batch of local changes to the server. The server applies each one
-with the same merge rules the client uses, assigns a fresh `seq` to every
-accepted change, and reports back.
-
-```text
-Push(PushRequest { changes: Change[] })
-  -> PushResponse { server_cursor: int64, conflicts: Conflict[] }
-```
-
-- The server validates that the caller may write each change's `scope_id`.
-- For each scalar `field` change it applies per-field LWW: the incoming value
-  wins only if its HLC is greater than the HLC currently stored for that field.
-- Set operations are applied as OR-Set add/remove; adds win over concurrent
-  removes.
-- `event` changes are appended unconditionally — they never conflict.
-- Every accepted change is assigned a new, strictly increasing `seq`.
-- `server_cursor` is the highest `seq` assigned in this batch, so the client can
-  fast-forward without an extra `Pull` round-trip for its own writes.
-
-### Conflicts
-
-`conflicts` is **not** an error list — the merge is always deterministic and
-always succeeds. It is an informational list of fields where the server already
-held a value with a higher HLC, so the client's pushed value was *not* adopted.
-
-```json
-{
-  "entity_id": "01HZX...",
-  "field": "queen_status",
-  "rejected_hlc": "2026-06-19T09:13:55.000Z-0001-nodeB",
-  "winning_hlc": "2026-06-19T09:14:10.421Z-0007-nodeA"
+```protobuf
+message PushRequest { repeated Change changes = 1; }
+message Conflict {
+  string entity = 1;
+  string entity_id = 2;
+  string winning_hlc = 3;
+}
+message PushResponse {
+  string server_cursor = 1;      // global sequence after this push
+  repeated Conflict conflicts = 2;
 }
 ```
 
-The client should treat a conflict as a signal to refresh that field from the
-next `Pull`, where it will receive the winning value. No retry is needed.
+The server processes the batch in one transaction:
 
-:::tip
-Because LWW is deterministic and HLC-ordered, `Push` is idempotent: re-sending a
-change whose HLC has already lost (or already won) leaves server state
-unchanged. Clients can safely retry a `Push` after a dropped connection.
-:::
+1. `hlc.Recv(change.hlc)`.
+2. Unknown `entity` values are skipped.
+3. `scope_id` must be in the caller's scope set, except that an `apiary`
+   change whose `scope_id` equals its own `entity_id` opens a new scope. Any
+   other unknown scope fails the whole push with `permission_denied`.
+4. The payload's `organization_id`, if present and non-empty, must match the
+   caller's active tenant; an existing row must belong to that tenant. New
+   rows are stamped with the caller's tenant. A mismatch fails the push with
+   `permission_denied`.
+5. The change is merged field by field (see below) and appended to
+   `change_log` with a fresh `seq`.
+
+`conflicts` is always empty in the current server: stale fields are dropped
+silently during the merge and the newer value arrives on the next `Pull`.
+`server_cursor` is the global sequence after the push; the client stores it
+as its cursor, which skips pulling its own changes back.
+
+The client drops the whole outbox batch when `Push` returns
+`permission_denied` (read-only demo session or an unwritable scope). The
+rows stay in the local tables; only the upload is abandoned. Any other error
+keeps the outbox for the next run.
+
+## Merge rules
+
+Both sides apply the same algorithm (`applyChange` in
+`server/internal/service/sync.go`, `applyRemote` in
+`app/src/lib/local/sync.ts`).
+
+Every synced table has a `field_hlc` column holding a JSON map
+`{ "<column>": "<hlc>" }`, the field clock.
+
+**New row.** Insert every column in the payload and stamp each with the
+change's HLC.
+
+**Existing row, scalar column.** Apply the value only if the change's HLC is
+greater than the column's entry in `field_hlc`, then update that entry. Two
+devices editing different columns of the same row both win; two devices
+editing the same column resolve to the higher HLC.
+
+**Existing row, set column.** The stored value is an OR-Set:
+`{ "<element>": { "a": ["<tag>", ...], "r": ["<tag>", ...] } }`. `add`
+elements get the change's HLC as a new tag in `a`. `remove` elements move
+the tags listed in `removed_tags` (or all current `a` tags) into `r`. An
+element is visible while it has a tag in `a` that is not in `r`, so an add
+that a remover never saw survives (add-wins). Set columns are never
+overwritten by LWW.
+
+**Delete.** `deleted` is a normal scalar column and follows LWW with the
+delete's HLC. Rows are never removed; readers filter `deleted = 0`.
+
+If nothing in the change beats the field clock, the row is left untouched.
+
+## Scopes
+
+The server computes a caller's scope set as:
+
+```text
+{ "user:<user id>" }
+  ∪ { id of every apiary in the caller's active tenant }
+  ∪ { apiary_id from apiary_share rows for the caller }
+```
+
+The same set gates `Pull` and `Push`. Apiaries use their own id as
+`scope_id`; everything under an apiary (hives, queens, inspections, tasks,
+placements, harvests, treatments, events) carries the apiary id. Nothing in
+the current app writes `apiary_share`, so in practice the scope set is the
+tenant's apiaries.
 
 ## Subscribe
 
-`Subscribe` is an optional server-streamed channel used purely as a wake-up
-signal. It does not carry data.
-
-```text
-Subscribe(SubscribeRequest { scopes: string[] })
-  -> stream Poke { scope_id: string, server_cursor: int64 }
+```protobuf
+message SubscribeRequest { string cursor = 1; }
+message SubscribeEvent { string server_cursor = 1; }
 ```
 
-When a write lands in one of the client's readable scopes, the server emits a
-`Poke`. The client responds by calling `Pull(since_cursor)` as usual. Keeping
-the actual data on `Pull` means the stream can be lossy without affecting
-correctness — a missed poke just means the next timer-driven `Pull` catches up.
+A server stream. Every two seconds the server reads the global sequence
+counter and sends `server_cursor` when it has advanced past the request
+cursor and past the last value sent. It carries no changes; a receiver
+calls `Pull`. The counter is global, not per scope, so an event may lead to
+an empty pull. The app does not use it.
 
-:::note
-`Subscribe` is a latency optimisation, not a requirement. A client that only
-polls `Pull` on a timer is fully correct; it is simply less timely.
-:::
+## Server-side tables
 
-## Partial replication by scope
+`change_log` is the feed: `seq`, `scope_id`, `entity`, `entity_id`, `op`,
+`payload`, `hlc`, `author_id`, `org_id`. `seq_counter` holds the single
+counter row (`name = 'change'`) that is incremented per accepted change. On
+the client, `outbox` holds not-yet-pushed changes in the same shape and
+`sync_meta` stores the cursor under key `cursor`.
 
-Sharing in Openbeehive is at the **apiary** level via *scopes*. A user replicates
-only the data inside the scopes they may read, not the whole database.
+## Server-originated changes
 
-This is enforced on `Pull` and `Push`:
-
-- `Pull` filters `changes` to the caller's readable scopes before paging by
-  `seq`. The cursor therefore advances over a *per-caller view* of the global
-  sequence — two users sharing one apiary will see that apiary's changes at the
-  same `seq`, while each also sees their own private scopes.
-- `Push` rejects writes to scopes the caller cannot write.
-
-Because the cursor is the global receive sequence, a client may see gaps in the
-`seq` values it receives (changes in scopes it cannot read are skipped). Gaps are
-expected and harmless — the client only ever needs the *next* cursor to ask for
-more.
-
-## Mirrored merge logic
-
-The merge functions — HLC comparison, per-field LWW, OR-Set resolution, event
-append — are **identical on the client and the server**. The same logic that the
-SvelteKit PWA runs when applying a `Pull` is the logic the Go backend runs when
-applying a `Push`.
-
-This mirroring is what makes the system genuinely conflict-free rather than
-merely conflict-resolving:
-
-- A change produces the same merged result regardless of *where* it is applied
-  or in *what order* it arrives, so client and server converge without
-  negotiation.
-- The server is not a privileged arbiter that can override device state; it
-  applies the same deterministic rules, then assigns a `seq` for ordering.
-- New entity types only need their merge rules defined once, in shared semantics,
-  and both sides honour them.
-
-For the underlying clock and data-structure details, see the
-[architecture overview](/developers/architecture) and the
-[data model](/developers/data-model). For how events fit the append-only path,
-see [history and events](/developers/history-and-events).
+The CRUD services (`ApiaryService`, `HiveService`, `QueenService`,
+`InspectionService`, `TaskService`, `TreatmentService`) do not write the
+entity tables directly. Every write RPC builds a `Change` and runs it through
+`applyChange` and `appendChangeLog` inside one transaction
+(`server/internal/service/writer.go`), the same two steps `Push` performs per
+change. Such a change has `author_id` set to the user id of the API caller,
+an `hlc` drawn from the server's own clock (node id `BEEHIVE_NODE_ID`, the
+clock shared with the `Push` handler so it stays ahead of everything received),
+and a `scope_id` of the apiary the row belongs to: an apiary's own id, the
+hive's apiary for hives, queens, inspections and treatments, and `user:<id>`
+for a task without an apiary. Its `payload_json` is a partial delta like a
+device's, so a later device edit of another column merges with it, and the
+row shows up in the next `Pull` of every device that can read the scope.
+Deletes through the API are `CHANGE_OP_DELETE` tombstones. The multi-row
+flows (hive plus placement plus event, queen replacement, frozen context for
+inspections and treatments) append one change per row, mirroring
+`app/src/lib/local/history.ts`.

@@ -77,7 +77,7 @@ Open feeding (leaving syrup in the open for any colony to take) is best avoided.
 
 Every feed is worth recording. Knowing how much syrup or fondant a colony took, and when, helps you judge whether stores are adequate, spot colonies that consistently run short, and plan next year's autumn feeding more accurately.
 
-In Openbeehive, log feeding as part of the relevant visit so it sits alongside everything else you saw that day. Note the feed type (light syrup, heavy syrup, or fondant) and the amount given. Because the app is offline-first, you can record this at the hive even with no signal, and it will sync later.
+In Openbeehive, log feeding as part of the visit: enter the amount in the **Fed (kg)** field and put the feed type (thin syrup, thick syrup or fondant) in the note, so it sits alongside everything else you saw that day.
 
 See [Inspections](/using-the-app/inspections) for how to record a visit and capture feeding amounts.
 

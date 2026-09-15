@@ -107,10 +107,3 @@ Many diseases and pests spread between colonies through robbing, drifting bees, 
 :::tip Know your regional rules
 Disease status, which conditions are notifiable, and which treatments are legal all vary by country and sometimes by region. Register with your national bee health scheme if one exists, and get to know your local association and bee inspector before you need them.
 :::
-
-## See also
-
-- [Varroa](/beekeeping/varroa) for full monitoring and treatment guidance
-- [Inspecting](/beekeeping/inspecting) for what to look for at each visit
-- [Glossary](/knowledge-base/glossary) for the terms used here
-- [FAQ](/knowledge-base/faq) and [Troubleshooting](/knowledge-base/troubleshooting)

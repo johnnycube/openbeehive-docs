@@ -7,9 +7,9 @@ title: "Hive types reference"
 
 When you create a hive in Openbeehive, you choose a **type**. This single value records the hive system you are running, which helps you keep frames, supers and spare parts compatible across your apiary.
 
-The type is purely a label for your own records. It does not change how inspections, treatments or harvests work, so do not worry about getting it "wrong" — you can change it at any time from the hive's settings. See [Hives](/using-the-app/hives) for how to add and edit a hive.
+The type is purely a label for your own records. It does not change how inspections, treatments or harvests work, so do not worry about getting it "wrong": you can change it at any time by editing the hive. See [Hives](/using-the-app/hives) for how to add and edit a hive.
 
-Openbeehive offers seven options: **Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar** and **Other**.
+Openbeehive offers seven options: **Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar** and **Other**.
 
 ## Quick comparison
 
@@ -33,7 +33,7 @@ A few practical pointers for picking a value:
 
 - **Match your frames, not your aspirations.** Choose the system whose frames physically fit your boxes today. Compatibility of frames and supers is the main reason this field matters.
 - **Stay consistent within an apiary.** Running one system per apiary makes it far easier to swap frames between colonies, share spare supers and manage your stores.
-- **Inherited or mixed kit?** If a hive does not fit a standard, choose **Other** and note the details in the hive's description.
+- **Inherited or mixed kit?** If a hive does not fit a standard, choose **Other** and note the details in a visit note.
 
 ### Vertical frame hives
 
@@ -57,10 +57,10 @@ Natural-comb hives can make some tasks harder. Comb is fragile without frames, h
 ## Frequently asked
 
 **Can I change a hive's type later?**
-Yes. Open the hive, edit its settings and pick a new type. Because Openbeehive is offline-first, the change is saved locally at once and syncs in the background — see [Offline and sync](/using-the-app/offline-and-sync).
+Yes. Open the hive, tap **Edit** and pick a new type.
 
 **My system isn't listed. What now?**
-Choose **Other** and record the specifics (frame size, box count, supplier) in the hive's notes so your records stay clear.
+Choose **Other** and record the specifics (frame size, box count, supplier) in a visit note so your records stay clear.
 
 **Does the type affect treatments or harvests?**
 No. It is a descriptive label. All inspections, treatments, tasks and harvests work the same regardless of type.

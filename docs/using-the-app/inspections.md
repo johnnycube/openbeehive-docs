@@ -5,117 +5,94 @@ title: "Inspections (visits)"
 
 # Inspections (visits)
 
-An inspection is the record of a single visit to a hive: what you saw, what you did, and anything worth remembering for next time. Over a season these visits build into a clear story of how each colony is developing.
-
-Because Openbeehive is offline-first, you can record everything at the hive side with no signal. Entries are saved instantly to your device and sync to the server in the background once you are back in range. See [Offline & sync](/using-the-app/offline-and-sync) for how that works.
+An inspection is the record of a single visit to a hive: what you saw, what you did, and anything worth remembering. Over a season the visits build into a picture of how each colony is developing. Works offline; see [Offline & sync](/using-the-app/offline-and-sync).
 
 :::tip
-For guidance on _what_ to look for during a visit and how often to inspect, read [Inspecting a colony](/beekeeping/inspecting). This page covers how to record it.
+For what to look for during a visit and how often to inspect, read [Inspecting a colony](/beekeeping/inspecting). This page covers how to record it.
 :::
 
-## Starting an inspection
+## Starting a visit
 
-Open a hive and tap **Add inspection** (or scan the hive's [QR label](/using-the-app/qr-labels) to jump straight to it). A new visit is created and stamped with the current date and time.
+Open a hive (or scan its [QR label](/using-the-app/qr-labels)) and tap **Record visit** above the visit log. The form opens with today's date.
 
-Every field is optional. Record as much or as little as you like — a quick "all fine" is a perfectly valid entry.
+Every field is optional. A quick "all fine" with nothing else filled in is a valid entry.
 
 ## Date and weather
 
 | Field | Notes |
 | --- | --- |
-| Date | Defaults to now; change it if you are logging a past visit. |
-| Weather | The conditions at the time, e.g. sunny, overcast, windy. Useful context, since bees behave differently in poor weather. |
+| Date | Defaults to today; change it to log a past visit. |
+| Weather | Free text, e.g. "sunny, 22°C". |
 
 ## Colony & behaviour
 
-This section captures the state of the colony on the day.
-
 | Field | What it records |
 | --- | --- |
-| Queen seen | Whether you actually spotted the queen. |
-| Eggs seen | Eggs are the best quick sign of a recently laying queen. |
-| Capped brood | Whether sealed worker brood is present. |
-| Youngest larva | The youngest brood stage you found — a finer signal of recent laying. |
+| Queen seen | Whether you spotted the queen. |
+| Eggs seen | The quickest sign of a recently laying queen. |
+| Capped brood seen | Whether sealed worker brood is present. |
+| Youngest larva | Age in days of the youngest brood stage you found. |
 | Occupied frames | How many frames the bees cover. |
 | Brood frames | How many frames hold brood. |
-| Food stores | Your read on stores: scarce, adequate or plenty. |
-| Swarm cells | Whether queen cells suggesting swarm preparation are present. |
-| Gentleness | How calm the colony is overall. |
-| Calmness on comb | Whether bees sit quietly on the comb or run and boil up. |
-| Varroa count | Mite count from a board or wash, if you took one. |
+| Food stores | Good, Medium, Low or None. |
+| Swarm cells | How many queen cells you found. |
+| Gentleness | Very gentle, Gentle, Normal, Nervous or Aggressive. |
+| Calmness on comb | Runs off comb, Restless, Calm or Very calm. |
+| Varroa | Free text for your count, e.g. "3 mites/day". |
+| Hive weight | In kg, if you weigh the hive. |
 
 :::note
-You will rarely fill in every field on every visit. The "queen seen / eggs seen / youngest larva" trio is usually enough to confirm a healthy laying queen without finding her each time.
+The "eggs seen / youngest larva / capped brood" trio usually confirms a healthy laying queen without finding her each time.
 :::
 
-## Activities on the visit
-
-Record anything you did while the hive was open. These activities also feed the hive's wider records — for example, honey taken can flow into [Harvests](/using-the-app/harvests).
+## Activities on this visit
 
 | Activity | Records |
 | --- | --- |
 | Fed | Amount fed, in kg. |
+| Honey harvested | Honey taken on this visit, in kg. |
 | Frames added / removed | Frames you put in or took out. |
 | Drone frame cut | Whether you cut out a drone brood frame (a varroa control measure). |
-| Super added | Whether you added a super for honey storage. |
-| Hive weight | The weighed weight of the hive, if you track it. |
-| Honey harvested | Honey taken on this visit. |
+| Super added | Whether you added a super. |
 
-For the bigger picture on mite management and harvesting, see [Varroa](/beekeeping/varroa) and [Honey harvest](/beekeeping/honey-harvest).
+For the bigger picture on mite management and harvesting, see [Varroa](/beekeeping/varroa) and [Honey harvest](/beekeeping/honey-harvest). Honey you take off for jarring is recorded separately as a [harvest](/using-the-app/harvests), with variety, water content and batch number.
 
-## Climate: temperature & humidity
+## Climate
 
-Each inspection can record temperature and relative humidity, both **inside the
-hive** and **outside** — useful for tracking brood-nest warmth, ventilation and
-overwintering.
+| Field | Unit |
+| --- | --- |
+| Hive temperature | °C |
+| Outside temperature | °C |
+| Hive humidity | % |
+| Outside humidity | % |
 
-| Field | Records | Unit |
-| --- | --- | --- |
-| Hive temperature | Temperature inside the hive | °C |
-| Outside temperature | Ambient temperature at the apiary | °C |
-| Hive humidity | Relative humidity inside the hive | % |
-| Outside humidity | Outside relative humidity | % |
-
-All four are optional — fill in what you measured. Over time they appear in the
-hive's **development charts** alongside weight and colony strength.
-
-:::tip Let sensors do it
-You don't have to type these in. A hive scale or temperature/humidity probe can
-post readings automatically through the API — see
-[Automated trackers](/using-the-api/automated-trackers).
-:::
-
-## Notes and photos
-
-Add free-text **notes** for anything the structured fields do not cover — a marked supersedure cell, a temper that needs watching, a reminder to requeen.
-
-Attach **photos** to capture brood patterns, suspect disease, or queen cells. Images are stored with the visit and sync along with the rest of your records.
+All four are optional. Over time they appear in the hive's **Development** charts alongside weight and colony strength.
 
 :::tip
-If something needs following up, create a [Task](/using-the-app/tasks) from the visit so it does not get lost.
+A hive scale or climate sensor can post these fields through the API; each reading becomes a visit on the hive and syncs to your devices. See [Automated trackers](/using-the-api/automated-trackers).
 :::
 
-## The visit log per hive
+## Note and photos
 
-Every inspection is kept, never overwritten. On the hive page you get a chronological **visit log** — the full history of that colony, newest first.
+Add a free-text **note** for anything the structured fields do not cover: a marked supersedure cell, a temper that needs watching, a reminder to requeen.
 
-This log lets you spot trends at a glance: brood building up in spring, stores running down before winter, a rising varroa count, or a temper problem developing. Because each visit is an append-only event, syncing across devices never loses or conflicts a record.
+**Add photo** attaches one or more pictures (brood pattern, suspect disease, queen cells). They are stored with the visit and sync with the rest of your records. If something needs following up, add a [task](/using-the-app/tasks) with a due date.
+
+## The visit log
+
+Every visit is kept. The hive page shows the five most recent visits, newest first, each summarised as chips; **See all N visits** opens the full log, and **Stock card** prints all visits as a table.
+
+The log lets you spot trends: brood building up in spring, stores running down before winter, a rising varroa count. Visits are only ever added, so syncing across devices never overwrites one.
 
 ## Tips for fast field entry
 
-Inspections happen with gloves on, in bright sun, with bees in the air. A few habits keep entry quick:
-
-- **Scan the QR label** to open the right hive instantly — no scrolling through a list.
-- **Log as you go.** Tap fields between frames rather than trying to remember everything afterwards.
+- **Scan the QR label** to open the right hive without scrolling.
+- **Log as you go.** Tap fields between frames rather than reconstructing everything afterwards.
 - **Lean on the quick trio.** Eggs seen, youngest larva and capped brood confirm a laying queen faster than hunting her down.
-- **Use voice or short notes.** Drop a brief note now; tidy it up later from the comfort of home.
-- **Don't fret over blanks.** Empty fields are fine. Record only what you checked.
-- **Photograph the doubtful.** A picture of an odd brood pattern or a queen cell is worth more than a typed description.
+- **Keep notes short.** Drop a brief note now; expand it at home.
+- **Leave blanks.** Record only what you checked.
+- **Photograph the doubtful.** A picture of an odd brood pattern is worth more than a typed description.
 
 :::caution
-If you suspect a notifiable disease such as American or European foulbrood, photograph it, close up, and follow your local reporting rules. Reporting obligations vary by country and region. See [Diseases & pests](/knowledge-base/diseases-and-pests).
+If you suspect a notifiable disease such as American or European foulbrood, photograph it, close up, and follow your local reporting rules. See [Diseases & pests](/knowledge-base/diseases-and-pests).
 :::
-
----
-
-See also: [Inspecting a colony](/beekeeping/inspecting) for field technique, and [Hives](/using-the-app/hives) for where the visit log lives.

@@ -19,11 +19,10 @@ when you are out at the apiary with no signal.
 - **An app icon** on your home screen or in your app launcher.
 - **A full-screen window** with no browser chrome, so there is more room for
   your hives and inspections.
-- **Offline-first access.** Your records live in a local database on the device
-  and sync in the background. Reads and writes are instant, signal or not. See
-  [Offline and sync](/using-the-app/offline-and-sync) for how this works.
+- **Offline access.** Your records live in a local database on the device and
+  sync in the background. See [Offline and sync](/using-the-app/offline-and-sync).
 - **Quick QR scanning.** Scanning a hive's [QR label](/using-the-app/qr-labels)
-  opens straight into the installed app at that hive.
+  opens that hive.
 
 :::tip
 You can keep using Openbeehive in a normal browser tab without installing. The
@@ -121,11 +120,3 @@ If you have records that have not yet synced when you uninstall, they live only
 in the device's local database and may be lost. Make sure the app has synced
 before removing it. See [Offline and sync](/using-the-app/offline-and-sync).
 :::
-
-## A note on native apps
-
-Openbeehive is a PWA first, and for almost everyone the installed PWA is
-indistinguishable from a native app. A native wrapper (using Capacitor) for the
-Apple App Store and Google Play is being considered for a future release, mainly
-to reach people who prefer the stores. The PWA will remain the primary way to
-install and will keep all of its offline-first capabilities.

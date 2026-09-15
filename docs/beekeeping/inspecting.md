@@ -101,6 +101,6 @@ Every inspection is a small disruption. Keep it proportionate. If you only need 
 
 ## Recording what you find
 
-An inspection is only as useful as the notes you keep. Record temperament, stores, space, brood and any queen cells or disease signs while the details are fresh, ideally hive-side on your phone. Because Openbeehive is offline-first, you can log everything in the apiary with no signal and it will sync later.
+An inspection is only as useful as the notes you keep. Record temperament, stores, space, brood and any queen cells or disease signs while the details are fresh, ideally hive-side on your phone.
 
 See [recording inspections](/using-the-app/inspections) to capture your findings, and the [beekeeping section](/category/beekeeping-basics) for the wider seasonal context.

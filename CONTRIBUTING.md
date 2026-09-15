@@ -19,11 +19,11 @@ npm run build      # static output in ./build (any static host / CDN)
 
 ## Writing docs
 
-- **Edit the current docs in `docs/`.** Do not edit `versioned_docs/` — those
+- **Edit the current docs in `docs/`.** Do not edit `versioned_docs/`; those
   are frozen snapshots of released versions.
-- Docs are organised into four areas: **Using the app**, **Self-hosting**,
-  **Beekeeping basics**, and the **Knowledge base**, plus a **Developers**
-  section. Put new pages in the matching folder.
+- Docs are organised into **Using the app**, **Using the API**,
+  **Self-hosting**, **Beekeeping basics**, the **Knowledge base** and
+  **Developers**. Put new pages in the matching folder.
 - Use a `sidebar_position` in the front matter to order pages.
 - Keep links relative so the broken-link checker (`onBrokenLinks: 'throw'`)
   passes during `npm run build`.
@@ -35,7 +35,7 @@ French, Spanish and Italian via Docusaurus i18n under `i18n/<locale>/`:
 
 - Page translations live in
   `i18n/<locale>/docusaurus-plugin-content-docs/current/` (and the matching
-  `version-0.1.0/` snapshot).
+  `version-<x.y.z>/` snapshots).
 - UI labels (navbar, footer, category names) live in the `*.json` files there;
   regenerate the scaffolding with `npm run write-translations -- --locale <loc>`.
 
@@ -48,7 +48,7 @@ broken link in any of them. To preview one locale: `npm start -- --locale fr`.
 When the app cuts a release, snapshot the docs:
 
 ```bash
-npm run docusaurus docs:version 0.2.0
+npm run docusaurus docs:version <app version>
 ```
 
 ## Pull requests

@@ -15,7 +15,7 @@ The hosted service at [app.openbeehive.org](https://app.openbeehive.org) is free
 
 ## Is my data private?
 
-Your records live on your own device first. Openbeehive is **offline-first**: the app stores everything in a local database on your phone, tablet or computer, and syncs to the server only in the background.
+Your records live on your own device first: the app stores everything in a local database on your phone, tablet or computer and syncs to the server in the background.
 
 If you self-host, your data never leaves your own infrastructure. On the hosted service, your records are stored on our servers so they can sync between your devices, but they remain yours.
 
@@ -39,10 +39,7 @@ There is no separate native app in the App Store or Play Store today, and you do
 
 ## Can I export my data?
 
-Yes. Because the project is open source and your data is stored in a standard SQLite database, you are never locked in.
-
-- **Self-hosters** can back up the database directly. See [Backups](/self-hosting/backups).
-- On the **hosted service**, export tools are part of the roadmap. Your records are also kept locally on each synced device.
+Yes. **Settings → Data & backup** exports everything on your device as a full JSON backup, a spreadsheet (XLSX), CSV files in a ZIP, BeeXML, or a printable PDF report, and imports JSON, BeeXML and CSV from other apps. See [Import & export](/using-the-app/import-export). Self-hosters can also back up the server database directly; see [Backups](/self-hosting/backups).
 
 ## Can I self-host it?
 
@@ -61,9 +58,7 @@ For a private single-user instance you can disable login entirely. See [Authenti
 
 ## How does sharing work?
 
-Sharing happens at the **apiary** level through "scopes". When you share an apiary, the people you share it with can see and contribute to everything inside it: its hives, queens, inspections, tasks and more.
-
-Sync is conflict-free by design, so two people editing the same apiary on different devices will not clobber each other's work. Edits merge cleanly even after long periods offline. The technical details are covered in the [sync protocol](/developers/sync-protocol).
+Records are shared through **tenants**. Every account has a personal tenant and can be invited into others, for example a club's. Everyone in a tenant sees and edits all of its apiaries, hives and records; there is no per-apiary sharing. Sync is conflict-free, so two people editing in the same tenant on different devices do not overwrite each other's work. See [Accounts & tenants](/using-the-app/accounts-tenants).
 
 ## What hive types are supported?
 
@@ -99,7 +94,7 @@ Each hive can have a printable QR label. Scanning it opens Openbeehive straight 
 
 ## What languages is it available in?
 
-Openbeehive is being built with internationalisation in mind, with German and English as the first focus given the project's roots. Additional languages are welcome as community contributions.
+Five languages ship in the app: English, German, French, Spanish and Italian. Switch under **Settings → Language**. Further translations are welcome as contributions.
 
 ## Which databases and storage backends are supported?
 
@@ -110,11 +105,11 @@ When self-hosting, the backend is pluggable:
 
 ## How do I sign in?
 
-The hosted service uses OIDC login (sign in with a supported provider), with optional passkeys (WebAuthn) for a passwordless experience. Self-hosters can configure their own OIDC providers, enable passkeys, or turn login off entirely for single-user setups. See [Authentication](/self-hosting/authentication).
+The hosted service uses email and password accounts. Self-hosters can enable email/password accounts, add OIDC providers (Google, Keycloak, Authentik and similar), enable passkeys, or turn login off entirely for a single-user setup. See [Authentication](/self-hosting/authentication).
 
 ## How do I report a bug or request a feature?
 
-Please open an issue on our [GitHub organisation](https://github.com/johnnycube/openbeehive-app). Clear steps to reproduce, your platform and browser, and a screenshot all help enormously.
+Please open an issue in the [GitHub repository](https://github.com/johnnycube/openbeehive-app). Clear steps to reproduce, your platform and browser, and a screenshot all help.
 
 The [troubleshooting page](/knowledge-base/troubleshooting) may already cover common issues.
 
@@ -122,8 +117,6 @@ The [troubleshooting page](/knowledge-base/troubleshooting) may already cover co
 
 Contributions of all kinds are welcome: code, documentation, translations, bug reports and ideas. The stack is Go on the backend and a SvelteKit PWA on the frontend.
 
-Read the [contributing guide](/developers/contributing) to get started, and have a look at the [architecture overview](/developers/architecture) to understand how the pieces fit together.
-
 ## What version is this?
 
-The current release is **v0.1.0**, our first public release. Expect rapid improvements, and check the [upgrading guide](/self-hosting/upgrading) when new versions land.
+Releases are tagged on [GitHub](https://github.com/johnnycube/openbeehive-app/releases). Self-hosters run the tag they built or the image tag they pulled; see the [upgrading guide](/self-hosting/upgrading) when new versions land.

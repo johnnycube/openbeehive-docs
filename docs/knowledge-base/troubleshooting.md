@@ -7,22 +7,22 @@ title: "Troubleshooting"
 
 Most issues with Openbeehive fall into a handful of categories: sync, local storage, the camera/QR scanner, or login. This page walks through each, with practical checks you can run yourself before reaching out for help.
 
-The good news: because Openbeehive is offline-first, your records live in a local database on your device. Almost nothing you do here can lose data that has already synced to the server.
+Your records live in a local database on your device, so almost nothing here can lose data that has already synced to the server.
 
 ## Data not syncing
 
 Your changes save instantly to the device. Syncing to the server happens quietly in the background, so a delay is normal and rarely a cause for concern. If changes you made on one device are not appearing on another, work through this list.
 
-**1. Check you are online.** Sync only runs when you have a network connection. Look at the sync status indicator in the app. If you have been working in the field with no signal, your edits are queued safely and will send as soon as you reconnect.
+**1. Check you are online.** The sidebar shows **Online** or **Offline** next to your account. If you have been working in the field with no signal, your edits are queued and send as soon as you reconnect.
 
-**2. Check you are logged in.** Sync requires an authenticated session. If your session has expired you will still be able to read and edit locally, but nothing will sync until you sign in again. Open the account menu and confirm you are signed in.
+**2. Check you are signed in.** Sync requires a session. If it has expired you can still read and edit locally, but nothing syncs until you sign in again. **Settings → Account** shows who you are signed in as.
 
-**3. Check the apiary scope.** Sharing in Openbeehive happens at the apiary level via **scopes**. If a hive or inspection is missing on another device or for another person, confirm the relevant apiary is shared with that account. Records in an apiary you cannot access will never appear.
+**3. Check the active tenant.** Records belong to a tenant. If a hive is missing on another device, open **Settings → Tenants** there and make sure the same tenant is active. If it is missing for another person, they are not a member of that tenant; a tenant admin can invite them.
 
 **4. Give it a moment, then reopen.** Background sync runs periodically. Closing and reopening the app, or switching to it from the background, prompts a fresh sync attempt.
 
 :::note
-Sync is conflict-free by design. Openbeehive uses Hybrid Logical Clocks with last-writer-wins for individual fields and add-wins sets for lists, and append-only events (inspections, treatments, harvests) never conflict. You will not lose work because two devices edited at once. The most recent edit to a given field wins; both additions to a list are kept.
+Sync is conflict-free by design. The most recent edit to a field wins, additions (photos, visits, harvests, treatments) are kept, and you will not lose work because two devices edited at once.
 :::
 
 If you self-host and sync fails for everyone, the problem is more likely server-side. See [Self-Hosting configuration](/self-hosting/configuration) and check the server logs.
@@ -98,8 +98,8 @@ On iPhone and iPad the in-app scanner can be restricted. If scanning does not wo
 
 - **Stuck on the sign-in screen.** Confirm you are reaching the correct address (the hosted app is at app.openbeehive.org). After signing in with your provider you should be redirected back automatically; if not, reload the page.
 - **Redirect fails or "invalid redirect" errors (self-host).** This almost always means the OIDC redirect URL or `BEEHIVE_PUBLIC_BASE_URL` is misconfigured. See [Authentication and configuration](/self-hosting/authentication).
-- **Passkey not offered.** WebAuthn/passkeys must be enabled and you must have registered a passkey on that device. If unavailable, sign in with your usual provider instead.
-- **Single-user self-host with no login.** If you run with no OIDC providers and WebAuthn disabled, there is no sign-in step at all. If you unexpectedly see a login screen, check your server configuration.
+- **Passkey not offered.** Passkeys must be enabled on the server and you must have added one under Settings → Passkeys. Otherwise sign in with another method.
+- **Single-user self-host with no login.** With password auth off, no OIDC providers and WebAuthn disabled, there is no sign-in step at all. If you unexpectedly see a login screen, check your server configuration.
 
 ## Filing a good bug report
 
@@ -110,7 +110,7 @@ If none of the above helps, please open an issue at [github.com/johnnycube/openb
 | What you did | "Tapped Save on a new inspection" |
 | What you expected | "Inspection appears in the hive timeline" |
 | What happened instead | "Spinner, then the entry vanished" |
-| App version | v0.1.0 (shown in the app's About screen) |
+| App version | The release you run: the image tag or git tag on a self-hosted instance |
 | Platform & browser | iPhone 14, iOS 17, Safari |
 | Hosted or self-hosted | Self-hosted, `selfhost` profile, SQLite |
 | Online or offline | "Was offline in the field, syncing now" |
@@ -120,4 +120,4 @@ If none of the above helps, please open an issue at [github.com/johnnycube/openb
 Please do not paste secrets. Redact session secrets, OIDC client secrets, database passwords and personal data before sharing logs or configuration.
 :::
 
-For self-hosting questions about databases, storage, authentication and environment variables, the [Self-Hosting section](/category/self-hosting) and [configuration reference](/self-hosting/configuration) are the best starting points. See also the [FAQ](/knowledge-base/faq).
+For self-hosting questions, start with the [configuration reference](/self-hosting/configuration).

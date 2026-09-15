@@ -151,11 +151,3 @@ When you mark a queen, record her marking colour in the app on the
 the year automatically, so you can confirm at a glance whether a queen is the
 age you think she is.
 :::
-
-## Where to go next
-
-- Learn the broader season in [The beekeeping year](/beekeeping/beekeeping-year).
-- Understand the impulse to make new queens in
-  [Swarming](/beekeeping/swarming).
-- See how colonies are organised in
-  [The colony](/beekeeping/the-colony).

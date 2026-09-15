@@ -5,228 +5,216 @@ title: "Data model"
 
 # Data model
 
-This page describes the core entities Openbeehive stores, how they relate, and
-how **scopes** decide what syncs to whom. It is written from the offline-first
-point of view: the same shape lives in the device's SQLite-WASM database and in
-the server's pluggable database, and the [sync protocol](/developers/sync-protocol)
-keeps them in step.
+The tables below are taken from the server migrations
+(`server/internal/storage/sql/migrations/`) and the client mirror schema
+(`app/src/lib/local/schema.ts`). Column names are identical on both sides and
+are the keys used in sync payloads. Enum columns store the proto number; the
+display label is what the app shows (`app/src/lib/i18n/locales/en.json`).
 
-If you want the mechanics of change tracking (HLC timestamps, last-writer-wins,
-OR-Sets, append-only events), read [History and events](/developers/history-and-events)
-first — this page focuses on the entities themselves.
+Every synced table carries three bookkeeping columns not repeated below:
+`organization_id` (tenant), `field_hlc` (JSON field clock, see the
+[sync protocol](/developers/sync-protocol)) and `deleted` (soft-delete flag).
+Ids are UUIDs, minted on the device or by the server for rows created
+through the [API](/using-the-api/overview). Timestamps are stored as ISO
+8601 strings on the client and as `TIMESTAMP` on the server.
 
-## The hierarchy
-
-At the top sits the **Apiary** (a yard or location). Each apiary holds **Hives**;
-each hive has a current **Queen** and accumulates a stream of records over time.
-
-```text
-Apiary
- ├── Hive ──────── Queen (current; queens form a succession over time)
- │     ├── Inspection   (a visit: what you saw)
- │     ├── Task         (something to do, with a due date)
- │     ├── Event        (append-only fact: requeened, split, died, moved…)
- │     ├── Harvest      (honey/wax taken off)
- │     └── Treatment    (varroa or disease treatment applied)
- │
- └── Placement (hive ↔ apiary, time-bounded — where a hive lived, and when)
-
-ApiaryShare (apiary ↔ user — grants another beekeeper access via a scope)
-```
-
-A hive belongs to one apiary at a time, but **Placement** records the full
-history of where a hive has lived, so a hive can move between yards without
-losing its records.
-
-## Entities and key fields
-
-Every entity shares a common envelope used by sync: a stable `id` (an
-offline-generated UUID), a `scope_id` (see **Scopes**),
-HLC bookkeeping columns, and a soft-delete flag. The fields below are the
-domain-meaningful ones.
-
-### Apiary
-
-The container and the unit of sharing.
-
-| Field | Notes |
-|---|---|
-| `id` | UUID |
-| `name` | e.g. "Home yard" |
-| `location` | free-text or lat/long |
-| `notes` | free-text |
-| `scope_id` | equals the apiary's own `id` (see below) |
-
-### Hive
-
-A colony's housing within an apiary.
-
-| Field | Notes |
-|---|---|
-| `id` | UUID; also encoded in the [hive QR label](/using-the-app/qr-labels) |
-| `apiary_id` | current apiary (the active placement) |
-| `name` / `short_code` | human label and the short code printed on the QR |
-| `type` | one of Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar, Other — see [Hive types](/knowledge-base/hive-types) |
-| `status` | e.g. active, dead, sold |
-| `notes` | free-text |
-| `scope_id` | the apiary id |
-
-### Queen
-
-The reigning queen of a hive. Queens form a **succession**: when a colony is
-requeened the previous queen is closed off and a new record opens, so you keep
-the full lineage.
-
-| Field | Notes |
-|---|---|
-| `id` | UUID |
-| `hive_id` | the hive she heads |
-| `year` | introduction/birth year |
-| `marking_colour` | follows the [international colour scheme](/knowledge-base/queen-marking-colours) (1/6 white, 2/7 yellow, 3/8 red, 4/9 green, 5/0 blue) |
-| `origin` | bred, bought, swarm, supersedure… |
-| `clipped` | wing-clipped (boolean) |
-| `scope_id` | the apiary id of her hive |
-
-### Inspection
-
-A dated visit: the snapshot of what you observed.
-
-| Field | Notes |
-|---|---|
-| `id`, `hive_id`, `date` | who and when |
-| `brood`, `stores`, `temperament` | typical observations |
-| `queen_seen`, `eggs_seen`, `queen_cells` | quick checks |
-| `varroa_count` | mite drop / wash count if taken |
-| `temp_hive`, `temp_outside` | temperature (°C) inside the hive and outside |
-| `humidity_hive`, `humidity_outside` | relative humidity (%) inside the hive and outside |
-| `notes` | free-text |
-| `scope_id` | the apiary id |
-
-The climate fields are plain optional scalars, so they sync per-field like any
-other column and can be filled by hand or by an automated sensor — see
-[Automated trackers](/using-the-api/automated-trackers).
-
-### Task
-
-Something to do for a hive or apiary, with a due date and a done state.
-
-| Field | Notes |
-|---|---|
-| `id` | UUID |
-| `hive_id` / `apiary_id` | the subject (a task may target either level) |
-| `title`, `due_date`, `done` | the basics |
-| `scope_id` | the apiary id |
-
-### Event
-
-An **append-only** fact about a hive — requeened, split, swarmed, died, moved,
-fed. Events are never edited or merged; they only accumulate, which is why they
-never conflict during sync. They are the backbone of the hive's timeline.
-
-| Field | Notes |
-|---|---|
-| `id`, `hive_id`, `occurred_at` | when it happened |
-| `kind` | the event type |
-| `payload` | type-specific detail (JSON) |
-| `scope_id` | the apiary id |
-
-See [History and events](/developers/history-and-events) for the full event
-catalogue and how the timeline is assembled.
-
-### Harvest
-
-Honey (or wax) taken off a hive.
-
-| Field | Notes |
-|---|---|
-| `id`, `hive_id`, `date` | the take-off |
-| `product` | honey, wax, propolis… |
-| `quantity`, `unit` | e.g. 12.5 kg |
-| `notes` | e.g. forage, moisture |
-| `scope_id` | the apiary id |
-
-### Treatment
-
-A varroa or disease treatment applied to a hive.
-
-| Field | Notes |
-|---|---|
-| `id`, `hive_id`, `date` | subject and application date |
-| `product`, `active_ingredient` | e.g. Oxuvar / oxalic acid |
-| `dose`, `method` | e.g. 50 ml, trickling |
-| `batch_number` | batch / charge (often legally required) |
-| `withdrawal_until` | date honey is safe to harvest again |
-| `reason` | e.g. varroa |
-| `note` | free-text |
-| `apiary_id`, `queen_id` | frozen context at application time |
-| `scope_id` | the apiary id |
-
-:::note
-Treatment and dosing rules vary by country and product approval. Openbeehive
-records what you did; it does not prescribe. Always follow your local
-authorisations — see [Varroa](/beekeeping/varroa).
-:::
-
-### Placement
-
-The time-bounded link between a hive and an apiary: where a hive lived and for
-how long. A new placement opens when a hive moves; the previous one closes.
-
-| Field | Notes |
-|---|---|
-| `id`, `hive_id`, `apiary_id` | the link |
-| `from` / `until` | interval; `until` is null while current |
-| `scope_id` | the apiary id |
-
-### ApiaryShare
-
-Grants another beekeeper access to an apiary (and everything under it).
-
-| Field | Notes |
-|---|---|
-| `id`, `apiary_id` | what is shared |
-| `user_id` | who it is shared with |
-| `role` | e.g. viewer, editor |
-
-## Scopes and sync gating
-
-Sharing happens at the **apiary** level, and a single value drives it: every
-record carries a `scope_id`.
-
-- For apiary-owned data — hives, queens, inspections, tasks, events, harvests,
-  treatments, placements, and the apiary itself — `scope_id` is the **apiary's
-  id**.
-- For data that belongs to a single user and is never shared (e.g. personal
-  preferences), `scope_id` takes the form `user:<id>`.
-
-When two devices sync, they exchange only the scopes the user is entitled to.
-The server resolves a user's scope set as:
+## Hierarchy
 
 ```text
-scopes(user) = { "user:<their id>" }
-             ∪ { apiary.id  for each apiary they own }
-             ∪ { share.apiary_id  for each ApiaryShare granting them access }
+apiary
+ └── hive ── queen (one active, older ones kept with replaced_at set)
+       ├── inspection
+       ├── task        (task.hive_id and task.apiary_id are both optional)
+       ├── harvest
+       ├── treatment
+       ├── placement   (which apiary the hive lived in, and when)
+       └── event       (append-only history with frozen apiary/hive/queen)
 ```
 
-Adding an `ApiaryShare` therefore makes a whole apiary — every hive and every
-record beneath it — appear on the recipient's devices on the next sync; revoking
-it stops further changes from flowing. Because the gate is the `scope_id` column,
-sharing is all-or-nothing per apiary and needs no per-record permissions.
+Sharing and sync partitioning use `scope_id`: an apiary's own id for the
+apiary and everything under it. Only `event` stores `scope_id` as a column;
+for the other tables it is carried on the `Change` message.
 
-:::tip
-A hive id by itself grants nothing. Scanning a [QR label](/developers/qr-codes)
-opens the app at a hive only if that hive's scope has actually synced to your
-device.
-:::
+## apiary
 
-## Why it merges cleanly
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | |
+| `name` | text | required |
+| `address` | text | free text |
+| `lat`, `lng` | real | `0` when unset |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
 
-The shapes above are chosen so that sync never needs a human to resolve a
-conflict:
+## hive
 
-- **Scalar fields** (a queen's marking colour, a hive's name) use per-field
-  last-writer-wins, decided by HLC timestamps.
-- **List/set fields** use add-wins OR-Sets, so concurrent additions all survive.
-- **Events** are append-only and immutable, so they simply accumulate.
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | also encoded in the [QR label](/developers/qr-codes) |
+| `apiary_id` | text | current apiary |
+| `name` | text | |
+| `type` | int | `HiveType`, see below |
+| `status` | int | `HiveStatus`, see below; new hives start at `1` |
+| `boxes` | int | number of boxes |
+| `colony_origin` | text | e.g. "swarm 2024" |
+| `note` | text | |
+| `qr_code` | text | reserved; the printed code is derived from `id` by `shortCode()` in `app/src/lib/qr.ts` |
+| `photo` | text | data URL or blob key |
+| `created_at`, `updated_at` | timestamp | |
 
-For the full algorithm, continue to the [sync protocol](/developers/sync-protocol).
+`HiveType`: 0 Unspecified, 1 Zander, 2 Dadant, 3 Deutsch Normal, 4 Langstroth,
+5 Warré, 6 Top-bar, 99 Other.
+
+`HiveStatus`: 0 Unspecified, 1 Active, 2 Nucleus, 3 Queenless, 4 Lost,
+5 Dissolved.
+
+## queen
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | |
+| `hive_id` | text | |
+| `year` | int | the queen's year; drives the default marking colour |
+| `marking` | int | `MarkingColor`: 1 white (years ending 1/6), 2 yellow (2/7), 3 red (3/8), 4 green (4/9), 5 blue (5/0); defaults from `year` |
+| `origin` | text | |
+| `breeder_number` | text | |
+| `introduced_at` | timestamp | start of reign |
+| `replaced_at` | timestamp | end of reign, null while reigning |
+| `active` | bool | true for the current queen |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
+
+A queen change sets `active = 0` and `replaced_at` on the old row and inserts
+a new one; old queens are never deleted.
+
+## inspection
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id`, `hive_id` | text | |
+| `date` | timestamp | |
+| `weather` | text | |
+| `queen_seen`, `eggs_seen` | bool | |
+| `temperament` | int | 1 Very gentle, 2 Gentle, 3 Normal, 4 Nervous, 5 Aggressive |
+| `calmness` | int | 1 Runs off comb, 2 Restless, 3 Calm, 4 Very calm |
+| `frames` | int | occupied frames |
+| `brood_frames` | int | |
+| `stores` | int | 1 Good, 2 Medium, 3 Low, 4 None |
+| `queen_cells` | int | swarm cells counted |
+| `youngest_larva` | int | age in days of the youngest larva seen |
+| `covered_larva` | bool | capped brood seen |
+| `varroa` | text | |
+| `honey_kg`, `fed_kg`, `weight_kg` | real | |
+| `frames_added`, `frames_removed` | int | |
+| `drone_frame_cut`, `super_added` | bool | |
+| `temp_hive`, `temp_outside` | real | °C, null when not measured in the app; `CreateInspection` stores `0` for fields left out |
+| `humidity_hive`, `humidity_outside` | real | %, same rule as the temperatures |
+| `note` | text | |
+| `photo_keys` | text | OR-Set JSON, the only set column |
+| `created_at` | timestamp | |
+
+## task
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | |
+| `title` | text | |
+| `hive_id`, `apiary_id` | text | optional |
+| `due_at` | timestamp | |
+| `done` | bool | |
+| `priority` | int | `TaskPriority`: 1 Low, 2 Normal, 3 High; the server column defaults to 2, the app writes 0 |
+| `note`, `recurrence`, `assigned_to` | text | present in the schema; the task form only fills `title` and `due_at` |
+| `created_at` | timestamp | |
+
+## placement
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id`, `hive_id`, `apiary_id` | text | |
+| `start_at` | timestamp | |
+| `end_at` | timestamp | null for the current placement |
+
+Creating a hive opens a placement; moving it closes the open row at the
+move time and opens a new one.
+
+A task without `apiary_id` syncs under the personal scope
+`user:<user id>` instead of an apiary id.
+
+## harvest
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | frozen at harvest time |
+| `date` | timestamp | |
+| `variety` | text | |
+| `amount_kg` | real | |
+| `water_content` | real | % |
+| `batch_number` | text | |
+| `best_before` | timestamp | |
+| `note` | text | |
+
+## treatment
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | frozen at treatment time |
+| `date` | timestamp | |
+| `product`, `active_ingredient` | text | |
+| `dose`, `method` | text | |
+| `batch_number` | text | |
+| `withdrawal_until` | timestamp | |
+| `reason` | text | defaults to `varroa` |
+| `note` | text | |
+
+## event
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | |
+| `scope_id` | text | apiary id |
+| `type` | int | `EventType`, see below |
+| `date` | timestamp | |
+| `apiary_id`, `hive_id`, `queen_id` | text | frozen at event time |
+| `ref_entity`, `ref_id` | text | the detail row, e.g. `harvest` / its id |
+| `title` | text | |
+| `amount_kg` | real | copied from the harvest so yield queries need no join |
+| `detail` | text | JSON |
+| `author_id` | text | |
+
+`EventType`: 1 Created, 2 Queen introduced, 3 Queen replaced, 4 Moved,
+5 Inspection, 6 Treatment, 7 Harvest, 8 Status, 9 Dissolved. The app writes
+types 1 to 7 (`app/src/lib/local/history.ts`). See
+[History and events](/developers/history-and-events).
+
+## Server-only tables
+
+`organization`, `users`, `member`, `invite`, `user_passkey`, `api_key`,
+`apiary_share`, `change_log` and `seq_counter` exist only on the server.
+`member.role` is `owner` or `member`; `users.role` is `admin` or `user`.
+`apiary_share` is read by the sync scope check but nothing in the app writes
+it. The client adds `outbox` and `sync_meta` for the sync engine.
+
+### api_key
+
+Long-lived keys for scripts and integrations (migration `0014_api_keys.sql`,
+`server/internal/auth/apikey.go`). Not synced.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | text | |
+| `user_id` | varchar(64) | owner; indexed |
+| `organization_id` | varchar(64) | the tenant the key acts in, fixed at creation |
+| `name` | text | label shown in Settings |
+| `key_prefix` | text | first 12 characters of the plaintext, for display |
+| `key_hash` | varchar(64) | hex SHA-256 of the plaintext `obhk_...` token, unique; the plaintext is never stored |
+| `scope` | text | `write` (default) or `read`; a `read` key may call only `Get*`, `List*`, `Pull` and `Subscribe` |
+| `created_at` | timestamp | |
+| `expires_at` | timestamp | null for keys that never expire; a key past this time is refused |
+| `last_used_at` | timestamp | updated on every verified use, null until then |
+
+A key is verified by hashing the bearer token and looking up `key_hash`; the
+row is deleted on removal, and a key whose owner is no longer a `member` of
+`organization_id`, or whose `expires_at` has passed, is refused without
+being deleted.

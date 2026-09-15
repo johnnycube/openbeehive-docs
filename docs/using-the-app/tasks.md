@@ -5,99 +5,48 @@ title: "Tasks"
 
 # Tasks
 
-Beekeeping is full of small jobs that are easy to forget: add a super before the
-flow, fit a clearer board the day before extraction, treat for varroa once the
-honey is off. Tasks are Openbeehive's reminders. Jot one down with a due date,
-and it will surface on your dashboard when the day comes.
-
-Like everything else in Openbeehive, tasks are stored locally first and sync in
-the background, so you can add one in the apiary with no signal and it will be
-waiting on your other devices later.
+Beekeeping is full of small jobs that are easy to forget: add a super before the flow, fit a clearer board the day before extraction, treat for varroa once the honey is off. Tasks are Openbeehive's reminders: a title and an optional due date. Works offline; see [Offline and sync](/using-the-app/offline-and-sync).
 
 ## Creating a task
 
-Open the Tasks view and choose **New task**. A task has just a few fields:
+Open **Tasks**. At the top, type what needs doing, optionally pick a due date, and tap **Add**.
 
 | Field | Notes |
 | --- | --- |
-| Title | A short description of the job, e.g. "Add second brood box". |
-| Due date | The day the task should appear as due. Optional, but recommended. |
-| Apiary | Optionally tie the task to a specific apiary. |
-| Notes | Any extra detail you want to remember. |
+| Title | A short description of the job, e.g. "Add second brood box". Put the hive or apiary in the title if it matters. |
+| Due | The day the task is due. Optional. |
 
-Keep the title short and actionable. The notes field is the place for the
-details, such as which hive, how much syrup, or which treatment you intend to
-use.
+That is the whole task. There are no notes, no link to a hive or apiary, and no recurrence.
 
 :::tip
-You can create a task without a due date for "someday" jobs, such as "Build two
-more nuc boxes over winter". It simply won't appear in your due reminders until
-you add a date.
+Create a task without a due date for "someday" jobs, such as "Build two more nuc boxes over winter".
 :::
 
-### Tying a task to an apiary
-
-If you link a task to an apiary, it travels with that apiary's records. This is
-handy when you keep bees in more than one place, because you can see at a glance
-which yard a job belongs to, for example "Mow around hives" at the home apiary
-versus "Check fence" at the out-apiary.
-
-Because sharing in Openbeehive happens at the apiary level via scopes, a task
-tied to a shared apiary is visible to everyone with access to that apiary. That
-makes tasks a simple way to coordinate within a small group or association. See
-[Apiaries](/using-the-app/apiaries) for more on sharing.
+Tasks belong to the active tenant, so everyone in a shared tenant sees the same list. That makes them a simple way to coordinate within a club or between two beekeepers.
 
 ## Open vs done
 
 Every task is either **open** or **done**.
 
-- **Open** tasks are still to do. They appear in your task list and, once their
-  due date arrives, on the dashboard.
-- **Done** tasks are completed. Mark a task done by ticking it off; it drops out
-  of your active list but stays in your records so you can see what was done and
-  when.
+- Tap the circle on the left of a task to tick it off. Done tasks stay in the list, struck through, and are not counted as open.
+- Tap the circle again to reopen a task you ticked off by mistake.
+- The pencil edits the title or due date; the cross deletes the task.
 
-You can reopen a task you marked done by mistake, and you can edit a task's title,
-date or notes at any time.
+If you and a co-beekeeper both tick off the same task on different devices, the task ends up done.
 
-:::note
-Marking a task done is a simple state change that syncs like any other field.
-Thanks to Openbeehive's conflict-free sync, if you and a co-beekeeper both tick
-off the same task on different devices, the result is consistent: the task ends
-up done. See [Offline and sync](/using-the-app/offline-and-sync) for how this
-works.
-:::
+## Tasks on the Overview
 
-## How due tasks surface on the dashboard
-
-The dashboard is your daily starting point, and due tasks are one of the first
-things it shows you. A task counts as **due** when its due date is today or
-earlier and the task is still open.
-
-- Tasks due **today** appear in your dashboard reminders.
-- Tasks whose due date has **passed** stay visible (overdue) until you mark them
-  done, so nothing quietly slips away.
-- Tasks with a due date in the **future** wait quietly and appear on the day.
-
-This means you can plan ahead freely. Schedule a job for three weeks' time and
-forget about it; it will resurface exactly when you need it. See the
-[Dashboard](/using-the-app/dashboard) for the full picture of what your home
-screen shows.
+The **Open tasks** tile counts tasks that are not done. **Upcoming tasks** lists up to five open tasks with their due dates; tasks whose due date has passed are flagged with **!**. See [The dashboard](/using-the-app/dashboard).
 
 :::tip
-For recurring jobs, the simplest approach is to create the next task when you
-mark the current one done. For example, after completing a 7-day inspection,
-add a new task for the following week.
+For recurring jobs, add the next task when you tick off the current one. After a seven-day swarm check, add "Swarm check" for the following week.
 :::
 
 ## Examples of typical beekeeping tasks
 
-Tasks work best when they are concrete and time-bound. Here are some common
-examples through the year:
-
 **Spring**
 
-- Carry out the first full inspection on a mild day.
+- First full inspection on a mild day.
 - Add a queen excluder and the first super before the main flow.
 - Check feed stores after a cold snap.
 
@@ -117,8 +66,7 @@ examples through the year:
 
 - Feed for winter and check overall stores.
 - Fit mouse guards before the first frosts.
-- Apply an oxalic acid treatment in the broodless period (timing varies by
-  region and method).
+- Oxalic acid treatment in the broodless period (timing varies by region and method).
 
 **Winter**
 
@@ -127,14 +75,5 @@ examples through the year:
 - Repair and build equipment ready for spring.
 
 :::caution
-Treatment timing and the products you may legally use vary by country and
-region. Always follow your local guidance and the product label. The
-[Varroa](/beekeeping/varroa) page covers the principles, but it is not a
-substitute for the rules where you keep bees.
+Treatment timing and the products you may legally use vary by country and region. Follow your local guidance and the product label. See [Varroa](/beekeeping/varroa).
 :::
-
-## See also
-
-- [Dashboard](/using-the-app/dashboard) — where due tasks appear.
-- [Inspections](/using-the-app/inspections) — recording what you find on a visit.
-- [The beekeeping year](/beekeeping/beekeeping-year) — what to do and when.

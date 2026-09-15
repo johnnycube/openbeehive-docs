@@ -6,15 +6,15 @@ title: Getting started
 
 # Openbeehive documentation
 
-**Openbeehive** is offline-first beekeeping record-keeping — a free hosted
-service **and** self-hostable software, for hobby and professional beekeepers
-alike. The app stores everything locally and syncs to the server, so it works in
-the bee yard with or without a signal.
+**Openbeehive** is offline-first beekeeping record-keeping: a free hosted
+service and self-hostable software, for hobby and professional beekeepers.
+The app stores everything on the device and syncs to the server, so it works
+in the bee yard with or without a signal.
 
-- 🐝 **Use the app:** [app.openbeehive.org](https://app.openbeehive.org)
-- 🍯 **Try the demo:** [demo.openbeehive.org](https://demo.openbeehive.org)
-- 🌐 **Project home:** [openbeehive.org](https://openbeehive.org)
-- 💻 **Source code:** [github.com/johnnycube/openbeehive-app](https://github.com/johnnycube/openbeehive-app)
+- Use the app: [app.openbeehive.org](https://app.openbeehive.org)
+- Try the demo: [demo.openbeehive.org](https://demo.openbeehive.org)
+- Project home: [openbeehive.org](https://openbeehive.org)
+- Source code: [github.com/johnnycube/openbeehive-app](https://github.com/johnnycube/openbeehive-app)
 
 ## Where to start
 
@@ -22,12 +22,13 @@ the bee yard with or without a signal.
 | --- | --- |
 | Learn how to record your beekeeping | [Using the app](/using-the-app/dashboard) |
 | Run your own instance | [Self-hosting](/self-hosting/quick-start) |
+| Call the API from scripts | [Using the API](/using-the-api/overview) |
 | Learn about beekeeping itself | [Beekeeping basics](/beekeeping/getting-started) |
 | Look something up | [Knowledge base](/knowledge-base/glossary) |
 | Understand the internals | [Developers](/developers/architecture) |
 
-:::note Early release
-These docs cover Openbeehive **v0.1.0**, the first public release. They're
-growing fast — if something is missing or unclear, please
+:::note
+These docs follow the current app release; use the version switch in the
+navbar for older snapshots. If something is missing or unclear,
 [open an issue](https://github.com/johnnycube/openbeehive-docs/issues).
 :::

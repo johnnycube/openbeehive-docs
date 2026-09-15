@@ -151,14 +151,10 @@ Every monitoring count and every treatment is worth recording, both to track
 trends and to meet record-keeping rules that apply to beekeepers in many
 countries.
 
-In Openbeehive you can log each application as a **Treatment** against a hive:
-the product used, the active substance, the dose, and the dates started and
-finished. Over time this builds a clear history so you can see what you used,
-when, and how the colony responded.
-
-See [Treatments](/using-the-app/treatments) for how to add and manage these
-records. Because the app is offline-first, you can log a treatment at the
-apiary with no signal and it will sync later.
+In Openbeehive you log each application as a **Treatment** against a hive: the
+date, product, active ingredient, method, dose, batch number, reason and the
+withdrawal-until date. Over time this builds a clear history of what you used
+and when. See [Treatments](/using-the-app/treatments).
 
 :::note
 Keeping accurate treatment records is often a legal requirement, especially

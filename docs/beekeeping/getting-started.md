@@ -97,10 +97,4 @@ Every region's calendar differs, so treat this as a shape rather than fixed date
 Aim to keep your colony alive and healthy through its first winter. That, not honey, is the real measure of a successful first year.
 :::
 
-## Where to go next
-
-- [Understanding the colony](/beekeeping/the-colony) — who's who inside the hive and how it all works.
-- [Equipment](/beekeeping/equipment) — hives, tools and protective clothing explained.
-- [The beekeeping year](/beekeeping/beekeeping-year) — what to do, season by season.
-
 Take it slowly, keep good records, lean on your local community, and respect the rules where you live. Welcome to beekeeping.

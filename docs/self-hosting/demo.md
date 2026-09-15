@@ -15,8 +15,9 @@ When enabled, Openbeehive creates:
 
 - a demo account (`demo@app.openbeehive.org` / `demo` by default),
 - a demo **tenant** with **15 hives across 4 apiaries**,
-- a full season of data: queens, ~75 inspections (with temperature, humidity,
-  varroa, weight…), honey harvests and varroa treatments.
+- a season of data: queens, 105 inspections (7 per hive, spread over the trailing
+  ten months, with temperature, humidity, varroa, weight and more), a honey
+  harvest and two varroa treatments per hive.
 
 The data is **re-seeded every hour**, so the showcase always looks the same — a
 visitor can edit freely and everything returns to the canonical set on the next

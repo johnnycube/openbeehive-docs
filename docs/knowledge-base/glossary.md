@@ -22,7 +22,7 @@ you up.
 
 | Term | Meaning |
 | --- | --- |
-| **Apiary** | A site where one or more hives are kept; a "bee yard". In Openbeehive an apiary is the top of the hierarchy and the unit of sharing. See [apiaries](/using-the-app/apiaries). |
+| **Apiary** | A site where one or more hives are kept; a "bee yard". In Openbeehive an apiary is the top of the hierarchy. See [apiaries](/using-the-app/apiaries). |
 | **Bee space** | The roughly 6-9 mm gap bees leave as a passage. Spaces smaller are filled with propolis; larger are filled with comb. Correct bee space keeps frames movable. |
 | **Brood** | The developing young: eggs, larvae and pupae. A healthy "brood pattern" is compact with few gaps. |
 | **Brood box** | The lower box (or boxes) where the queen lays and brood is raised, as opposed to the supers above. |
@@ -74,9 +74,9 @@ national rules.
 | **OR-Set** | An "add-wins" set used for list fields so concurrent additions from different devices all survive a merge. See [sync protocol](/developers/sync-protocol). |
 | **PWA** | Progressive Web App - the installable, offline-capable web app you run on phone, tablet or desktop. See [install](/using-the-app/install). |
 | **QR label** | A printable code on a hive that encodes a deep link; scanning it opens the app straight at that hive. See [QR labels](/using-the-app/qr-labels). |
-| **Scope** | The sharing boundary in Openbeehive. Sharing happens at the apiary level: a scope grants others access to an apiary and everything within it. |
 | **Sync** | The background, conflict-free merging of your local changes with the server and your other devices. See [offline and sync](/using-the-app/offline-and-sync). |
-| **Task** | A reminder or to-do tied to a hive or apiary - for example "add a super" or "treat for varroa". See [tasks](/using-the-app/tasks). |
+| **Task** | A reminder with a title and an optional due date, for example "add a super" or "treat for varroa". See [tasks](/using-the-app/tasks). |
+| **Tenant** | A collection of apiaries, hives and records shared by its members. Every account has a personal tenant and can be invited into others; there is no finer-grained sharing. See [accounts and tenants](/using-the-app/accounts-tenants). |
 
 :::note
 The deeper mechanics of HLCs, OR-Sets and append-only events are covered in the

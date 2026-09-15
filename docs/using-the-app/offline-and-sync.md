@@ -5,166 +5,81 @@ title: "Offline & sync"
 
 # Offline & sync
 
-Openbeehive is built for the apiary, not the office. Out in the field you rarely
-have a reliable signal, so the app is **offline-first**: everything you do is
-saved on your device straight away and synced to the server later, quietly, in
-the background.
+Openbeehive is built for the apiary, not the office. Out in the field you rarely have a reliable signal, so the app is **offline-first**: everything you do is saved on your device straight away and synced to the server later, in the background.
 
-In practice this means the app never makes you wait for the network. Open a hive,
-record an inspection, add a task, snap a note about the queen, all of it is
-instant, signal or no signal.
+The app never makes you wait for the network. Open a hive, record a visit, add a task, note something about the queen: all of it is instant, signal or no signal.
 
 ## Everything is saved locally
 
-When you install Openbeehive it keeps a complete copy of your records in a small
-database on your device. Every read and every write happens against that local
-copy first.
+Openbeehive keeps a complete copy of your records in a small database on your device. Every read and every write happens against that local copy first.
 
-The upshot:
-
-- **It is fast.** Opening a hive or scrolling inspections never spins on a
-  loading bar.
-- **It works with no signal.** A wood, a valley, a cellar full of supers,
-  it makes no difference.
-- **Your data is yours.** The records live on your device; the server is a
-  copy for syncing and sharing, not the only home for your data.
+- **It is fast.** Opening a hive or scrolling visits never waits on a loading bar.
+- **It works with no signal.** A wood, a valley, a cellar full of supers.
+- **Your data is yours.** The records live on your device; the server is the copy for syncing and sharing.
 
 :::tip
-Because records are stored on the device, it is worth installing Openbeehive as
-an app rather than using it in a browser tab. See
-[Install Openbeehive](/using-the-app/install) for how to add it to your phone,
-tablet or desktop.
+Because records are stored on the device, install Openbeehive as an app rather than using it in a browser tab. See [Install Openbeehive](/using-the-app/install).
 :::
 
-## The offline banner
+## The offline indicator
 
-When the app cannot reach the server, a small banner appears to let you know you
-are working offline. This is purely informational, you can carry on exactly as
-before. Keep recording inspections, ticking off tasks, logging a harvest; nothing
-is blocked.
+When the device has no connection, the account block in the sidebar switches from **Online** to **Offline** and a bar at the top of the page reads "Offline — changes are saved and synced later." This is informational; carry on exactly as before.
 
-The moment your device is back online, the banner clears and any changes you made
-while offline are sent up automatically. There is no "sync now" button to
-remember and no risk of forgetting to save.
+When the device is back online the bar clears and any changes made offline are sent up automatically. There is no "sync now" button.
 
 :::note
-A persistent offline banner usually just means weak coverage out at the apiary.
-If it stays up even on a good connection at home, have a look at
-[Troubleshooting](/knowledge-base/troubleshooting).
+A persistent offline indicator usually means weak coverage at the apiary. If it stays on even on a good connection at home, see [Troubleshooting](/knowledge-base/troubleshooting).
 :::
 
 ## Your first sync on a new device
 
-Signing in on a new device, or reopening the app after its storage was cleared,
-starts with an empty local database that fills up in the background. The app
-makes that state visible instead of pretending there is nothing to show:
+Signing in on a new device, or reopening the app after its storage was cleared, starts with an empty local database that fills up in the background:
 
-- Lists show **shimmering placeholders** while they read from the local
-  database.
-- While the first download is still running, the dashboard and the apiary,
-  hive and task lists show **"Syncing your data…"** rather than an empty state,
-  so you are never invited to "create your first apiary" over records that are
-  about to arrive.
-- Large datasets appear **progressively**: every batch the app receives is
-  shown at once, so a long first sync fills the screen as it goes rather than
-  at the very end.
+- Lists show **shimmering placeholders** while they read from the local database.
+- While the first download is still running, the Overview and the apiary, hive and task lists show **"Syncing your data…"** rather than an empty state.
+- Large datasets appear **progressively**: every batch the app receives is shown at once.
 
-Only once the app knows the data is complete does it show a real empty state.
-If the device is offline or the server is unreachable, the hint gives way to
-whatever is stored locally, so nothing stays hidden behind a spinner.
+Only once the app knows the data is complete does it show a real empty state. If the device is offline or the server is unreachable, the hint gives way to whatever is stored locally.
 
 ## Syncing across your devices
 
-You can use Openbeehive on several devices, say a phone in the field and a
-laptop at home, and they will stay in step automatically.
-
-Each device keeps its own local copy and exchanges changes with the server in the
-background. Record an inspection on your phone at the hives, and by the time you
-sit down at your laptop it is already there. Edits flow both ways.
-
-You do not have to choose a "main" device or copy anything across by hand. As
-long as each device signs in to the same account, they all see the same records.
+Use Openbeehive on several devices, a phone in the field and a laptop at home, and they stay in step. Each device keeps its own local copy and exchanges changes with the server in the background. Record a visit on your phone at the hives, and by the time you sit down at your laptop it is there. As long as each device signs in to the same account, they all see the same records.
 
 ## What happens when two devices change the same thing
 
-This is the question every beekeeper asks, and the reassuring answer is: you do
-not have to think about it. Openbeehive resolves overlapping changes
-**automatically**, with no "which version do you want to keep?" prompts and no
-lost work.
+Openbeehive resolves overlapping changes **automatically**, with no "which version do you want to keep?" prompts.
 
-A few examples of how it behaves:
+- **You edit an apiary's note on your phone, your co-beekeeper edits the same note on theirs.** The most recent edit to that field wins.
+- **You both add photos to the same visit while offline.** Both sets of photos are kept.
+- **You each log a separate visit.** Visits, harvests and treatments are only ever added, so both are kept side by side.
 
-- **You edit a hive's notes on your phone, your co-beekeeper edits the same
-  notes on theirs.** The most recent edit to that field wins; the other is
-  superseded cleanly.
-- **You both add tasks, or both tag the hive, while offline.** Additions to
-  lists are kept, so nobody's task or tag gets dropped.
-- **You each log a separate inspection.** Inspections, events and similar
-  records are only ever added, never overwritten, so both are kept side by side.
-
-The result is that every device converges on the same, sensible state once they
-have all synced, and you never get a corrupted or half-merged record.
+Every device converges on the same state once all have synced.
 
 :::tip
-The short version: **add freely, edit confidently, never worry about losing
-data.** If you are curious how this actually works under the bonnet, the
-[sync protocol](/developers/sync-protocol) and
-[architecture](/developers/architecture) pages explain it in detail.
+The short version: add freely, edit confidently. How this works under the bonnet is on the [sync protocol](/developers/sync-protocol) and [architecture](/developers/architecture) pages.
 :::
 
-## Sharing an apiary
+## Sharing
 
-Openbeehive shares records at the **apiary** level. When you share an apiary,
-everything inside it, its hives, queens, inspections, tasks, events, harvests and
-treatments, is shared along with it. This keeps things simple: you grant access
-to a yard, not to dozens of individual hives.
-
-Each person you share with is given a role:
+Records are shared through **tenants**. Every member of a tenant sees and edits all of its apiaries, hives and records; there is no per-apiary or per-hive sharing.
 
 | Role | What they can do |
 | --- | --- |
-| **Viewer** | See the apiary and all its records. Cannot make changes. |
-| **Beekeeper** | View and edit: record inspections, complete tasks, log harvests and treatments, update hives and queens. |
-| **Owner** | Everything a beekeeper can do, plus manage the apiary itself and who it is shared with. |
+| **Admin** (tenant owner) | Everything a member can, plus invite and revoke, and delete the tenant. |
+| **Member** | Add and edit apiaries, hives, visits, tasks, harvests and treatments in the tenant. |
 
-This works well for an association teaching apiary, a mentor keeping an eye on a
-new beekeeper's hives, or simply two people sharing the work in the same yard.
-Shared records sync and resolve conflicts in exactly the same way as your own, so
-a partner's changes appear on your devices automatically.
-
-:::note
-Sharing is per apiary, so you can share one yard with a mentor while keeping
-others entirely private.
-:::
+To share one yard with a mentor while keeping others private, put that yard in its own tenant and invite the mentor there. Shared records sync and resolve conflicts exactly like your own. See [Accounts & tenants](/using-the-app/accounts-tenants).
 
 ## If something cannot be saved
 
-Saving happens on your device, so it virtually never fails. If it ever does — for example because the browser's storage is full or damaged — the app says so plainly: the form stays open with everything you typed, and an error message explains what went wrong. Nothing disappears silently.
+Saving happens on your device, so it virtually never fails. If it does (for example because the browser's storage is full or damaged) the form stays open with everything you typed and an error message explains what went wrong.
 
-On the public **demo account** the server does not accept uploads (the demo resets itself regularly). You can still try everything: your changes are saved on your device and simply stay there instead of syncing.
+On the public **demo account** the server rejects changes (the demo resets itself hourly). Your changes are saved on your device and simply stay there instead of syncing.
 
-There is one situation where saving works but does not last: if the browser
-cannot give the app its private storage, the app falls back to an in-memory
-database and shows the toast **"Storage is unavailable — changes will not
-persist on this device."** Everything keeps working for the session, and edits
-still sync to the server if you are signed in, but the local copy is gone once
-the tab closes. This happens in private browsing windows and when a second tab
-of the app is still holding the storage; see
-[Troubleshooting](/knowledge-base/troubleshooting#storage-is-unavailable) for
-what to do.
+There is one situation where saving works but does not last: if the browser cannot give the app its private storage, the app falls back to an in-memory database and shows the toast **"Storage is unavailable — changes will not persist on this device."** Everything keeps working for the session, and edits still sync to the server if you are signed in, but the local copy is gone once the tab closes. This happens in private browsing windows and when a second tab of the app is still holding the storage; see [Troubleshooting](/knowledge-base/troubleshooting#storage-is-unavailable).
 
 ## Will I ever lose data?
 
-No. Your records are written to your device first and are not removed simply
-because you are offline or because the app closes. They wait safely on the
-device until they can be synced, then sync on their own.
+Your records are written to your device first and are not removed because you are offline or the app closes. They wait on the device until they can be synced.
 
-For extra peace of mind, particularly if you self-host, it is still good
-practice to keep server backups. See [Backups](/self-hosting/backups) for how.
-
-## Related pages
-
-- [Install Openbeehive](/using-the-app/install)
-- [QR labels](/using-the-app/qr-labels)
-- [Architecture](/developers/architecture)
-- [Sync protocol](/developers/sync-protocol)
+If you self-host, keep server backups as well. See [Backups](/self-hosting/backups).
