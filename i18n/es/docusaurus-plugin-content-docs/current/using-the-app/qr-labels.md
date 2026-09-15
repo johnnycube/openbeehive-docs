@@ -5,132 +5,74 @@ title: "Etiquetas QR"
 
 # Etiquetas QR
 
-Una etiqueta QR convierte cualquier colmena en un atajo de un solo toque. Pega una
-etiqueta en el techo o la cámara de cría, apunta tu teléfono hacia ella y Openbeehive
-abre directamente la ficha de esa colmena. Sin recorrer listas en el colmenar, sin
-forzar la vista para leer números escritos a mano bajo la lluvia.
-
-Esto es especialmente útil cuando mantienes varias colmenas que parecen idénticas, o
-cuando un ayudante que no conoce tu numeración necesita encontrar la colonia correcta.
+Una etiqueta QR convierte una colmena en un atajo de un solo toque. Pega una etiqueta en el techo o la cámara de cría, apunta tu teléfono hacia ella y Openbeehive se abre en la ficha de esa colmena. Sin recorrer listas en el colmenar, sin forzar la vista para leer números escritos a mano bajo la lluvia.
 
 ## Qué contiene el código QR
 
-El código QR de cada colmena codifica un único **enlace directo** a esa colmena:
+El código de cada colmena codifica un único enlace profundo a esa colmena:
 
 ```text
 <base>/h/<hiveId>
 ```
 
-El `<base>` es la dirección de tu aplicación (para el servicio alojado es
-`https://app.openbeehive.org`; para una instalación autoalojada es tu propia URL). El
-`<hiveId>` es el identificador único de la colmena.
+`<base>` es la dirección en la que usas la aplicación (`https://app.openbeehive.org` en el servicio alojado, tu propia URL en una instancia autoalojada) y `<hiveId>` es el identificador de la colmena. La etiqueta también imprime un código corto de seis caracteres derivado del id, para distinguir las etiquetas a simple vista.
 
-El código no contiene datos de abejas, ni pesos de miel, ni información personal. Es
-solo un enlace. Si alguien lo escanea sin acceso a tus registros, se le pedirá que
-inicie sesión y solo verá la colmena si se ha compartido con esa persona.
+El código no contiene datos de abejas ni información personal; es solo un enlace. A quien lo escanee sin acceso se le pide que inicie sesión, y solo ve la colmena si es miembro del espacio (tenant) que la contiene.
 
-:::note
-El enlace abre la **aplicación**, que luego carga la colmena desde tu base de datos
-local. Como Openbeehive funciona con un enfoque offline-first, la colmena se abre
-igualmente aunque no tengas cobertura, una vez que la aplicación está instalada en tu
-teléfono.
-:::
+Una vez instalada la aplicación, el enlace abre la colmena desde tu base de datos local, así que funciona sin cobertura.
 
 ## Imprimir una etiqueta para una colmena
 
-1. Abre la colmena desde tu lista de **Colmenares**, o desde la colmena directamente.
-2. Elige **Etiqueta QR** (búscala en el menú de acciones de la colmena).
-3. Aparece una vista previa que muestra el código más el nombre de la colmena y el
-   colmenar, para que puedas distinguir las etiquetas antes de que vayan a las cajas.
-4. Selecciona **Imprimir**. Se abre el diálogo de impresión de tu navegador.
-5. Imprime en una hoja de etiquetas o en papel normal, luego fíjala a la colmena.
+1. Abre la colmena.
+2. Toca la acción **QR** (el icono de cuadrado punteado junto a Editar y Mover). Aparece una tarjeta con el código, el nombre de la colmena y el código corto.
+3. Toca **Imprimir**. Se abre una etiqueta limpia en una ventana nueva, seguida del diálogo de impresión. **SVG** descarga el código como archivo, para tus propios diseños de etiqueta.
+4. Imprime en papel de etiquetas o papel normal y fíjala a la colmena.
 
 :::tip Haz que dure a la intemperie
-Las colmenas viven en el sol, la lluvia y la escarcha. Para etiquetas que sobrevivan una
-temporada:
-
-- Imprime en papel de etiqueta resistente a la intemperie o de vinilo, **o**
-- Imprime en papel y cúbrelo con cinta de embalar transparente o una funda de plastificar.
-
-Coloca la etiqueta en algún sitio donde no la rocen las alzas al levantarlas y ponerlas
-— el lateral de la cámara de cría o bajo el borde del techo funcionan bien ambos.
+Imprime en papel de etiqueta resistente a la intemperie o de vinilo, o cubre una etiqueta de papel con cinta de embalar transparente o una funda de plastificar. Colócala donde no la rocen las alzas al levantarlas y ponerlas: el lateral de la cámara de cría o bajo el borde del techo.
 :::
 
-## Imprimir una hoja por lotes para un colmenar
+## Imprimir una hoja para un colmenar
 
-Si estás montando todo un colmenar de una vez, imprime juntas las etiquetas de todas las
-colmenas en lugar de una a una.
-
-1. Abre el **colmenar** desde tu lista de Colmenares.
-2. Elige **Hoja QR** (o **Imprimir etiquetas**) para el colmenar.
-3. Openbeehive compone una hoja con un código etiquetado por cada colmena de ese
-   colmenar.
-4. Imprime, luego recorta y aplica.
-
-Esto también mantiene un registro ordenado: una sola hoja muestra cada colonia del
-colmenar con su nombre y su código uno al lado del otro.
+1. Abre el colmenar.
+2. Toca **Etiquetas QR**.
+3. Se abre una hoja A4 con un código etiquetado por cada colmena de ese colmenar, seguida del diálogo de impresión.
+4. Imprime, recorta y aplica.
 
 ## Escanear una etiqueta
 
-Puedes escanear una etiqueta de dos formas.
-
 ### Con la cámara de tu teléfono
 
-La mayoría de los teléfonos modernos reconocen los códigos QR en la aplicación de cámara
-integrada. Apunta la cámara a la etiqueta, espera a que aparezca el enlace y púlsalo. Tu
-teléfono abre el enlace y Openbeehive salta a la colmena.
-
-Esto funciona para cualquiera: un visitante o un coapicultor puede escanear una colmena
-compartida sin abrir antes la aplicación.
+La mayoría de los teléfonos reconocen los códigos QR en la aplicación de cámara integrada. Apunta la cámara a la etiqueta, toca el enlace que aparece y Openbeehive se abre en la colmena. Esto funciona para cualquiera con acceso, sin abrir antes la aplicación.
 
 ### Con el escáner integrado en la aplicación
 
-Openbeehive también tiene su propio escáner, útil cuando ya estás trabajando en la
-aplicación y quieres moverte entre colmenas rápidamente.
+**Escanear**, en la navegación, abre el escáner propio de Openbeehive, útil cuando ya estás en la aplicación y te mueves entre colmenas.
 
-1. Abre el escáner (busca el icono de QR o de cámara en la aplicación).
-2. Concede permiso de cámara la primera vez que lo uses.
-3. Apunta a una etiqueta — la colmena se abre de inmediato.
+1. Abre **Escanear** y concede permiso de cámara la primera vez.
+2. Apunta al código QR de la colmena; la colmena se abre en cuanto se reconoce.
 
-:::tip
-El escáner integrado te mantiene dentro de Openbeehive, así que pasas de una ficha de
-colmena a la siguiente sin rebotar por el navegador.
-:::
+En dispositivos cuyo navegador no admite el escáner integrado, la pantalla lo indica y sugiere usar la aplicación de cámara habitual.
 
 ## Si un escaneo no abre la colmena correcta
-
-Unas cuantas causas y soluciones comunes:
 
 | Síntoma | Causa probable | Qué hacer |
 | --- | --- | --- |
 | La cámara no enfoca el código | Etiqueta húmeda, descolorida o curvada | Sécala; reimprímela si está desgastada |
-| El enlace abre pero dice "no encontrada" | La colmena se eliminó, o está en otra cuenta | Comprueba que la colmena sigue existiendo y que has iniciado sesión en la cuenta correcta |
-| Te pide iniciar sesión | La colmena pertenece al colmenar de otra persona | Pídele que comparta el colmenar contigo |
-| No pasa nada al pulsar | La aplicación no está instalada en este teléfono | Instala Openbeehive, luego vuelve a escanear |
+| El enlace abre pero dice "Colmena no encontrada" | La colmena se eliminó, o pertenece a otro espacio | Comprueba que la colmena sigue existiendo y que está activo el espacio correcto |
+| Te pide iniciar sesión | No has iniciado sesión en este dispositivo, o la colmena está en un espacio del que no eres miembro | Inicia sesión; pide al admin del espacio que te invite |
+| No pasa nada al tocar | El teléfono no reconoció el código como un enlace | Usa el escáner integrado u otro lector de QR |
 
-El uso compartido es a nivel de colmenar, así que para dejar que alguien escanee una
-colmena necesitas compartir su **colmenar** con esa persona. Consulta
-[Sin conexión y sincronización](/using-the-app/offline-and-sync)
-para ver cómo funcionan el uso compartido y los scopes.
+El acceso sigue la pertenencia al espacio; consulta [Cuentas y espacios](/using-the-app/accounts-tenants).
 
 ## Reimprimir y cambiar etiquetas
 
-Las etiquetas nunca caducan. El enlace sigue siendo válido durante toda la vida de la
-colmena, así que un código impreso hoy seguirá funcionando la próxima temporada.
+Las etiquetas nunca caducan. El enlace sigue siendo válido durante toda la vida de la ficha de la colmena. Si retiras una caja pero mantienes la colonia como la misma colmena en Openbeehive, la etiqueta antigua sigue funcionando. Si inicias una ficha de colmena nueva, imprime una etiqueta nueva.
 
-Si mueves equipo de un lado a otro, recuerda que la etiqueta sigue a la **ficha de la
-colmena**, no a la caja física. Cuando retiras una caja pero mantienes la colonia como
-la misma colmena en Openbeehive, la etiqueta antigua sigue funcionando. Si inicias una
-ficha de colmena nueva, genera e imprime una etiqueta nueva para ella.
+Las etiquetas codifican la dirección desde la que las imprimiste. Si tu instancia autoalojada se muda a un dominio nuevo, reimprime.
 
 :::caution
-No traslades una etiqueta impresa de la caja de una colmena a otra esperando que apunte
-a la nueva colonia — seguirá abriendo la colmena original. En su lugar, imprime una
-etiqueta nueva.
+No traslades una etiqueta impresa de una caja a otra esperando que apunte a la nueva colonia; seguirá abriendo la colmena original. Imprime una etiqueta nueva.
 :::
 
-## Profundizar más
-
-¿Quieres el detalle técnico — cómo se analiza el enlace directo, cómo la instalación
-nativa intercepta la URL y cómo generar códigos mediante programación? Consulta
-[Códigos QR para desarrolladores](/developers/qr-codes).
+Detalles técnicos del formato del enlace: [Códigos QR para desarrolladores](/developers/qr-codes).

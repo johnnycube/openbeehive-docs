@@ -5,7 +5,7 @@ title: "Configuración"
 
 # Configuración
 
-Openbeehive se configura por completo a través de variables de entorno. Esta página es la referencia completa, agrupada exactamente como aparecen en `.env.example`.
+Openbeehive se configura por completo a través de variables de entorno. Esta página es la referencia completa.
 
 Puedes definir estas variables en tu shell, en un archivo `.env` junto al binario, en tu archivo `docker compose` o mediante el gestor de secretos de tu plataforma de alojamiento. El servidor las lee una sola vez al arrancar, por lo que los cambios surten efecto tras un reinicio.
 
@@ -20,7 +20,7 @@ El ajuste más importante de todos es `BEEHIVE_DEPLOYMENT_PROFILE`. Elige valore
 | Perfil     | Base de datos predeterminada | Almacenamiento de blobs predeterminado | Pensado para                          |
 | ---------- | ---------------------------- | -------------------------------------- | ------------------------------------- |
 | `selfhost` | SQLite (archivo)             | Sistema de archivos local              | Un solo binario, sin Docker, un host  |
-| `cloud`    | PostgreSQL                   | MinIO / S3                             | El despliegue alojado y multiinquilino |
+| `cloud`    | PostgreSQL                   | MinIO / S3                             | El despliegue alojado y multi-tenant |
 
 El perfil solo establece *valores predeterminados*. Cualquier variable que definas explícitamente siempre prevalece. Por ejemplo, puedes ejecutar el perfil `selfhost` pero apuntarlo a PostgreSQL definiendo `BEEHIVE_DATABASE_DRIVER` y `BEEHIVE_DATABASE_DSN` por tu cuenta.
 
@@ -39,15 +39,15 @@ Los dos perfiles se documentan en profundidad en sus propias páginas: [Binario 
 | Variable          | Predeterminado           | Descripción                                                                 |
 | ----------------- | ------------------------ | --------------------------------------------------------------------------- |
 | `BEEHIVE_ADDR`            | `:8080`                  | Dirección y puerto en los que escucha el servidor. Usa `127.0.0.1:8080` para enlazar solo a localhost detrás de un proxy inverso. |
-| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | La URL pública donde los usuarios acceden a la aplicación. Se usa para los enlaces profundos de los códigos QR, las redirecciones de OIDC y los enlaces absolutos. Establécela con tu dominio real en producción. |
+| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | La URL pública donde los usuarios acceden a la aplicación. Se usa para las redirecciones de OIDC, los enlaces de invitación y verificación, y los valores predeterminados de las passkeys. Establécela con tu dominio real en producción. |
 | `BEEHIVE_HTTP_READ_HEADER_TIMEOUT` | `10s` | Tiempo permitido para leer las cabeceras de una petición. |
-| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Límite de lectura de la petición completa; `0` significa ninguno, que es lo que necesita la suscripción de sincronización en streaming. |
-| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Límite de escritura de la respuesta; `0` significa ninguno, por la misma razón. |
+| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Límite de lectura de la petición completa; `0` significa ninguno. |
+| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Límite de escritura de la respuesta; `0` significa ninguno. |
 | `BEEHIVE_HTTP_IDLE_TIMEOUT` | `120s` | Cuánto tiempo permanece abierta una conexión keep-alive inactiva. |
 | `BEEHIVE_HTTP_SHUTDOWN_TIMEOUT` | `15s` | Periodo de gracia para las peticiones en curso al apagar. |
 
 :::caution
-`BEEHIVE_PUBLIC_BASE_URL` debe coincidir con la dirección que los usuarios visitan realmente. Si es incorrecta, las etiquetas QR, las redirecciones de inicio de sesión y los enlaces compartidos apuntarán al lugar equivocado.
+`BEEHIVE_PUBLIC_BASE_URL` debe coincidir con la dirección que los usuarios visitan realmente. Si es incorrecta, las redirecciones de inicio de sesión y los enlaces de invitación apuntan al lugar equivocado.
 :::
 
 ## Aplicación web integrada
@@ -144,7 +144,7 @@ persona que se registra. Consulta [Autenticación](/self-hosting/authentication)
 | `BEEHIVE_PASSWORD_AUTH` | activado en `cloud`, desactivado en `selfhost` | Habilita el registro y el inicio de sesión con correo electrónico y contraseña. También lo implica `BEEHIVE_DEMO=true`. |
 | `BEEHIVE_ADMIN_EMAIL` | (vacío) | Correo del administrador de la instancia. **Obligatorio siempre que la autenticación por contraseña esté activada.** La cuenta se garantiza en cada arranque: se crea si falta y su rol se fuerza a administrador. El registro nunca concede el rol de administrador. |
 | `BEEHIVE_ADMIN_PASSWORD` | (vacío) | Contraseña del administrador de la instancia, de al menos 8 caracteres. Es la que manda en cada arranque: la contraseña almacenada se restablece a este valor, lo que sirve también como recuperación de contraseña. |
-| `BEEHIVE_REGISTRATION` | `true` | Registro abierto. Establécelo en `false` para una instancia solo por invitación: aparte del administrador del primer arranque, las cuentas solo pueden crearse mediante enlaces de invitación, y la pantalla de inicio de sesión muestra un aviso de que la instancia es solo por invitación. |
+| `BEEHIVE_REGISTRATION` | `true` | Registro abierto. Establécelo en `false` para una instancia solo por invitación: aparte del administrador configurado, las cuentas solo pueden crearse mediante enlaces de invitación, y la pantalla de inicio de sesión muestra un aviso de que la instancia es solo por invitación. |
 | `BEEHIVE_EMAIL_VERIFICATION` | `false` | Exige la confirmación del correo electrónico antes de que una cuenta nueva pueda iniciar sesión. |
 | `BEEHIVE_SMTP_HOST` | (vacío) | Servidor SMTP para los correos de verificación e invitación. Si está vacío, los enlaces se escriben en el registro en su lugar. |
 | `BEEHIVE_SMTP_PORT` | `587` | Puerto SMTP. |
@@ -152,14 +152,14 @@ persona que se registra. Consulta [Autenticación](/self-hosting/authentication)
 | `BEEHIVE_SMTP_PASS` | (vacío) | Contraseña de SMTP. |
 | `BEEHIVE_SMTP_FROM` | `Openbeehive <no-reply@openbeehive.org>` | Dirección de remitente del correo saliente. |
 
-## Inquilino de demostración
+## Espacio de demostración
 
-Instala una cuenta y un inquilino de demostración a modo de muestra. Desactivado de forma predeterminada; consulta
+Instala una cuenta y un espacio (tenant) de demostración a modo de muestra. Desactivado de forma predeterminada; consulta
 [Modo demostración](/self-hosting/demo).
 
 | Variable | Predeterminado | Descripción |
 | --- | --- | --- |
-| `BEEHIVE_DEMO` | `false` | Instala una cuenta + inquilino de demostración (15 colmenas en 4 colmenares, reiniciado cada hora). Implica `BEEHIVE_PASSWORD_AUTH=true`. |
+| `BEEHIVE_DEMO` | `false` | Instala una cuenta + espacio de demostración (15 colmenas en 4 colmenares, reiniciado cada hora). Implica `BEEHIVE_PASSWORD_AUTH=true`. |
 | `BEEHIVE_DEMO_AUTOLOGIN` | `false` | Inicia sesión automáticamente en la demo a los visitantes anónimos en lugar de mostrar la pantalla de inicio de sesión. Solo para hosts de pura demostración; déjalo desactivado en una instancia que también sirva a usuarios reales. |
 | `BEEHIVE_DEMO_EMAIL` | `demo@app.openbeehive.org` | Correo electrónico de la cuenta de demostración. |
 | `BEEHIVE_DEMO_PASSWORD` | `demo` | Contraseña de la cuenta de demostración. |
@@ -203,7 +203,7 @@ BEEHIVE_OIDC_KEYCLOAK_CLIENT_SECRET=...
 ```
 
 :::tip Un solo usuario, sin inicio de sesión
-Para una instancia personal autoalojada puedes omitir el inicio de sesión por completo. Deja `BEEHIVE_OIDC_PROVIDERS` vacío **y** establece `BEEHIVE_WEBAUTHN_ENABLED=false`. La aplicación se ejecuta entonces en modo de un solo usuario, sin paso de inicio de sesión.
+Para una instancia personal autoalojada puedes omitir el inicio de sesión por completo: deja `BEEHIVE_PASSWORD_AUTH` desactivado (el valor predeterminado de selfhost), `BEEHIVE_OIDC_PROVIDERS` vacío y `BEEHIVE_WEBAUTHN_ENABLED=false`. La aplicación se ejecuta entonces en modo de un solo usuario, sin paso de inicio de sesión.
 :::
 
 Para los tutoriales de configuración de proveedores, las URL de redirección y los consejos de seguridad, consulta [Autenticación](/self-hosting/authentication).

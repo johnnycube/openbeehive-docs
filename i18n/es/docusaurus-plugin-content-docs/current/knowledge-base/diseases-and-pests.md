@@ -107,10 +107,3 @@ Muchas enfermedades y plagas se propagan entre colonias a través del pillaje, l
 :::tip Conoce las normas de tu región
 El estado sanitario, qué afecciones son de declaración obligatoria y qué tratamientos son legales varían según el país y, a veces, según la región. Inscríbete en tu programa nacional de sanidad apícola si existe, y conoce a tu asociación local y a tu inspector apícola antes de necesitarlos.
 :::
-
-## Véase también
-
-- [Varroa](/beekeeping/varroa) para una guía completa de seguimiento y tratamiento
-- [Inspección](/beekeeping/inspecting) para saber qué buscar en cada visita
-- [Glosario](/knowledge-base/glossary) para los términos usados aquí
-- [Preguntas frecuentes](/knowledge-base/faq) y [Resolución de problemas](/knowledge-base/troubleshooting)

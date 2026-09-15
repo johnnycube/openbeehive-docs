@@ -97,10 +97,4 @@ El calendario de cada región difiere, así que trata esto como una forma orient
 Procura mantener tu colonia viva y sana durante su primer invierno. Eso, y no la miel, es la verdadera medida de un primer año exitoso.
 :::
 
-## Adónde ir a continuación
-
-- [Entender la colonia](/beekeeping/the-colony) — quién es quién dentro de la colmena y cómo funciona todo.
-- [Equipo](/beekeeping/equipment) — colmenas, herramientas y ropa de protección explicadas.
-- [El año apícola](/beekeeping/beekeeping-year) — qué hacer, estación por estación.
-
 Tómatelo con calma, lleva buenos registros, apóyate en tu comunidad local y respeta las normas de donde vives. Bienvenido a la apicultura.

@@ -48,7 +48,7 @@
     "description": "The label for category 'Using the API' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API.link.generated-index.description": {
-    "message": "Openbeehive es abierto y prioriza la API: todo lo que hace la aplicacion se ejecuta a traves de una API publica Connect-RPC (gRPC y HTTP/JSON plano). Crea integraciones, scripts, paneles y sensores automatizados sobre el mismo contrato que usa la aplicacion.",
+    "message": "La API Connect-RPC con la que habla la aplicación: qué servicios se sirven, cómo autenticarse y cómo llamarlos mediante HTTP/JSON o gRPC.",
     "description": "The generated-index page description for category 'Using the API' in sidebar 'tutorialSidebar'"
   }
 }

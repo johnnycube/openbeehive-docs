@@ -49,6 +49,8 @@ El diagrama siguiente muestra cómo un cambio viaja desde una pulsación en la i
 
 El motor de sincronización intercambia únicamente los registros que pertenecen a los ámbitos a los que un usuario puede acceder, de modo que un dispositivo nunca descarga todo el mundo: solo los colmenares a los que tiene derecho.
 
+Los scripts y los sensores entran en este mismo esquema a través de los servicios CRUD del servidor ([Uso de la API](/using-the-api/overview)). Sus escrituras no se saltan este flujo: el servidor aplica cada una con la misma fusión por campo y la añade al mismo registro de cambios que un cambio enviado por push, así que una lectura publicada por una báscula de colmena es simplemente otro cambio que los dispositivos descargan en su siguiente sincronización.
+
 ## Resolución de conflictos
 
 Dos dispositivos pueden editar la misma colmena mientras ambos están sin conexión. Cuando se reconectan, Openbeehive fusiona sus cambios de forma determinista, sin avisos manuales de conflicto. Tres técnicas hacen que esto esté libre de conflictos.
@@ -63,11 +65,11 @@ Para campos escalares simples, como el nombre de una colmena, su tipo o el color
 
 ### OR-Sets para campos de lista
 
-Los campos de tipo lista, como las etiquetas, usan un conjunto de eliminación observada (OR-Set) con semántica add-wins (las adiciones ganan). Las adiciones concurrentes sobreviven todas, y una eliminación solo surte efecto sobre las entradas concretas que observó. Esto evita el problema clásico en el que la adición de una persona borra silenciosamente la de otra.
+Los campos de tipo lista (actualmente solo las claves de foto de una inspección) usan un conjunto de eliminación observada (OR-Set) con semántica add-wins (las adiciones ganan). Las adiciones concurrentes sobreviven todas, y una eliminación solo surte efecto sobre las entradas concretas que observó. Esto evita el problema clásico en el que la adición de una persona borra silenciosamente la de otra.
 
 ### Eventos append-only
 
-Los registros que describen cosas que ocurrieron, como inspecciones, eventos, cosechas y tratamientos, son append-only (solo se añaden). Las nuevas entradas simplemente se agregan; la capa de sincronización nunca las edita en su lugar, así que no pueden entrar en conflicto. El resultado es un historial inmutable y ordenado. Consulta [historial y eventos](/developers/history-and-events) para más detalle.
+La tabla `event` es append-only por convención: cada escritura de historial inserta una fila nueva con un id nuevo y nada edita ni elimina ninguna, así que dos dispositivos que añaden eventos sin conexión nunca tocan la misma fila. Consulta [historial y eventos](/developers/history-and-events) para más detalle.
 
 :::tip
 Como las fusiones son deterministas, dos dispositivos cualesquiera que hayan visto el mismo conjunto de cambios calcularán siempre exactamente el mismo resultado, sin importar el orden en que esos cambios llegaron.
@@ -88,10 +90,6 @@ La aplicación es una Progressive Web App, diseñada primero para el teléfono q
 - Un **service worker** almacena en caché la estructura de la aplicación y sus recursos para que la app cargue al instante y funcione totalmente sin conexión tras la primera visita.
 - **SQLite-WASM sobre OPFS** proporciona una base de datos relacional real en el navegador, con almacenamiento duradero y privado del origen que sobrevive a las recargas.
 - La aplicación es instalable en la pantalla de inicio y se comporta como una app nativa, incluido el flujo de escaneo de QR que abre la app en una colmena concreta.
-
-:::note
-Para los usuarios que quieran una aplicación empaquetada desde las tiendas de aplicaciones, el mismo código base puede envolverse con **Capacitor** para distribuir compilaciones nativas de iOS y Android. Esto es opcional; la PWA es el canal de distribución principal.
-:::
 
 ## Cómo encaja todo
 

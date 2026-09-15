@@ -5,239 +5,220 @@ title: "Modelo de datos"
 
 # Modelo de datos
 
-Esta página describe las entidades centrales que almacena Openbeehive, cómo se
-relacionan y cómo los **ámbitos** (scopes) deciden qué se sincroniza y con
-quién. Está escrita desde el punto de vista offline-first: la misma estructura
-vive en la base de datos SQLite-WASM del dispositivo y en la base de datos
-conectable del servidor, y el [protocolo de sincronización](/developers/sync-protocol)
-las mantiene en sintonía.
+Las tablas siguientes están tomadas de las migraciones del servidor
+(`server/internal/storage/sql/migrations/`) y del esquema espejo del cliente
+(`app/src/lib/local/schema.ts`). Los nombres de columna son idénticos en ambos
+lados y son las claves usadas en las cargas de sincronización. Las columnas de
+enumeración almacenan el número proto; la etiqueta visible es lo que muestra la
+aplicación (`app/src/lib/i18n/locales/en.json`).
 
-Si quieres conocer la mecánica del seguimiento de cambios (marcas de tiempo HLC,
-last-writer-wins, OR-Sets, eventos de solo anexado), lee primero
-[Historial y eventos](/developers/history-and-events) — esta página se centra en
-las entidades en sí.
+Cada tabla sincronizada lleva tres columnas de contabilidad que no se repiten
+abajo: `organization_id` (espacio/tenant), `field_hlc` (reloj de campos en
+JSON, consulta el [protocolo de sincronización](/developers/sync-protocol)) y
+`deleted` (marca de borrado lógico). Los id son UUID, acuñados en el
+dispositivo o por el servidor para las filas creadas a través de la
+[API](/using-the-api/overview). Las marcas de tiempo se almacenan como cadenas
+ISO 8601 en el cliente y como `TIMESTAMP` en el servidor.
 
-## La jerarquía
-
-En la cima está el **Colmenar** (un emplazamiento o ubicación). Cada colmenar
-contiene **Colmenas**; cada colmena tiene una **Reina** actual y acumula un flujo
-de registros con el tiempo.
-
-```text
-Apiary
- ├── Hive ──────── Queen (current; queens form a succession over time)
- │     ├── Inspection   (a visit: what you saw)
- │     ├── Task         (something to do, with a due date)
- │     ├── Event        (append-only fact: requeened, split, died, moved…)
- │     ├── Harvest      (honey/wax taken off)
- │     └── Treatment    (varroa or disease treatment applied)
- │
- └── Placement (hive ↔ apiary, time-bounded — where a hive lived, and when)
-
-ApiaryShare (apiary ↔ user — grants another beekeeper access via a scope)
-```
-
-Una colmena pertenece a un colmenar a la vez, pero **Placement** registra el
-historial completo de dónde ha vivido una colmena, de modo que una colmena puede
-moverse entre emplazamientos sin perder sus registros.
-
-## Entidades y campos clave
-
-Cada entidad comparte un sobre común usado por la sincronización: un `id` estable
-(un UUID generado offline), un `scope_id` (consulta **Ámbitos**), columnas de
-contabilidad HLC y un indicador de borrado lógico. Los campos siguientes son los
-relevantes a nivel de dominio.
-
-### Apiary
-
-El contenedor y la unidad de uso compartido.
-
-| Campo | Notas |
-|---|---|
-| `id` | UUID |
-| `name` | p. ej. "Emplazamiento de casa" |
-| `location` | texto libre o lat/long |
-| `notes` | texto libre |
-| `scope_id` | igual al propio `id` del colmenar (ver abajo) |
-
-### Hive
-
-El alojamiento de una colonia dentro de un colmenar.
-
-| Campo | Notas |
-|---|---|
-| `id` | UUID; también codificado en la [etiqueta QR de la colmena](/using-the-app/qr-labels) |
-| `apiary_id` | colmenar actual (la ubicación activa) |
-| `name` / `short_code` | etiqueta legible y el código corto impreso en el QR |
-| `type` | uno de Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar, Other — ver [Tipos de colmena](/knowledge-base/hive-types) |
-| `status` | p. ej. activa, muerta, vendida |
-| `notes` | texto libre |
-| `scope_id` | el id del colmenar |
-
-### Queen
-
-La reina reinante de una colmena. Las reinas forman una **sucesión**: cuando una
-colonia es reemplazada de reina, la reina anterior se cierra y se abre un nuevo
-registro, de modo que conservas el linaje completo.
-
-| Campo | Notas |
-|---|---|
-| `id` | UUID |
-| `hive_id` | la colmena que encabeza |
-| `year` | año de introducción/nacimiento |
-| `marking_colour` | sigue el [esquema de colores internacional](/knowledge-base/queen-marking-colours) (1/6 blanco, 2/7 amarillo, 3/8 rojo, 4/9 verde, 5/0 azul) |
-| `origin` | criada, comprada, enjambre, sustitución de la reina… |
-| `clipped` | con ala recortada (booleano) |
-| `scope_id` | el id del colmenar de su colmena |
-
-### Inspection
-
-Una visita fechada: la instantánea de lo que observaste.
-
-| Campo | Notas |
-|---|---|
-| `id`, `hive_id`, `date` | quién y cuándo |
-| `brood`, `stores`, `temperament` | observaciones típicas |
-| `queen_seen`, `eggs_seen`, `queen_cells` | comprobaciones rápidas |
-| `varroa_count` | caída de ácaros / recuento por lavado si se tomó |
-| `temp_hive`, `temp_outside` | temperatura (°C) dentro de la colmena y en el exterior |
-| `humidity_hive`, `humidity_outside` | humedad relativa (%) dentro de la colmena y en el exterior |
-| `notes` | texto libre |
-| `scope_id` | el id del colmenar |
-
-Los campos climáticos son escalares opcionales simples, por lo que se sincronizan
-por campo como cualquier otra columna y pueden rellenarse a mano o mediante un
-sensor automatizado — ver [Registradores automatizados](/using-the-api/automated-trackers).
-
-### Task
-
-Algo que hacer para una colmena o un colmenar, con una fecha de vencimiento y un
-estado de completado.
-
-| Campo | Notas |
-|---|---|
-| `id` | UUID |
-| `hive_id` / `apiary_id` | el sujeto (una tarea puede apuntar a cualquiera de los dos niveles) |
-| `title`, `due_date`, `done` | lo básico |
-| `scope_id` | el id del colmenar |
-
-### Event
-
-Un hecho de **solo anexado** sobre una colmena — reemplazo de reina, división,
-enjambrazón, muerte, traslado, alimentación. Los eventos nunca se editan ni se
-fusionan; solo se acumulan, por lo que nunca entran en conflicto durante la
-sincronización. Son la columna vertebral de la cronología de la colmena.
-
-| Campo | Notas |
-|---|---|
-| `id`, `hive_id`, `occurred_at` | cuándo ocurrió |
-| `kind` | el tipo de evento |
-| `payload` | detalle específico del tipo (JSON) |
-| `scope_id` | el id del colmenar |
-
-Consulta [Historial y eventos](/developers/history-and-events) para el catálogo
-completo de eventos y cómo se compone la cronología.
-
-### Harvest
-
-Miel (o cera) extraída de una colmena.
-
-| Campo | Notas |
-|---|---|
-| `id`, `hive_id`, `date` | la extracción |
-| `product` | miel, cera, propóleo… |
-| `quantity`, `unit` | p. ej. 12,5 kg |
-| `notes` | p. ej. floración, humedad |
-| `scope_id` | el id del colmenar |
-
-### Treatment
-
-Un tratamiento contra varroa o enfermedades aplicado a una colmena.
-
-| Campo | Notas |
-|---|---|
-| `id`, `hive_id`, `date` | sujeto y fecha de aplicación |
-| `product`, `active_ingredient` | p. ej. Oxuvar / ácido oxálico |
-| `dose`, `method` | p. ej. 50 ml, goteo |
-| `batch_number` | lote / carga (a menudo exigido legalmente) |
-| `withdrawal_until` | fecha en que la miel se puede cosechar de nuevo de forma segura |
-| `reason` | p. ej. varroa |
-| `note` | texto libre |
-| `apiary_id`, `queen_id` | contexto congelado en el momento de la aplicación |
-| `scope_id` | el id del colmenar |
-
-:::note
-Las normas de tratamiento y dosificación varían según el país y la autorización
-del producto. Openbeehive registra lo que hiciste; no prescribe. Sigue siempre
-las autorizaciones locales — ver [Varroa](/beekeeping/varroa).
-:::
-
-### Placement
-
-El vínculo acotado en el tiempo entre una colmena y un colmenar: dónde vivió una
-colmena y durante cuánto tiempo. Se abre una nueva ubicación cuando una colmena
-se traslada; la anterior se cierra.
-
-| Campo | Notas |
-|---|---|
-| `id`, `hive_id`, `apiary_id` | el vínculo |
-| `from` / `until` | intervalo; `until` es nulo mientras está vigente |
-| `scope_id` | el id del colmenar |
-
-### ApiaryShare
-
-Otorga a otro apicultor acceso a un colmenar (y a todo lo que contiene).
-
-| Campo | Notas |
-|---|---|
-| `id`, `apiary_id` | lo que se comparte |
-| `user_id` | con quién se comparte |
-| `role` | p. ej. lector, editor |
-
-## Ámbitos y control de la sincronización
-
-El uso compartido ocurre a nivel de **colmenar**, y un único valor lo gobierna:
-cada registro lleva un `scope_id`.
-
-- Para los datos propiedad del colmenar — colmenas, reinas, inspecciones, tareas,
-  eventos, cosechas, tratamientos, ubicaciones y el propio colmenar — `scope_id`
-  es el **id del colmenar**.
-- Para los datos que pertenecen a un único usuario y nunca se comparten (p. ej.
-  preferencias personales), `scope_id` toma la forma `user:<id>`.
-
-Cuando dos dispositivos se sincronizan, intercambian solo los ámbitos a los que
-el usuario tiene derecho. El servidor resuelve el conjunto de ámbitos de un
-usuario como:
+## Jerarquía
 
 ```text
-scopes(user) = { "user:<their id>" }
-             ∪ { apiary.id  for each apiary they own }
-             ∪ { share.apiary_id  for each ApiaryShare granting them access }
+apiary
+ └── hive ── queen (one active, older ones kept with replaced_at set)
+       ├── inspection
+       ├── task        (task.hive_id and task.apiary_id are both optional)
+       ├── harvest
+       ├── treatment
+       ├── placement   (which apiary the hive lived in, and when)
+       └── event       (append-only history with frozen apiary/hive/queen)
 ```
 
-Por lo tanto, añadir un `ApiaryShare` hace que un colmenar entero — cada colmena y
-cada registro bajo él — aparezca en los dispositivos del destinatario en la
-siguiente sincronización; revocarlo detiene el flujo de más cambios. Como la
-compuerta es la columna `scope_id`, el uso compartido es de todo o nada por
-colmenar y no necesita permisos por registro.
+La compartición y la partición de la sincronización usan `scope_id`: el propio
+id del colmenar para el colmenar y todo lo que hay debajo. Solo `event`
+almacena `scope_id` como columna; para las demás tablas viaja en el mensaje
+`Change`.
 
-:::tip
-Un id de colmena por sí solo no concede nada. Escanear una
-[etiqueta QR](/developers/qr-codes) abre la app en una colmena solo si el ámbito
-de esa colmena se ha sincronizado realmente con tu dispositivo.
-:::
+## apiary
 
-## Por qué se fusiona limpiamente
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | |
+| `name` | text | obligatorio |
+| `address` | text | texto libre |
+| `lat`, `lng` | real | `0` cuando no está definido |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
 
-Las estructuras anteriores se eligen de modo que la sincronización nunca necesite
-que una persona resuelva un conflicto:
+## hive
 
-- Los **campos escalares** (el color de marcado de una reina, el nombre de una
-  colmena) usan last-writer-wins por campo, decidido por las marcas de tiempo HLC.
-- Los **campos de lista/conjunto** usan OR-Sets con prioridad de adición, de modo
-  que todas las adiciones concurrentes sobreviven.
-- Los **eventos** son de solo anexado e inmutables, así que simplemente se
-  acumulan.
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | también codificado en la [etiqueta QR](/developers/qr-codes) |
+| `apiary_id` | text | colmenar actual |
+| `name` | text | |
+| `type` | int | `HiveType`, ver abajo |
+| `status` | int | `HiveStatus`, ver abajo; las colmenas nuevas empiezan en `1` |
+| `boxes` | int | número de cajas |
+| `colony_origin` | text | p. ej. "swarm 2024" |
+| `note` | text | |
+| `qr_code` | text | reservado; el código impreso se deriva de `id` mediante `shortCode()` en `app/src/lib/qr.ts` |
+| `photo` | text | data URL o clave de blob |
+| `created_at`, `updated_at` | timestamp | |
 
-Para el algoritmo completo, continúa con el
-[protocolo de sincronización](/developers/sync-protocol).
+`HiveType`: 0 Sin especificar, 1 Zander, 2 Dadant, 3 Deutsch Normal,
+4 Langstroth, 5 Warré, 6 Top-bar, 99 Otro.
+
+`HiveStatus`: 0 Sin especificar, 1 Activa, 2 Núcleo, 3 Sin reina, 4 Perdida,
+5 Disuelta.
+
+## queen
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | |
+| `hive_id` | text | |
+| `year` | int | el año de la reina; determina el color de marcado por defecto |
+| `marking` | int | `MarkingColor`: 1 blanco (años terminados en 1/6), 2 amarillo (2/7), 3 rojo (3/8), 4 verde (4/9), 5 azul (5/0); por defecto a partir de `year` |
+| `origin` | text | |
+| `breeder_number` | text | |
+| `introduced_at` | timestamp | inicio del reinado |
+| `replaced_at` | timestamp | fin del reinado, null mientras reina |
+| `active` | bool | true para la reina actual |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
+
+Un cambio de reina establece `active = 0` y `replaced_at` en la fila antigua e
+inserta una nueva; las reinas antiguas nunca se eliminan.
+
+## inspection
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id`, `hive_id` | text | |
+| `date` | timestamp | |
+| `weather` | text | |
+| `queen_seen`, `eggs_seen` | bool | |
+| `temperament` | int | 1 Muy mansa, 2 Mansa, 3 Normal, 4 Nerviosa, 5 Agresiva |
+| `calmness` | int | 1 Abandona el cuadro, 2 Inquieta, 3 Tranquila, 4 Muy tranquila |
+| `frames` | int | cuadros ocupados |
+| `brood_frames` | int | |
+| `stores` | int | 1 Buenas, 2 Medias, 3 Bajas, 4 Ninguna |
+| `queen_cells` | int | celdas reales contadas |
+| `youngest_larva` | int | edad en días de la larva más joven vista |
+| `covered_larva` | bool | cría operculada vista |
+| `varroa` | text | |
+| `honey_kg`, `fed_kg`, `weight_kg` | real | |
+| `frames_added`, `frames_removed` | int | |
+| `drone_frame_cut`, `super_added` | bool | |
+| `temp_hive`, `temp_outside` | real | °C, null cuando no se midió en la aplicación; `CreateInspection` almacena `0` para los campos omitidos |
+| `humidity_hive`, `humidity_outside` | real | %, la misma regla que las temperaturas |
+| `note` | text | |
+| `photo_keys` | text | JSON de OR-Set, la única columna de conjunto |
+| `created_at` | timestamp | |
+
+## task
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | |
+| `title` | text | |
+| `hive_id`, `apiary_id` | text | opcionales |
+| `due_at` | timestamp | |
+| `done` | bool | |
+| `priority` | int | `TaskPriority`: 1 Baja, 2 Normal, 3 Alta; la columna del servidor tiene 2 por defecto, la aplicación escribe 0 |
+| `note`, `recurrence`, `assigned_to` | text | presentes en el esquema; el formulario de tarea solo rellena `title` y `due_at` |
+| `created_at` | timestamp | |
+
+## placement
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id`, `hive_id`, `apiary_id` | text | |
+| `start_at` | timestamp | |
+| `end_at` | timestamp | null para la ubicación actual |
+
+Crear una colmena abre una ubicación; moverla cierra la fila abierta en el
+momento del traslado y abre una nueva.
+
+Una tarea sin `apiary_id` se sincroniza bajo el ámbito personal
+`user:<user id>` en lugar de un id de colmenar.
+
+## harvest
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | congelados en el momento de la cosecha |
+| `date` | timestamp | |
+| `variety` | text | |
+| `amount_kg` | real | |
+| `water_content` | real | % |
+| `batch_number` | text | |
+| `best_before` | timestamp | |
+| `note` | text | |
+
+## treatment
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | congelados en el momento del tratamiento |
+| `date` | timestamp | |
+| `product`, `active_ingredient` | text | |
+| `dose`, `method` | text | |
+| `batch_number` | text | |
+| `withdrawal_until` | timestamp | |
+| `reason` | text | por defecto `varroa` |
+| `note` | text | |
+
+## event
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | |
+| `scope_id` | text | id del colmenar |
+| `type` | int | `EventType`, ver abajo |
+| `date` | timestamp | |
+| `apiary_id`, `hive_id`, `queen_id` | text | congelados en el momento del evento |
+| `ref_entity`, `ref_id` | text | la fila de detalle, p. ej. `harvest` / su id |
+| `title` | text | |
+| `amount_kg` | real | copiado de la cosecha para que las consultas de rendimiento no necesiten join |
+| `detail` | text | JSON |
+| `author_id` | text | |
+
+`EventType`: 1 Creada, 2 Reina introducida, 3 Reina reemplazada, 4 Movida,
+5 Inspección, 6 Tratamiento, 7 Cosecha, 8 Estado, 9 Disuelta. La aplicación
+escribe los tipos 1 a 7 (`app/src/lib/local/history.ts`). Consulta
+[Historial y eventos](/developers/history-and-events).
+
+## Tablas solo del servidor
+
+`organization`, `users`, `member`, `invite`, `user_passkey`, `api_key`,
+`apiary_share`, `change_log` y `seq_counter` existen solo en el servidor.
+`member.role` es `owner` o `member`; `users.role` es `admin` o `user`.
+`apiary_share` lo lee la comprobación de ámbitos de sincronización, pero nada
+en la aplicación lo escribe. El cliente añade `outbox` y `sync_meta` para el
+motor de sincronización.
+
+### api_key
+
+Claves de larga duración para scripts e integraciones (migración
+`0014_api_keys.sql`, `server/internal/auth/apikey.go`). No se sincroniza.
+
+| Columna | Tipo | Notas |
+| --- | --- | --- |
+| `id` | text | |
+| `user_id` | varchar(64) | propietario; indexado |
+| `organization_id` | varchar(64) | el espacio en el que actúa la clave, fijado al crearla |
+| `name` | text | etiqueta que se muestra en Ajustes |
+| `key_prefix` | text | los primeros 12 caracteres del texto en claro, para mostrarlos |
+| `key_hash` | varchar(64) | SHA-256 en hexadecimal del token `obhk_...` en claro, único; el texto en claro nunca se almacena |
+| `scope` | text | `write` (predeterminado) o `read`; una clave `read` solo puede llamar a `Get*`, `List*`, `Pull` y `Subscribe` |
+| `created_at` | timestamp | |
+| `expires_at` | timestamp | null para las claves que no caducan; una clave pasado ese momento se rechaza |
+| `last_used_at` | timestamp | se actualiza en cada uso verificado, null hasta entonces |
+
+Una clave se verifica calculando el hash del token bearer y buscando
+`key_hash`; la fila se borra al eliminarla, y una clave cuyo propietario ya no
+es `member` de `organization_id`, o cuyo `expires_at` ya ha pasado, se
+rechaza sin borrarla.

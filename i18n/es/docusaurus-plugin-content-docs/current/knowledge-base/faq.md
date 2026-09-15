@@ -15,7 +15,7 @@ El servicio alojado en [app.openbeehive.org](https://app.openbeehive.org) es gra
 
 ## ¿Son privados mis datos?
 
-Tus registros viven primero en tu propio dispositivo. Openbeehive es **offline-first**: la aplicación almacena todo en una base de datos local en tu teléfono, tableta u ordenador, y solo sincroniza con el servidor en segundo plano.
+Tus registros viven primero en tu propio dispositivo: la aplicación almacena todo en una base de datos local en tu teléfono, tableta u ordenador y sincroniza con el servidor en segundo plano.
 
 Si te autoalojas, tus datos nunca salen de tu propia infraestructura. En el servicio alojado, tus registros se almacenan en nuestros servidores para que puedan sincronizarse entre tus dispositivos, pero siguen siendo tuyos.
 
@@ -39,10 +39,7 @@ Hoy no hay una aplicación nativa independiente en la App Store ni en la Play St
 
 ## ¿Puedo exportar mis datos?
 
-Sí. Como el proyecto es de código abierto y tus datos se almacenan en una base de datos SQLite estándar, nunca quedas atrapado.
-
-- Quienes se **autoalojan** pueden hacer copia de seguridad de la base de datos directamente. Consulta [Copias de seguridad](/self-hosting/backups).
-- En el **servicio alojado**, las herramientas de exportación forman parte de la hoja de ruta. Tus registros también se conservan localmente en cada dispositivo sincronizado.
+Sí. **Ajustes → Datos y copia de seguridad** exporta todo lo que hay en tu dispositivo como copia completa en JSON, hoja de cálculo (XLSX), archivos CSV en un ZIP, BeeXML o un informe PDF imprimible, e importa JSON, BeeXML y CSV de otras aplicaciones. Consulta [Importar y exportar](/using-the-app/import-export). Quienes se autoalojan también pueden hacer copia de seguridad de la base de datos del servidor directamente; consulta [Copias de seguridad](/self-hosting/backups).
 
 ## ¿Puedo autoalojarlo?
 
@@ -61,9 +58,7 @@ Para una instancia privada de un solo usuario puedes desactivar el inicio de ses
 
 ## ¿Cómo funciona la compartición?
 
-La compartición se produce a nivel de **colmenar** mediante "ámbitos" (scopes). Cuando compartes un colmenar, las personas con quienes lo compartes pueden ver y contribuir a todo lo que contiene: sus colmenas, reinas, inspecciones, tareas y más.
-
-La sincronización está libre de conflictos por diseño, así que dos personas editando el mismo colmenar en distintos dispositivos no se pisarán el trabajo. Las ediciones se fusionan limpiamente incluso tras largos periodos sin conexión. Los detalles técnicos se tratan en el [protocolo de sincronización](/developers/sync-protocol).
+Los registros se comparten mediante **espacios** (tenants). Cada cuenta tiene un espacio personal y puede ser invitada a otros, por ejemplo el de un club. Todos los miembros de un espacio ven y editan todos sus colmenares, colmenas y registros; no hay compartición por colmenar. La sincronización está libre de conflictos, así que dos personas editando en el mismo espacio desde distintos dispositivos no se sobrescriben el trabajo. Consulta [Cuentas y espacios](/using-the-app/accounts-tenants).
 
 ## ¿Qué tipos de colmena se admiten?
 
@@ -99,7 +94,7 @@ Cada colmena puede tener una etiqueta QR imprimible. Al escanearla se abre Openb
 
 ## ¿En qué idiomas está disponible?
 
-Openbeehive se está construyendo pensando en la internacionalización, con el alemán y el inglés como primer foco dadas las raíces del proyecto. Los idiomas adicionales son bienvenidos como contribuciones de la comunidad.
+La aplicación incluye cinco idiomas: inglés, alemán, francés, español e italiano. Cámbialo en **Ajustes → Idioma**. Otras traducciones son bienvenidas como contribuciones.
 
 ## ¿Qué bases de datos y backends de almacenamiento se admiten?
 
@@ -110,7 +105,7 @@ Al autoalojar, el backend es modular:
 
 ## ¿Cómo inicio sesión?
 
-El servicio alojado usa inicio de sesión OIDC (iniciar sesión con un proveedor compatible), con claves de acceso opcionales (WebAuthn) para una experiencia sin contraseña. Quienes se autoalojan pueden configurar sus propios proveedores OIDC, habilitar claves de acceso o desactivar el inicio de sesión por completo para instalaciones de un solo usuario. Consulta [Autenticación](/self-hosting/authentication).
+El servicio alojado usa cuentas con correo electrónico y contraseña. Quienes se autoalojan pueden habilitar cuentas con correo y contraseña, añadir proveedores OIDC (Google, Keycloak, Authentik y similares), habilitar passkeys o desactivar el inicio de sesión por completo para una instalación de un solo usuario. Consulta [Autenticación](/self-hosting/authentication).
 
 ## ¿Cómo informo de un error o solicito una funcionalidad?
 
@@ -122,8 +117,6 @@ La [página de resolución de problemas](/knowledge-base/troubleshooting) puede 
 
 Las contribuciones de todo tipo son bienvenidas: código, documentación, traducciones, informes de errores e ideas. La pila es Go en el backend y una PWA en SvelteKit en el frontend.
 
-Lee la [guía de contribución](/developers/contributing) para empezar, y echa un vistazo a la [visión general de la arquitectura](/developers/architecture) para entender cómo encajan las piezas.
-
 ## ¿Qué versión es esta?
 
-La versión actual es la **v0.1.0**, nuestra primera versión pública. Espera mejoras rápidas, y consulta la [guía de actualización](/self-hosting/upgrading) cuando lleguen nuevas versiones.
+Las versiones se etiquetan en [GitHub](https://github.com/johnnycube/openbeehive-app/releases). Quienes se autoalojan ejecutan la etiqueta que compilaron o la etiqueta de imagen que descargaron; consulta la [guía de actualización](/self-hosting/upgrading) cuando lleguen nuevas versiones.

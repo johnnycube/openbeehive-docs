@@ -100,9 +100,3 @@ Incluso colonias de aspecto sano pueden morir durante el invierno por inanición
 :::note Variación regional
 El comportamiento de la colonia varía con el clima y la subespecie. El ciclo anterior describe una colonia de clima templado; en regiones más cálidas la cría puede no detenerse nunca del todo, y los tiempos cambian en consecuencia. Calibra siempre según tu propia ubicación y tus mentores locales.
 :::
-
-## Adónde ir a continuación
-
-- ¿Nuevo en las abejas? Empieza con [Primeros pasos](/beekeeping/getting-started).
-- ¿Listo para mirar dentro? Lee [Inspeccionar](/beekeeping/inspecting).
-- ¿Con curiosidad por el material? Consulta [Equipo](/beekeeping/equipment).

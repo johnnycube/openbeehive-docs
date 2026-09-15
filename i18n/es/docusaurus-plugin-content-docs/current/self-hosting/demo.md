@@ -5,7 +5,7 @@ title: "Modo demo"
 
 # Modo demo
 
-El modo demo instala una **cuenta y un inquilino de demostración** ya preparados
+El modo demo instala una **cuenta y un espacio (tenant) de demostración** ya preparados
 para que los visitantes puedan probar Openbeehive con datos realistas, sin tocar
 los registros reales de nadie. Está **desactivado de forma predeterminada** y
 pensado para exhibiciones públicas y pruebas.
@@ -16,9 +16,10 @@ Cuando se activa, Openbeehive crea:
 
 - una cuenta de demostración (`demo@app.openbeehive.org` / `demo` de forma
   predeterminada),
-- un **inquilino** de demostración con **15 colmenas repartidas en 4 colmenares**,
-- una temporada completa de datos: reinas, ~75 inspecciones (con temperatura,
-  humedad, varroa, peso…), cosechas de miel y tratamientos contra la varroa.
+- un **espacio** de demostración con **15 colmenas repartidas en 4 colmenares**,
+- una temporada de datos: reinas, 105 inspecciones (7 por colmena, repartidas a lo
+  largo de los últimos diez meses, con temperatura, humedad, varroa, peso y más),
+  una cosecha de miel y dos tratamientos contra la varroa por colmena.
 
 Los datos se **vuelven a sembrar cada hora**, de modo que la exhibición siempre
 luce igual: un visitante puede editar libremente y todo vuelve al conjunto
@@ -60,16 +61,16 @@ automáticamente:
 BEEHIVE_DEMO_AUTOLOGIN=true
 ```
 
-Los visitantes anónimos entran directamente en el inquilino de la demo en lugar de ver la
+Los visitantes anónimos entran directamente en el espacio de la demo en lugar de ver la
 pantalla de inicio de sesión. Déjalo desactivado en una instancia que también sirva a usuarios
 reales, para que vean la página de inicio de sesión normal con el botón de la demo.
 
 ## Cómo está aislado
 
-- La demo vive en su **propio inquilino**; el reinicio horario solo elimina y
-  reconstruye los datos de la **demo**, nunca los de otros inquilinos.
+- La demo vive en su **propio espacio**; el reinicio horario solo elimina y
+  reconstruye los datos de la **demo**, nunca los de otros espacios.
 - Los usuarios reales en la misma instancia no se ven afectados: tienen sus
-  propios inquilinos.
+  propios espacios.
 
 :::caution
 La cuenta de demostración es una cuenta real con la que se puede iniciar sesión.
@@ -82,6 +83,6 @@ cómodo compartiendo, y no la reutilices en ningún otro lugar. Deja
 
 Establece `BEEHIVE_DEMO=false` (o elimínalo) y reinicia. Los nuevos inicios de
 sesión en la cuenta de demostración dejan de funcionar; los datos de demostración
-existentes permanecen hasta que los elimines. La cuenta y el inquilino de
+existentes permanecen hasta que los elimines. La cuenta y el espacio de
 demostración se llaman internamente `demo-user` / `demo-tenant` por si quieres
 eliminarlos de la base de datos.

@@ -35,7 +35,7 @@ Cuando añadas un tratamiento a una colmena, captura todo lo siguiente que sea a
 | Fecha de aplicación | Cuándo trataste la colonia. |
 | Espera hasta | La fecha en que la miel de esta colmena vuelve a ser segura para cosechar. |
 | Motivo | Para qué trataste (p. ej. varroa). |
-| Notas | Tiempo meteorológico, estado de la cría, resultados observados o cualquier otra cosa que merezca la pena recordar. |
+| Nota | Tiempo meteorológico, estado de la cría, resultados observados o cualquier otra cosa que merezca la pena recordar. |
 
 :::tip
 Registra el número de lote directamente del envase en el momento en que tratas. Es casi imposible reconstruirlo después, y es exactamente el detalle que pedirá un inspector o un auditor.
@@ -44,12 +44,12 @@ Registra el número de lote directamente del envase en el momento en que tratas.
 ## Añadir un tratamiento
 
 1. Abre la colmena que trataste.
-2. Elige **Añadir tratamiento** (los tratamientos también se pueden anotar desde una inspección si tratas durante una visita).
-3. Introduce el producto, la dosis, el método y la fecha, y el número de lote si lo tienes.
+2. Toca **Registrar tratamiento** en **Tratamientos**.
+3. Introduce la fecha, el producto, el principio activo, el método, la dosis, el número de lote y el motivo.
 4. Fija la fecha de **espera hasta** si el producto especifica un periodo de retirada.
 5. Guarda.
 
-Como Openbeehive funciona con un enfoque offline-first, puedes hacer esto junto a la colmena sin cobertura. El registro se escribe en la base de datos local al instante y se sincroniza con el servidor en segundo plano una vez que vuelves a estar conectado. No se pierde nada si anotas los tratamientos de pie en el colmenar.
+Funciona sin conexión; consulta [Sin conexión y sincronización](/using-the-app/offline-and-sync).
 
 ## Periodos de retirada y cosecha
 
@@ -70,14 +70,8 @@ Unos cuantos hábitos mantienen tus registros fiables.
 - **No edites el historial para ordenarlo.** Si algo cambió, añade un seguimiento en lugar de reescribir el pasado.
 - **Trata cada colmena individualmente.** Aunque apliques el mismo producto en todo un colmenar, anótalo por colmena para que las dosis y las ventanas de retirada sean exactas para cada colonia.
 
-Como las entradas de tratamiento se sincronizan entre tus dispositivos, el registro que construyes sobre el terreno es el mismo que puedes revisar más tarde en casa, o compartir con cualquiera que tenga acceso al colmenar.
+Como las entradas de tratamiento se sincronizan entre tus dispositivos, el registro que construyes sobre el terreno es el mismo que revisas en casa, y el que ven los demás miembros de tu espacio.
 
 ## Tratamientos y varroa
 
 El ácaro varroa es la razón por la que la mayoría de los apicultores recurren a un tratamiento en primer lugar, y acertar con el momento a lo largo de la temporada es un tema en sí mismo. Para una visión más completa sobre el seguimiento de los niveles de ácaros, la elección de un enfoque y la planificación de los tratamientos en torno al año apícola, consulta [la guía de varroa](/beekeeping/varroa).
-
-## Páginas relacionadas
-
-- [Inspecciones](/using-the-app/inspections) registran lo que ves; los tratamientos registran lo que haces al respecto.
-- [Cosechas](/using-the-app/harvests) es donde más importan los periodos de retirada.
-- [La guía de varroa](/beekeeping/varroa) cubre el seguimiento y el momento.

@@ -24,7 +24,7 @@ palabra te haga dudar.
 
 | Término | Significado |
 | --- | --- |
-| **Colmenar (apiario)** | Un emplazamiento donde se mantienen una o más colmenas. En Openbeehive un colmenar es la cima de la jerarquía y la unidad de compartición. Consulta [colmenares](/using-the-app/apiaries). |
+| **Colmenar (apiario)** | Un emplazamiento donde se mantienen una o más colmenas. En Openbeehive un colmenar es la cima de la jerarquía. Consulta [colmenares](/using-the-app/apiaries). |
 | **Espacio de abeja** | El hueco de aproximadamente 6-9 mm que las abejas dejan como paso. Los espacios menores se rellenan con propóleo; los mayores se rellenan con panal. Un espacio de abeja correcto mantiene los cuadros movibles. |
 | **Cría** | Las jóvenes en desarrollo: huevos, larvas y pupas. Un buen "patrón de cría" es compacto y con pocos huecos. |
 | **Cámara de cría** | La caja inferior (o cajas) donde la reina pone y se cría la prole, a diferencia de las alzas que están encima. |
@@ -76,9 +76,9 @@ y consulta las normas de tu país.
 | **OR-Set** | Un conjunto de tipo "gana la adición" usado para campos de lista, de modo que las adiciones concurrentes desde distintos dispositivos sobrevivan todas a una fusión. Consulta [protocolo de sincronización](/developers/sync-protocol). |
 | **PWA** | Progressive Web App: la aplicación web instalable y capaz de funcionar sin conexión que ejecutas en el teléfono, la tableta o el escritorio. Consulta [instalación](/using-the-app/install). |
 | **Etiqueta QR** | Un código imprimible en una colmena que codifica un enlace profundo; al escanearlo se abre la aplicación directamente en esa colmena. Consulta [etiquetas QR](/using-the-app/qr-labels). |
-| **Ámbito (scope)** | El límite de compartición en Openbeehive. La compartición se produce a nivel de colmenar: un ámbito concede a otros acceso a un colmenar y a todo lo que contiene. |
 | **Sincronización** | La fusión en segundo plano y sin conflictos de tus cambios locales con el servidor y tus otros dispositivos. Consulta [sin conexión y sincronización](/using-the-app/offline-and-sync). |
-| **Tarea** | Un recordatorio o pendiente ligado a una colmena o colmenar; por ejemplo "añadir un alza" o "tratar contra varroa". Consulta [tareas](/using-the-app/tasks). |
+| **Tarea** | Un recordatorio con un título y una fecha de vencimiento opcional; por ejemplo "añadir un alza" o "tratar contra varroa". Consulta [tareas](/using-the-app/tasks). |
+| **Espacio (tenant)** | Una colección de colmenares, colmenas y registros compartida por sus miembros. Cada cuenta tiene un espacio personal y puede ser invitada a otros; no hay compartición más fina. Consulta [cuentas y espacios](/using-the-app/accounts-tenants). |
 
 :::note
 Los mecanismos más profundos de los HLC, los OR-Sets y los eventos de solo

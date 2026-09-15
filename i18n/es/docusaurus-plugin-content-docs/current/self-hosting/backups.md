@@ -8,7 +8,7 @@ title: "Copias de seguridad y restauracion"
 Unos pocos minutos dedicados ahora a configurar las copias de seguridad te ahorraran muchas preocupaciones mas adelante. Esta pagina cubre que respaldar, como hacerlo de forma segura y como restaurar cuando lo necesites.
 
 :::tip El servidor es la fuente de verdad
-Openbeehive es offline-first, asi que cada dispositivo que usa tu colmena mantiene una copia local completa de sus datos en el navegador. Esa copia es una comodidad, no una copia de seguridad: reside en el almacenamiento del navegador y puede borrarse al limpiar los datos del sitio, reinstalar o perder el dispositivo.
+Cada dispositivo que usa tu instancia mantiene una copia local de sus datos en el navegador. Esa copia es una comodidad, no una copia de seguridad: puede borrarse al limpiar los datos del sitio, reinstalar o perder el dispositivo.
 
 Para todo lo que se comparte entre personas o dispositivos, el **servidor** es la copia autorizada. Haz copia de seguridad del servidor y protegeras los registros de todos a la vez.
 :::
@@ -148,9 +148,3 @@ Los caracteres `%` deben escaparse como `\%` dentro de crontab. Para Postgres, s
 :::tip Prueba tus restauraciones
 Una copia de seguridad que nunca has restaurado es solo una esperanza. De vez en cuando, restaura en un directorio desechable o una instancia de prueba y confirma que puedes abrir la aplicacion y ver tus colmenas. Conserva al menos unos dias de copias fechadas y guarda una fuera del sitio (un disco externo o un bucket remoto).
 :::
-
-## A donde ir despues
-
-- Establece o comprueba `BEEHIVE_DATABASE_DSN` y `BEEHIVE_BLOB_DIR` en la pagina de [Configuracion](/self-hosting/configuration).
-- Planifica las actualizaciones de version en la pagina de [Actualizacion](/self-hosting/upgrading) — haz siempre copia de seguridad primero.
-- Vuelve a la [vision general del alojamiento propio](/category/self-hosting) para el panorama completo del despliegue.

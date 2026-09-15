@@ -77,7 +77,7 @@ La alimentación abierta (dejar jarabe al aire libre para que lo tome cualquier 
 
 Cada alimentación merece ser registrada. Saber cuánto jarabe o cándi tomó una colonia, y cuándo, te ayuda a juzgar si las reservas son adecuadas, detectar colonias que se quedan cortas sistemáticamente y planificar la alimentación de otoño del año siguiente con más precisión.
 
-En Openbeehive, anota la alimentación como parte de la visita correspondiente para que quede junto a todo lo demás que viste ese día. Apunta el tipo de alimento (jarabe ligero, jarabe pesado o cándi) y la cantidad dada. Como la app funciona con prioridad sin conexión, puedes registrar esto junto a la colmena incluso sin cobertura, y se sincronizará más tarde.
+En Openbeehive, anota la alimentación como parte de la visita: introduce la cantidad en el campo **Alimentada** (kg) y apunta el tipo de alimento (jarabe ligero, jarabe pesado o cándi) en la nota, para que quede junto a todo lo demás que viste ese día.
 
 Consulta [Inspecciones](/using-the-app/inspections) para saber cómo registrar una visita y captar las cantidades de alimentación.
 

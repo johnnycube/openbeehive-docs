@@ -8,7 +8,7 @@ title: "Equipo y tipos de colmena"
 La apicultura no exige una gran cantidad de material, pero unas pocas buenas herramientas hacen que cada visita sea más tranquila, segura y rápida. Esta página cubre lo esencial y luego ofrece una visión general de los principales sistemas de colmena para que puedas elegir el que más te convenga y registrarlo correctamente en Openbeehive.
 
 :::tip
-Cuando creas una colmena en Openbeehive, eliges su tipo (Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar u Otro). Elegir el correcto mantiene coherentes el número de cuadros y las notas de equipo en todo tu colmenar. Consulta [Colmenas](/using-the-app/hives).
+Cuando creas una colmena en Openbeehive, eliges su tipo (Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar u Otro). Elegir el correcto mantiene coherentes el número de cuadros y las notas de equipo en todo tu colmenar. Consulta [Colmenas](/using-the-app/hives).
 :::
 
 ## Lo esencial
@@ -75,7 +75,7 @@ Los tipos de colmena difieren principalmente en las dimensiones de cajas y cuadr
 
 Los sistemas de cuadros móviles (Langstroth, Dadant, Zander, Deutsch Normal) funcionan todos del mismo modo general —pilas verticales de cajas con cuadros rectangulares completos— y difieren sobre todo en dimensiones. Las colmenas **Top-bar** y **Warré** adoptan un enfoque de menor intervención: las abejas construyen panal a partir de simples listones, lo que implica un manejo más suave pero sin extractor de miel (el panal suele prensarse y colarse).
 
-Si tu colmena no coincide con ninguna de estas, elige **Otro** en Openbeehive y anota los detalles en la descripción de la colmena.
+Si tu colmena no coincide con ninguna de estas, elige **Otro** en Openbeehive y anota los detalles en la nota de una visita.
 
 :::note
 No existe una única colmena "mejor". La elección más práctica suele ser la que usen tu **asociación local y los apicultores cercanos**, para que puedas tomar prestado equipo, intercambiar cuadros y recibir ayuda práctica. Para una comparación más detallada y las dimensiones de los cuadros, consulta [Tipos de colmena](/knowledge-base/hive-types).

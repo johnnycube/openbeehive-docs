@@ -5,197 +5,117 @@ title: "Historial y eventos"
 
 # Historial y eventos
 
-Openbeehive trata tus registros apícolas como una historia que se desarrolla a lo
-largo del tiempo. Una colmena se traslada entre colmenares, una reina reina y más
-tarde es reemplazada, una cosecha se registra en un día concreto. Para que este
-historial sea preciso y útil, el modelo de datos mantiene dos cosas claras: qué
-ocurrió y la situación que era cierta cuando ocurrió.
-
-Esta página explica cómo los eventos congelan su contexto, cómo los historiales
-de intervalos registran reinados y emplazamientos, cómo los registros de detalle
-tipados cuelgan de los eventos, y cómo el cliente escribe y consulta todo ello
-sin conexión.
+Una colmena se mueve entre colmenares, una reina reina y es reemplazada, la
+miel se retira un día concreto. Para que ese historial siga siendo correcto
+después de que el mundo cambie, cada escritura de historial congela el contexto
+que era cierto en ese momento. El código está en `app/src/lib/local/history.ts`.
 
 ## Los eventos congelan su contexto
 
-Un evento es un hecho append-only: registra que algo ocurrió en un momento del
-tiempo. De forma crucial, cada evento almacena una instantánea del contexto
-relevante tal como estaba en el momento del evento, en lugar de solo un puntero
-al estado actual.
+La tabla `event` es append-only. Cada fila almacena, como columnas normales, el
+`apiary_id`, `hive_id` y `queen_id` que aplicaban en la `date` del evento.
+Mueve la colmena el mes que viene y la inspección de la semana pasada sigue
+perteneciendo al colmenar antiguo; cambia la reina y una cosecha anterior sigue
+atribuida a la reina que la produjo.
 
-Cuando se escribe un evento, el cliente resuelve y almacena:
+Las mismas filas sirven como tabla de hechos para las estadísticas: `amount_kg`
+se copia en los eventos de cosecha, así que la miel por colmenar, por reina o
+por año es un único `GROUP BY` sobre `event` sin joins.
 
-- el colmenar al que pertenecía la colmena,
-- la propia colmena,
-- la reina que reinaba en esa colmena en esa fecha.
+## Historiales por intervalos
 
-Esta instantánea se desnormaliza en la fila del evento. La ventaja es que el
-historial sigue siendo veraz incluso después de que el mundo cambie. Si trasladas
-una colmena a un nuevo colmenar el mes que viene, la inspección de la semana
-pasada sigue leyéndose como ocurrida en el colmenar donde realmente tuvo lugar.
-Si cambias de reina, una cosecha antigua sigue atribuyendo la miel a la reina que
-estaba al mando en ese momento.
+Dos tablas contienen intervalos semiabiertos `[start, end)`:
 
-:::note
-Como los eventos son append-only y llevan su propio contexto, nunca entran en
-conflicto durante la sincronización. Dos dispositivos pueden añadir eventos sin
-conexión cada uno y ambos conjuntos se conservan.
-Consulta el [protocolo de sincronización](/developers/sync-protocol) para las reglas libres de conflictos.
-:::
-
-## La tabla de eventos también es una tabla de hechos
-
-Las mismas filas de eventos hacen también de tabla de hechos para las
-estadísticas. Las medidas numéricas viven directamente en el evento, la más
-importante `amount_kg` para las cosechas, junto a las dimensiones congeladas
-(colmenar, colmena, reina, fecha, `scope_id`, tipo de evento).
-
-Esto significa que los informes habituales son una sola consulta agrupada sobre
-una única tabla, sin necesidad de joins para atribuir un número al colmenar,
-colmena o reina que lo produjo. El contexto congelado es lo que hace que "miel
-por colmenar en 2025" o "rendimiento por reina" sean correctos por construcción.
-
-## Historiales de intervalos
-
-Algunos hechos se expresan mejor como intervalos que como puntos. Openbeehive usa
-intervalos semiabiertos, escritos `[start, end)`: el inicio se incluye y el final
-se excluye. Esto hace que los intervalos se ensamblen limpiamente sin solapamiento
-ni huecos cuando un periodo termina justo cuando empieza el siguiente.
-
-| Historial | Intervalo | Significado |
+| Tabla | Intervalo | Significado |
 | --- | --- | --- |
-| Reinado de la reina | `[installed, replaced)` | La reina encabeza la colonia desde su fecha de instalación hasta, sin incluirla, la fecha en que es reemplazada. |
-| Emplazamiento de la colmena | `[from, to)` | La colmena se encuentra en un colmenar dado desde `from` hasta, sin incluirla, `to`. |
+| `queen` | `[introduced_at, replaced_at)` | La reina encabeza la colonia desde su introducción hasta que es reemplazada. `replaced_at` es null mientras reina; `active` también está activado. |
+| `placement` | `[start_at, end_at)` | La colmena está en `apiary_id` desde `start_at` hasta que se mueve. `end_at` es null para la ubicación actual. |
 
-Un reinado o emplazamiento actual tiene un final abierto (todavía sin `replaced`
-/ `to`). Cuando se reemplaza una reina, el intervalo de la reina saliente se
-cierra en la fecha de instalación de la nueva reina, y el nuevo reinado se abre
-ahí. Los traslados de colmena funcionan de la misma manera.
+Los intervalos semiabiertos encajan sin solaparse: en un día de cambio coincide
+exactamente una fila.
 
-:::tip
-Los intervalos semiabiertos convierten "¿quién reinaba en la fecha D?" en una
-prueba sencilla: encuentra la fila donde `installed <= D` y (`replaced` es nulo o
-`replaced > D`). Coincide exactamente una fila, incluso en un día de relevo.
-:::
+## resolveContext
 
-## Registros de detalle tipados
+Las entradas suelen tener fecha retroactiva (la visita del sábado introducida el
+lunes), así que el contexto se resuelve para la fecha propia de la entrada, no
+para el momento actual:
 
-Los eventos vienen en varios tipos, y los detalles específicos de cada tipo viven
-en sus propios registros enlazados al evento:
-
-- Detalle de **inspección**: observaciones de una visita (cría, reservas,
-  temperamento, reina vista, etc.).
-- Detalle de **cosecha**: lo que se extrajo, incluida la medida `amount_kg` usada
-  para las estadísticas.
-- Detalle de **tratamiento**: el producto aplicado, dosis y momento de un
-  tratamiento contra varroa o enfermedad.
-
-Mantener los campos compartidos del evento (fecha, contexto congelado,
-`scope_id`) en un solo lugar y los campos específicos del tipo en registros
-tipados mantiene la tabla de hechos limpia, permitiendo a la vez formularios y
-pantallas ricos y conscientes del tipo. Las formas de estos registros se
-describen en el [modelo de datos](/developers/data-model).
-
-## resolveContext para entradas con fecha retroactiva
-
-Los apicultores no siempre registran las cosas en el momento en que ocurren.
-Podrías introducir la inspección del sábado pasado el lunes por la noche. Por eso
-el contexto debe resolverse para la fecha propia del evento, no para "ahora".
-
-El cliente usa un ayudante, conceptualmente:
-
-```text
-resolveContext(hiveId, date) -> { apiaryId, hiveId, queenId, scopeId }
+```ts
+resolveContext(hiveId: string, date: string) -> { apiaryId, queenId }
 ```
 
-Busca la colmena, luego consulta los historiales de intervalos para encontrar el
-emplazamiento del colmenar y el reinado de la reina que cubren `date`, y lee el
-`scope_id` de la colmena. El resultado se congela en el evento.
+Ejecuta dos consultas contra la base de datos local y recurre a los valores
+actuales cuando ningún intervalo cubre la fecha:
 
 ```sql
--- Find the queen reigning in a hive on a given date.
-SELECT id
-FROM queens
-WHERE hive_id = :hiveId
-  AND installed <= :date
-  AND (replaced IS NULL OR replaced > :date)
-LIMIT 1;
+-- Where the hive lived on the date (falls back to hive.apiary_id).
+SELECT apiary_id FROM placement
+WHERE hive_id = ? AND deleted = 0 AND start_at <= ?
+  AND (end_at IS NULL OR end_at > ?)
+ORDER BY start_at DESC LIMIT 1;
+
+-- Who reigned on the date (falls back to the queen with active = 1).
+SELECT id FROM queen
+WHERE hive_id = ? AND deleted = 0 AND introduced_at <= ?
+  AND (replaced_at IS NULL OR replaced_at > ?)
+ORDER BY introduced_at DESC LIMIT 1;
 ```
+
+## Funciones que escriben historial
+
+| Función | Escribe |
+| --- | --- |
+| `createHive` | fila `hive`, un `placement` abierto, evento `CREATED` |
+| `setQueen` | cierra la reina activa (`active = 0`, `replaced_at`), inserta la nueva, eventos `QUEEN_REPLACED` y `QUEEN_INTRODUCED` |
+| `moveHive` | cierra el `placement` abierto, abre uno nuevo, actualiza `hive.apiary_id`, evento `MOVED` con `detail = {from, to}` |
+| `recordHarvest` | fila `harvest` con `apiary_id` / `queen_id` congelados, evento `HARVEST` con `amount_kg` y `ref_id` |
+| `recordTreatment` | fila `treatment` con contexto congelado, evento `TREATMENT` |
+| `recordInspection` | fila `inspection`, evento `INSPECTION` |
+
+`recordHarvest`, `recordTreatment` y `recordInspection` llaman primero a
+`resolveContext`. Todas las escrituras pasan por `patch()` en
+`app/src/lib/local/repo.ts`, así que aterrizan en la tabla local y en el outbox
+de sincronización como cualquier otro cambio. Las filas de detalle (`harvest`,
+`treatment`, `inspection`) son filas sincronizadas normales; solo `event` se
+trata como append-only por convención. Nada en la aplicación edita ni elimina un
+evento.
+
+Los números de tipo de evento se listan en el [modelo de datos](/developers/data-model#event).
+
+## Leer el historial
+
+```ts
+historyForHive(hiveId)     // SELECT * FROM event WHERE deleted = 0 AND hive_id = ?   ORDER BY date DESC
+historyForApiary(apiaryId) // ... WHERE apiary_id = ?
+historyForQueen(queenId)   // ... WHERE queen_id = ?
+```
+
+Estadísticas:
 
 ```sql
--- Find the apiary the hive was placed in on a given date.
-SELECT apiary_id
-FROM hive_placements
-WHERE hive_id = :hiveId
-  AND from_date <= :date
-  AND (to_date IS NULL OR to_date > :date)
-LIMIT 1;
+-- honeyByApiary
+SELECT apiary_id AS key, SUM(amount_kg) AS kg
+FROM event WHERE type = 7 AND deleted = 0
+GROUP BY apiary_id ORDER BY kg DESC;
+
+-- honeyByQueen
+SELECT queen_id AS key, SUM(amount_kg) AS kg
+FROM event WHERE type = 7 AND deleted = 0
+GROUP BY queen_id ORDER BY kg DESC;
+
+-- honeyByYear
+SELECT substr(date, 1, 4) AS year, SUM(amount_kg) AS kg
+FROM event WHERE type = 7 AND deleted = 0
+GROUP BY year ORDER BY year;
 ```
 
-:::caution
-Resuelve siempre el contexto frente a la fecha del evento. Usar el colmenar
-actual o la reina actual de la colmena atribuiría silenciosamente de forma
-errónea las entradas con fecha retroactiva y corrompería tus estadísticas.
-:::
+`type = 7` es `HARVEST`. Como las dimensiones están congeladas en la fila, no
+hace falta ningún join con el estado actual.
 
-## Qué funciones del cliente escriben historial
+## Sincronización
 
-Tres tipos de escritura tocan el historial, y conviene mantenerlas diferenciadas:
-
-1. **Añadir un evento.** Los escritores de inspecciones, cosechas, tratamientos y
-   otros eventos llaman primero a `resolveContext(hiveId, date)`, luego añaden el
-   evento con su contexto congelado (y `amount_kg` cuando corresponda) más el
-   registro de detalle tipado.
-2. **Reemplazar una reina.** Cierra el reinado actual en la nueva fecha de
-   instalación y abre un nuevo intervalo `[installed, replaced)`. Los eventos
-   existentes conservan su reina congelada original.
-3. **Trasladar una colmena.** Cierra el emplazamiento actual en la fecha del
-   traslado y abre un nuevo intervalo `[from, to)` en el colmenar de destino. Los
-   eventos existentes conservan su colmenar congelado original.
-
-Los reinados y emplazamientos son filas de intervalo cuyos campos escalares (la
-fecha de cierre) siguen last-writer-wins por campo; los eventos son append-only e
-inmutables una vez escritos. Las nuevas correcciones se hacen añadiendo más
-eventos, no editando los antiguos.
-
-## Consultas de estadísticas
-
-Como las medidas y dimensiones están congeladas en el evento, los informes
-agrupan directamente:
-
-```sql
--- Total honey per apiary for a season.
-SELECT apiary_id, SUM(amount_kg) AS total_kg
-FROM events
-WHERE type = 'harvest'
-  AND date >= '2025-01-01' AND date < '2026-01-01'
-GROUP BY apiary_id;
-```
-
-```sql
--- Yield attributed to each queen.
-SELECT queen_id, SUM(amount_kg) AS total_kg
-FROM events
-WHERE type = 'harvest'
-GROUP BY queen_id;
-```
-
-No se necesitan joins al estado actual: el `apiary_id` y el `queen_id` congelados
-ya son los correctos para el momento de la cosecha.
-
-## Sin conexión y compartición mediante scope_id
-
-Cada fila de evento e historial lleva el `scope_id` de su colmenar. Los ámbitos
-son la unidad de compartición en Openbeehive: conceder a alguien acceso a un
-colmenar comparte todos los eventos e historiales bajo ese ámbito.
-
-Como las escrituras son locales e instantáneas, el historial se escribe primero
-en la base de datos SQLite del dispositivo y se sincroniza en segundo plano. El
-contexto congelado significa que una entrada con fecha retroactiva hecha sin
-conexión lleva el colmenar, la colmena y la reina correctos incluso si el
-dispositivo no ha visto cambios recientes de otros lugares; los eventos
-append-only se fusionan sin conflicto cuando el dispositivo se reconecta.
-
-Consulta [sin conexión y sincronización](/using-the-app/offline-and-sync) para el
-comportamiento de cara al usuario y [Desarrolladores](/category/developers) para
-la arquitectura más amplia.
+Las filas de `event` llevan `scope_id` (el id del colmenar) como columna y se
+sincronizan como cualquier otra tabla, con last-writer-wins por campo. Como
+cada evento tiene un UUID nuevo y nunca se edita, dos dispositivos que añaden
+eventos sin conexión nunca tocan la misma fila y ambos conjuntos sobreviven.
+Consulta el [protocolo de sincronización](/developers/sync-protocol).

@@ -37,8 +37,8 @@ Qué hacer:
 - Aplica tu método elegido de control de enjambrazón si aparecen realeras (consulta [Enjambrazón](/beekeeping/swarming)).
 - Considera criar nuevas reinas o aumentar el número de colonias a partir de stock fuerte (consulta [Cría de reinas](/beekeeping/queen-rearing)).
 
-:::tip Usa una tarea semanal para mantener el ritmo
-El ciclo de inspección de siete días es fácil de perder de vista con varias colmenas. Crea una tarea de inspección recurrente por colmenar para que la próxima visita esté siempre en tu lista. Consulta [Tareas](/using-the-app/tasks).
+:::tip Usa tareas para mantener el ritmo
+El ciclo de siete días es fácil de perder de vista con varias colmenas. Añade una tarea con fecha de vencimiento para la próxima visita y, cuando la marques como hecha, añade la siguiente. Consulta [Tareas](/using-the-app/tasks).
 :::
 
 ## Verano: la entrada de miel

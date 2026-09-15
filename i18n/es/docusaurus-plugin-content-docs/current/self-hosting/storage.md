@@ -104,27 +104,14 @@ Indica `BEEHIVE_MINIO_ENDPOINT` como un host, opcionalmente con un puerto, por e
 Controla el esquema con `BEEHIVE_MINIO_USE_SSL` en su lugar.
 :::
 
-### Crear el bucket
+### El bucket
 
-El servidor espera que el bucket nombrado en `BEEHIVE_MINIO_BUCKET` exista. Crealo una vez
-antes de iniciar Openbeehive.
-
-Usando el cliente de MinIO `mc`:
+Al arrancar, el servidor comprueba si existe el bucket nombrado en `BEEHIVE_MINIO_BUCKET` y lo crea si no, así que con credenciales que puedan crear buckets no hay nada que preparar. Si tus credenciales están restringidas a un bucket existente, créalo primero, por ejemplo con el cliente de MinIO:
 
 ```bash
 mc alias set local https://minio.example.com:9000 ACCESS_KEY SECRET_KEY
 mc mb local/openbeehive
 ```
-
-O usando la AWS CLI contra cualquier endpoint compatible con S3:
-
-```bash
-aws --endpoint-url https://minio.example.com:9000 \
-  s3 mb s3://openbeehive
-```
-
-En el propio Amazon S3 puedes crear el bucket desde la Consola de AWS o con el
-comando anterior (omitiendo `--endpoint-url`).
 
 :::caution Manten el bucket privado
 Los blobs pueden contener fotos identificables de tus colmenares. No hagas el bucket
@@ -165,9 +152,3 @@ Si empiezas en el sistema de archivos y mas tarde pasas al almacenamiento de obj
 existentes no se migran automaticamente. Planea copiar el contenido de `BEEHIVE_BLOB_DIR` a tu
 bucket (por ejemplo con `mc cp --recursive` o `aws s3 sync`) antes de cambiar
 `BEEHIVE_BLOB_BACKEND`, para que las fotos de inspecciones antiguas sigan disponibles.
-
-## Relacionado
-
-- [Configuracion](/self-hosting/configuration) — lista completa de variables de entorno
-- [Bases de datos](/self-hosting/databases) — elegir y configurar la base de datos
-- [Copias de seguridad](/self-hosting/backups) — proteger tanto los registros como los blobs

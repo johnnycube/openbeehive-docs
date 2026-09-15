@@ -5,105 +5,52 @@ title: "El panel de control"
 
 # El panel de control
 
-El panel de control es tu base de operaciones en Openbeehive. Es la primera pantalla que ves al abrir la aplicación y está pensado para responder a una pregunta sencilla: ¿qué necesita mi atención hoy?
+El **Resumen** es la primera pantalla tras abrir la aplicación. Todo lo que muestra se lee de la base de datos local de tu dispositivo, así que se carga al instante con o sin cobertura.
 
-Como Openbeehive funciona con un enfoque offline-first, todo lo que aparece en el panel se lee directamente de la base de datos local de tu dispositivo. Se carga al instante y funciona tengas o no cobertura en el colmenar. Los cambios que hagas se sincronizan con el servidor de forma discreta en segundo plano.
+El botón **+ Nuevo** de la cabecera te lleva a la lista de Colmenares para crear un colmenar.
 
 ## Mosaicos de estadísticas
 
-En la parte superior del panel encontrarás una fila de mosaicos de estadísticas que te dan un recuento rápido de lo que contienen tus registros:
-
 | Mosaico | Qué muestra |
 | --- | --- |
-| **Colmenares** | El número de colmenares que mantienes, incluidos los que se han compartido contigo. |
-| **Colmenas** | Total de colmenas en todos tus colmenares. |
+| **Colmenares** | Número de colmenares en el espacio activo. |
+| **Colmenas** | Número de colmenas. |
 | **Reinas** | Reinas registradas actualmente al frente de una colonia. |
 | **Tareas abiertas** | Tareas que aún no están marcadas como hechas. |
+| **Miel esta temporada** | Total de kilogramos cosechados registrados en el año natural en curso. |
 
-Cada mosaico se puede pulsar y te lleva a la sección correspondiente de la aplicación, de modo que puedes pasar directamente de un recuento al detalle que hay detrás.
+Los mosaicos son solo recuentos; usa la navegación para abrir la sección correspondiente.
 
-## Qué hay que hacer
+## Inspecciones pendientes
 
-Debajo de los mosaicos, el panel agrupa las cosas que dependen del tiempo.
+Lista hasta cinco colmenas, primero las que llevan más tiempo sin visitar, con los días transcurridos desde la última inspección de cada una ("nunca" para las colmenas sin visitas). La insignia se resalta a partir de 21 días, o cuando no hay ninguna visita. Toca una colmena para abrirla y registrar una visita. Cuando no hay colmenas, el panel dice "Todo al día".
 
-### Inspecciones pendientes
+No hay un intervalo configurable: la lista se ordena por el tiempo transcurrido desde la última visita registrada.
 
-Lista las colmenas cuya próxima inspección está pendiente o vencida, según el intervalo que fijaste al inspeccionar. Es tu recordatorio para planificar una visita. Pulsa una colmena para abrirla e iniciar una nueva inspección.
+## Próximas tareas
 
-### Tareas próximas
-
-Muestra las tareas con una fecha de vencimiento próxima, las más cercanas primero. Las tareas pueden estar vinculadas a una colmena o colmenar concreto, o ser independientes (por ejemplo, "encargar cuadros nuevos"). Marca una como hecha aquí mismo sin salir del panel.
-
-### Inspecciones recientes
-
-Un breve listado de tus visitas más recientes, para que puedas ver de un vistazo qué encontraste por última vez en cada colonia. Pulsa cualquier entrada para leer las notas completas de la inspección.
-
-### Miel esta temporada
-
-Un total acumulado de la miel que has cosechado en la temporada actual, calculado a partir de tus registros de cosecha. Es una forma rápida y gratificante de seguir cómo va el año.
-
-:::tip
-El panel refleja únicamente lo que hay en tus registros. Cuanto más constante seas al anotar inspecciones, tareas y cosechas, más útiles serán estos resúmenes.
-:::
+Muestra hasta cinco tareas abiertas con sus fechas de vencimiento. Las tareas cuya fecha ya ha pasado se marcan con **!**. Marca las tareas como hechas en la vista **Tareas**; consulta [Tareas](/using-the-app/tasks).
 
 ## Cómo moverte
 
-Cómo navegas depende del tamaño de tu pantalla. Las mismas funciones están disponibles de cualquier manera; solo cambia la disposición.
+Los mismos destinos están disponibles en todas partes: **Resumen, Colmenares, Escanear, Colmenas, Tareas** y **Ajustes**.
 
-### En móvil
+- En el móvil, una **barra de pestañas inferior** contiene los seis.
+- En escritorio o tableta, una **barra lateral** a la izquierda lista Resumen, Colmenares, Escanear, Colmenas y Tareas, con tu cuenta (correo y estado de conexión) en la parte inferior enlazando a Ajustes.
 
-Una **barra de pestañas inferior** te da acceso con un solo toque a las áreas principales de la aplicación: el panel, tus colmenares y colmenas, las tareas, etc. Permanece fija en la parte inferior de la pantalla, así que siempre está al alcance del pulgar mientras trabajas junto a la colmena.
+## Ajustes
 
-### En escritorio y tableta
+**Ajustes** contiene:
 
-Una **barra lateral** recorre el lado izquierdo con el mismo conjunto de destinos, además de un poco más de espacio para mostrar etiquetas y elementos anidados. En pantallas más anchas, esto deja el área principal libre para tus registros.
+- **Idioma**: inglés, alemán, francés, español, italiano. La elección se guarda en el dispositivo.
+- **Espacios**: cambiar, crear, invitar y gestionar (en instancias con inicio de sesión). Consulta [Cuentas y espacios](/using-the-app/accounts-tenants).
+- **Passkeys**: añadir o eliminar passkeys (cuando el servidor las habilita).
+- **Claves API**: crear y eliminar claves para scripts y dispositivos (en instancias con inicio de sesión). Consulta [Cuentas y espacios](./accounts-tenants.md#api-keys).
+- **Datos y copia de seguridad**: exportar e importar; consulta [Importar y exportar](/using-the-app/import-export).
+- **Cuenta**: con qué cuenta has iniciado sesión, y **Cerrar sesión**.
 
-## Cuenta y ajustes
-
-Tu cuenta y tus ajustes están juntos en un solo lugar, accesible desde la navegación. Aquí puedes gestionar tu perfil, cerrar sesión y acceder a las preferencias generales de la aplicación, como el idioma y (si tu servidor las usa) las passkeys y los proveedores de inicio de sesión conectados.
-
-Si ejecutas una instancia autoalojada de un solo usuario sin inicio de sesión configurado, el bloque de cuenta simplemente muestra tu perfil local.
+En una instancia autoalojada de un solo usuario sin inicio de sesión no hay sesión que cerrar; el bloque de cuenta muestra la identidad local.
 
 ## El indicador de conexión/sin conexión
 
-Un pequeño indicador muestra tu estado actual de conexión y sincronización.
-
-- **Conectado** significa que la aplicación está conectada y sincronizando los cambios con el servidor.
-- **Sin conexión** significa que ahora mismo no hay conexión. Esto es completamente normal y no hay de qué preocuparse: puedes seguir añadiendo inspecciones, tareas y todo lo demás exactamente igual que siempre.
-
-Cuando vuelvas a tener cobertura, Openbeehive sincroniza automáticamente. Gracias a su diseño sin conflictos, las ediciones hechas en distintos dispositivos mientras estaban sin conexión se fusionan limpiamente cuando se reencuentran.
-
-:::note
-Ver "sin conexión" **no** significa que vayas a perder datos. Todo se guarda primero localmente. El indicador solo te avisa de cuándo la sincronización en segundo plano está en pausa. Para saber más sobre cómo funciona, consulta [Sin conexión y sincronización](/using-the-app/offline-and-sync).
-:::
-
-## Cambiar el idioma
-
-Openbeehive está disponible en varios idiomas. Para cambiarlo:
-
-1. Abre **Ajustes**.
-2. Busca la opción **Idioma**.
-3. Elige tu idioma preferido.
-
-Los idiomas disponibles son:
-
-| Código | Idioma |
-| --- | --- |
-| `en` | Inglés (English) |
-| `de` | Alemán (Deutsch) |
-| `fr` | Francés (Français) |
-| `es` | Español |
-| `it` | Italiano |
-
-El cambio surte efecto de inmediato y se recuerda en tu dispositivo.
-
-## Adónde ir después
-
-Desde el panel puedes ramificarte hacia el resto de la aplicación:
-
-- Configura tus [colmenares](/using-the-app/apiaries) y [colmenas](/using-the-app/hives).
-- Registra una visita en [inspecciones](/using-the-app/inspections).
-- Mantente al día con los trabajos mediante [tareas](/using-the-app/tasks).
-- Anota tu cosecha en [cosechas](/using-the-app/harvests).
-
-Para un recorrido más amplio por todo lo que la aplicación puede hacer, dirígete a la introducción de [Uso de la aplicación](/category/using-the-app).
+La barra lateral muestra **En línea** o **Sin conexión** junto a tu cuenta, y mientras estás sin conexión una barra en la parte superior indica "Sin conexión: los cambios se guardan y se sincronizan más tarde". Sigue registrando exactamente igual que siempre; la sincronización se reanuda cuando vuelve la conexión. Consulta [Sin conexión y sincronización](/using-the-app/offline-and-sync).

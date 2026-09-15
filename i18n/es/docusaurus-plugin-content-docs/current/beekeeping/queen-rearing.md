@@ -158,11 +158,3 @@ Cuando marques una reina, registra su color de marcaje en la app en la
 esperado a partir del año, para que puedas confirmar de un vistazo si una reina tiene la edad
 que crees.
 :::
-
-## Adónde ir a continuación
-
-- Aprende la temporada en su conjunto en [El año apícola](/beekeeping/beekeeping-year).
-- Comprende el impulso de criar nuevas reinas en
-  [Enjambrazón](/beekeeping/swarming).
-- Mira cómo se organizan las colonias en
-  [La colonia](/beekeeping/the-colony).

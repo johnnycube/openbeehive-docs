@@ -20,13 +20,11 @@ disponibles incluso cuando estás en el colmenar sin cobertura.
 - **Un icono de aplicación** en tu pantalla de inicio o en tu lanzador de aplicaciones.
 - **Una ventana a pantalla completa** sin la interfaz del navegador, así que hay más sitio
   para tus colmenas e inspecciones.
-- **Acceso offline-first.** Tus registros viven en una base de datos local en el
-  dispositivo y se sincronizan en segundo plano. Las lecturas y escrituras son instantáneas,
-  haya cobertura o no. Consulta
-  [Sin conexión y sincronización](/using-the-app/offline-and-sync) para ver cómo funciona
-  esto.
+- **Acceso sin conexión.** Tus registros viven en una base de datos local en el
+  dispositivo y se sincronizan en segundo plano. Consulta
+  [Sin conexión y sincronización](/using-the-app/offline-and-sync).
 - **Escaneo QR rápido.** Escanear la [etiqueta QR](/using-the-app/qr-labels) de una colmena
-  abre directamente la aplicación instalada en esa colmena.
+  abre esa colmena.
 
 :::tip
 Puedes seguir usando Openbeehive en una pestaña normal del navegador sin instalarlo. Las
@@ -124,11 +122,3 @@ Si tienes registros que aún no se han sincronizado cuando desinstalas, viven so
 base de datos local del dispositivo y pueden perderse. Asegúrate de que la aplicación se ha
 sincronizado antes de eliminarla. Consulta [Sin conexión y sincronización](/using-the-app/offline-and-sync).
 :::
-
-## Una nota sobre las aplicaciones nativas
-
-Openbeehive es ante todo una PWA, y para casi todo el mundo la PWA instalada es
-indistinguible de una aplicación nativa. Se está considerando un envoltorio nativo (usando
-Capacitor) para la Apple App Store y Google Play para una versión futura, principalmente
-para llegar a las personas que prefieren las tiendas. La PWA seguirá siendo la forma
-principal de instalar y conservará todas sus capacidades offline-first.

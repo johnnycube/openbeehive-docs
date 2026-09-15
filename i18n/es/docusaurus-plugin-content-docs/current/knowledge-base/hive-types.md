@@ -7,9 +7,9 @@ title: "Referencia de tipos de colmena"
 
 Cuando creas una colmena en Openbeehive, eliges un **tipo**. Este único valor registra el sistema de colmena que estás utilizando, lo que te ayuda a mantener cuadros, alzas y piezas de repuesto compatibles en todo tu colmenar.
 
-El tipo es puramente una etiqueta para tus propios registros. No cambia el funcionamiento de las inspecciones, los tratamientos ni las cosechas, así que no te preocupes por equivocarte: puedes cambiarlo en cualquier momento desde la configuración de la colmena. Consulta [Colmenas](/using-the-app/hives) para saber cómo añadir y editar una colmena.
+El tipo es puramente una etiqueta para tus propios registros. No cambia el funcionamiento de las inspecciones, los tratamientos ni las cosechas, así que no te preocupes por equivocarte: puedes cambiarlo en cualquier momento editando la colmena. Consulta [Colmenas](/using-the-app/hives) para saber cómo añadir y editar una colmena.
 
-Openbeehive ofrece siete opciones: **Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar** y **Otro**.
+Openbeehive ofrece siete opciones: **Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar** y **Otro**.
 
 ## Comparación rápida
 
@@ -33,7 +33,7 @@ Algunas indicaciones prácticas para elegir un valor:
 
 - **Ajústate a tus cuadros, no a tus aspiraciones.** Elige el sistema cuyos cuadros encajan físicamente en tus cajas hoy. La compatibilidad de cuadros y alzas es la razón principal por la que este campo importa.
 - **Sé coherente dentro de un colmenar.** Usar un solo sistema por colmenar facilita enormemente intercambiar cuadros entre colonias, compartir alzas de repuesto y gestionar tus reservas.
-- **¿Material heredado o mixto?** Si una colmena no encaja en un estándar, elige **Otro** y anota los detalles en la descripción de la colmena.
+- **¿Material heredado o mixto?** Si una colmena no encaja en un estándar, elige **Otro** y anota los detalles en la nota de una visita.
 
 ### Colmenas verticales de cuadro
 
@@ -57,10 +57,10 @@ Las colmenas de panal natural pueden dificultar algunas tareas. El panal es frá
 ## Preguntas frecuentes
 
 **¿Puedo cambiar el tipo de una colmena más adelante?**
-Sí. Abre la colmena, edita su configuración y elige un nuevo tipo. Como Openbeehive es offline-first, el cambio se guarda localmente de inmediato y se sincroniza en segundo plano; consulta [Sin conexión y sincronización](/using-the-app/offline-and-sync).
+Sí. Abre la colmena, pulsa **Editar colmena** y elige un nuevo tipo.
 
 **Mi sistema no aparece en la lista. ¿Qué hago ahora?**
-Elige **Otro** y registra los detalles (tamaño del cuadro, número de cajas, proveedor) en las notas de la colmena para que tus registros queden claros.
+Elige **Otro** y registra los detalles (tamaño del cuadro, número de cajas, proveedor) en la nota de una visita para que tus registros queden claros.
 
 **¿Afecta el tipo a los tratamientos o las cosechas?**
 No. Es una etiqueta descriptiva. Todas las inspecciones, tratamientos, tareas y cosechas funcionan igual independientemente del tipo.

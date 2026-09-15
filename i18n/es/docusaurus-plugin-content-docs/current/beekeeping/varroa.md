@@ -152,14 +152,10 @@ Cada recuento de monitorización y cada tratamiento merece ser registrado, tanto
 seguir tendencias como para cumplir las normas de registro que se aplican a los apicultores
 en muchos países.
 
-En Openbeehive puedes anotar cada aplicación como un **Tratamiento** asociado a una colmena:
-el producto usado, la sustancia activa, la dosis, y las fechas de inicio y fin. Con el
-tiempo esto construye un historial claro para que puedas ver qué usaste, cuándo y cómo
-respondió la colonia.
-
-Consulta [Tratamientos](/using-the-app/treatments) para saber cómo añadir y gestionar estos
-registros. Como la app funciona con prioridad sin conexión, puedes anotar un tratamiento en
-el colmenar sin cobertura y se sincronizará más tarde.
+En Openbeehive anotas cada aplicación como un **Tratamiento** asociado a una colmena: la
+fecha, el producto, el principio activo, el método, la dosis, el número de lote, el motivo y
+la fecha de fin del tiempo de espera. Con el tiempo esto construye un historial claro de qué
+usaste y cuándo. Consulta [Tratamientos](/using-the-app/treatments).
 
 :::note
 Mantener registros de tratamiento precisos suele ser un requisito legal, especialmente

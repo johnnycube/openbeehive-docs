@@ -20,7 +20,7 @@ Necesitaras unas pocas herramientas de compilacion instaladas en la maquina que 
 | Herramienta | Version | Proposito |
 | --- | --- | --- |
 | Go | 1.25+ | Compila el servidor |
-| Node.js | 20+ | Construye la aplicacion web SvelteKit |
+| Node.js | 24+ | Construye la aplicacion web SvelteKit |
 | buf | mas reciente | Genera el codigo Connect-RPC a partir de las definiciones protobuf |
 
 Una vez compilado, el propio binario no tiene dependencias en tiempo de ejecucion: puedes copiarlo a un servidor que no tenga ninguna de las anteriores instaladas.
@@ -29,7 +29,7 @@ Una vez compilado, el propio binario no tiene dependencias en tiempo de ejecucio
 
 ```bash
 git clone https://github.com/johnnycube/openbeehive-app.git
-cd openbeehive
+cd openbeehive-app
 ```
 
 ## Configurar
@@ -63,10 +63,10 @@ openssl rand -base64 32
 Pega el resultado en `BEEHIVE_SESSION_SECRET=`.
 
 :::note Sin inicio de sesion por defecto
-Deja `BEEHIVE_OIDC_PROVIDERS` vacio **y** `BEEHIVE_WEBAUTHN_ENABLED=false` para ejecutar como un solo usuario sin paso de inicio de sesion. Cuando estes listo para anadir cuentas o claves de acceso, consulta [Autenticacion](/self-hosting/authentication).
+El perfil selfhost no habilita ningún método de inicio de sesión: `BEEHIVE_PASSWORD_AUTH` está desactivado, `BEEHIVE_OIDC_PROVIDERS` está vacío y `BEEHIVE_WEBAUTHN_ENABLED=false`. Déjalos así para ejecutar como un solo usuario sin paso de inicio de sesión. Cuando quieras cuentas, passkeys o un proveedor, consulta [Autenticación](/self-hosting/authentication).
 :::
 
-Si tienes la intencion de acceder a la instancia desde otro dispositivo de tu red, configura `BEEHIVE_PUBLIC_BASE_URL` con una direccion que ese dispositivo pueda resolver realmente (por ejemplo `http://192.168.1.20:8080` o tu dominio detras de un [proxy inverso](/self-hosting/reverse-proxy)). Este valor tambien se integra en los enlaces directos usados por las [etiquetas QR](/using-the-app/qr-labels).
+Si tienes la intencion de acceder a la instancia desde otro dispositivo de tu red, configura `BEEHIVE_PUBLIC_BASE_URL` con una direccion que ese dispositivo pueda resolver realmente (por ejemplo `http://192.168.1.20:8080` o tu dominio detras de un [proxy inverso](/self-hosting/reverse-proxy)). Las etiquetas QR codifican la dirección en la que abres la aplicación, así que usa siempre esa misma dirección.
 
 ## Compilar
 

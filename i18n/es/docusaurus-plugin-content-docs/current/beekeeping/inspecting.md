@@ -101,6 +101,6 @@ Cada inspección es una pequeña perturbación. Mantenla proporcionada. Si solo 
 
 ## Registrar lo que encuentras
 
-Una inspección solo es tan útil como las notas que conserves. Registra el temperamento, las reservas, el espacio, la cría y cualquier realera o signo de enfermedad mientras los detalles están frescos, idealmente junto a la colmena en tu teléfono. Como Openbeehive funciona con prioridad sin conexión, puedes anotar todo en el colmenar sin cobertura y se sincronizará más tarde.
+Una inspección solo es tan útil como las notas que conserves. Registra el temperamento, las reservas, el espacio, la cría y cualquier realera o signo de enfermedad mientras los detalles están frescos, idealmente junto a la colmena en tu teléfono.
 
 Consulta [registrar inspecciones](/using-the-app/inspections) para captar tus hallazgos, y la [sección de apicultura](/category/beekeeping-basics) para el contexto estacional más amplio.

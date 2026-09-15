@@ -133,13 +133,10 @@ botulismo infantil. Esta advertencia es legalmente obligatoria en muchos países
 Anota cada lote como una **Cosecha** para poder rastrear cada partida hasta su colmenar, colmena
 y fecha —exactamente el tipo de trazabilidad que prometen tus etiquetas.
 
-Para cada cosecha, registra detalles como la colmena o el colmenar de origen, la fecha, la
-cantidad (peso o número de tarros), el tipo de miel y tu número de lote. Añade notas sobre el
-contenido de agua, el sabor o el cuajado, y adjunta una foto si quieres.
-
-Como Openbeehive funciona con prioridad sin conexión, puedes registrar las cosechas justo junto a
-la colmena o en la sala de extracción sin cobertura —todo se sincroniza más tarde. El número de
-lote que guardas aquí es el mismo que imprimir en el tarro, cerrando el ciclo del panal al estante.
+Para cada cosecha, registra la fecha, la cantidad en kilogramos, la variedad, el contenido de
+agua, tu número de lote y la fecha de consumo preferente, además de una nota sobre el sabor o el
+cuajado. El número de lote que guardas aquí es el que imprimir en el tarro, cerrando el ciclo del
+panal al estante.
 
 Consulta [Cosechas en la app](/using-the-app/harvests) para saber cómo introducir y gestionar tus
 registros de cosecha, y la [guía de apicultura](/category/beekeeping-basics) más amplia para la
