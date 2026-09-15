@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Documentation content is also versioned in-site via Docusaurus (see
 `versions.json`).
 
+## [0.3.0.1] - 2026-09-15
+
+### Fixed
+
+- The 0.3.0 snapshot carried a duplicated `current/` folder inside each
+  translated version, which showed up as an extra category in the German,
+  French, Spanish and Italian 0.3.0 docs. Removed.
+
 ## [0.3.0] - 2026-09-15
 
 Documents app release 0.3.0 (integration API, API keys) and rebuilds every
@@ -190,6 +198,7 @@ First public release. 🐝
   (Docusaurus i18n, with a locale dropdown).
 - Versioned docs snapshot `0.1.0`.
 
+[0.3.0.1]: https://github.com/johnnycube/openbeehive-docs/releases/tag/v0.3.0.1
 [0.3.0]: https://github.com/johnnycube/openbeehive-docs/releases/tag/v0.3.0
 [0.2.3.2]: https://github.com/johnnycube/openbeehive-docs/releases/tag/v0.2.3.2
 [0.2.3.1]: https://github.com/johnnycube/openbeehive-docs/releases/tag/v0.2.3.1
