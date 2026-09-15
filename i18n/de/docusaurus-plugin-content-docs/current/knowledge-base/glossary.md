@@ -24,7 +24,7 @@ wann immer dich ein Wort stolpern lässt.
 
 | Begriff | Bedeutung |
 | --- | --- |
-| **Bienenstand (Apiary)** | Ein Standort, an dem ein oder mehrere Bienenstöcke gehalten werden. In Openbeehive steht der Bienenstand an der Spitze der Hierarchie und ist die Einheit, über die geteilt wird. Siehe [Bienenstände](/using-the-app/apiaries). |
+| **Bienenstand (Apiary)** | Ein Standort, an dem ein oder mehrere Bienenstöcke gehalten werden. In Openbeehive steht der Bienenstand an der Spitze der Hierarchie. Siehe [Bienenstände](/using-the-app/apiaries). |
 | **Bienenabstand (Bee space)** | Der etwa 6-9 mm große Spalt, den Bienen als Durchgang frei lassen. Kleinere Räume werden mit Propolis gefüllt, größere mit Wabenbau. Der richtige Bienenabstand hält die Rähmchen beweglich. |
 | **Brut** | Der heranwachsende Nachwuchs: Eier, Larven und Puppen. Ein gesundes „Brutbild“ ist geschlossen und weist wenige Lücken auf. |
 | **Brutraum** | Die untere Zarge (oder Zargen), in der die Königin legt und Brut aufgezogen wird, im Gegensatz zu den darüber liegenden Honigräumen. |
@@ -76,9 +76,9 @@ maßgeblich und prüfe deine nationalen Vorschriften.
 | **OR-Set** | Eine „Add-wins“-Menge, die für Listenfelder verwendet wird, sodass gleichzeitige Hinzufügungen von verschiedenen Geräten allesamt eine Zusammenführung überstehen. Siehe [Sync-Protokoll](/developers/sync-protocol). |
 | **PWA** | Progressive Web App - die installierbare, offlinefähige Web-App, die du auf Smartphone, Tablet oder Desktop ausführst. Siehe [Installation](/using-the-app/install). |
 | **QR-Etikett** | Ein druckbarer Code an einem Bienenstock, der einen Deep Link enthält; durch das Scannen öffnet sich die App direkt bei diesem Bienenstock. Siehe [QR-Etiketten](/using-the-app/qr-labels). |
-| **Scope** | Die Freigabegrenze in Openbeehive. Das Teilen erfolgt auf Ebene des Bienenstands: Ein Scope gewährt anderen Zugriff auf einen Bienenstand und alles darin. |
 | **Synchronisierung (Sync)** | Das konfliktfreie Zusammenführen deiner lokalen Änderungen mit dem Server und deinen anderen Geräten im Hintergrund. Siehe [Offline und Synchronisierung](/using-the-app/offline-and-sync). |
-| **Aufgabe (Task)** | Eine Erinnerung oder ein To-do, das an einen Bienenstock oder Bienenstand gebunden ist - zum Beispiel „Honigraum aufsetzen“ oder „gegen Varroa behandeln“. Siehe [Aufgaben](/using-the-app/tasks). |
+| **Aufgabe (Task)** | Eine Erinnerung mit Titel und optionalem Fälligkeitsdatum, zum Beispiel „Honigraum aufsetzen“ oder „gegen Varroa behandeln“. Siehe [Aufgaben](/using-the-app/tasks). |
+| **Mandant (Tenant)** | Eine Sammlung von Bienenständen, Bienenstöcken und Aufzeichnungen, die von ihren Mitgliedern gemeinsam genutzt wird. Jedes Konto hat einen persönlichen Mandanten und kann in weitere eingeladen werden; eine feinere Freigabe gibt es nicht. Siehe [Konten und Mandanten](/using-the-app/accounts-tenants). |
 
 :::note
 Die tiefergehende Mechanik von HLCs, OR-Sets und nur anfügbaren Events wird im

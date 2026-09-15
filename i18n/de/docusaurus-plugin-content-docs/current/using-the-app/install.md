@@ -20,12 +20,10 @@ selbst wenn du draußen am Bienenstand ohne Empfang bist.
 - **Ein App-Symbol** auf deinem Startbildschirm oder in deinem App-Launcher.
 - **Ein Vollbildfenster** ohne Browser-Bedienelemente, sodass mehr Platz für deine
   Beuten und Durchsichten bleibt.
-- **Offline-first-Zugriff.** Deine Aufzeichnungen leben in einer lokalen Datenbank auf
-  dem Gerät und synchronisieren im Hintergrund. Lese- und Schreibvorgänge sind sofort,
-  mit oder ohne Empfang. Siehe [Offline und Synchronisation](/using-the-app/offline-and-sync)
-  dafür, wie das funktioniert.
+- **Offline-Zugriff.** Deine Aufzeichnungen leben in einer lokalen Datenbank auf
+  dem Gerät und synchronisieren im Hintergrund. Siehe [Offline und Synchronisation](/using-the-app/offline-and-sync).
 - **Schnelles QR-Scannen.** Das [QR-Etikett](/using-the-app/qr-labels) einer Beute zu
-  scannen öffnet direkt die installierte App bei dieser Beute.
+  scannen öffnet diese Beute.
 
 :::tip
 Du kannst Openbeehive weiterhin in einem normalen Browser-Tab nutzen, ohne zu
@@ -123,11 +121,3 @@ Wenn du Aufzeichnungen hast, die beim Deinstallieren noch nicht synchronisiert w
 sie nur in der lokalen Datenbank des Geräts und können verloren gehen. Stelle sicher, dass die
 App synchronisiert hat, bevor du sie entfernst. Siehe [Offline und Synchronisation](/using-the-app/offline-and-sync).
 :::
-
-## Eine Anmerkung zu nativen Apps
-
-Openbeehive ist in erster Linie eine PWA, und für fast jeden ist die installierte PWA von
-einer nativen App nicht zu unterscheiden. Eine native Hülle (mit Capacitor) für den Apple App
-Store und Google Play wird für eine zukünftige Veröffentlichung in Betracht gezogen,
-hauptsächlich um Menschen zu erreichen, die die Stores bevorzugen. Die PWA bleibt der
-primäre Weg zur Installation und behält alle ihre Offline-first-Fähigkeiten.

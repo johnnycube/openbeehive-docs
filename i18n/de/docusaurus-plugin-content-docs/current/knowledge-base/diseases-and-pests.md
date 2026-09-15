@@ -107,10 +107,3 @@ Viele Krankheiten und Schädlinge verbreiten sich zwischen Völkern durch Räube
 :::tip Kenne deine regionalen Vorschriften
 Der Krankheitsstatus, welche Krankheiten anzeigepflichtig sind und welche Behandlungen legal sind, variieren je nach Land und mitunter je nach Region. Melde dich bei deinem nationalen Bienengesundheitsprogramm an, falls es eines gibt, und lerne deinen örtlichen Verband und Bienensachverständigen kennen, bevor du sie brauchst.
 :::
-
-## Siehe auch
-
-- [Varroa](/beekeeping/varroa) für umfassende Anleitungen zu Überwachung und Behandlung
-- [Durchsicht](/beekeeping/inspecting) für das, worauf du bei jedem Besuch achten solltest
-- [Glossar](/knowledge-base/glossary) für die hier verwendeten Begriffe
-- [FAQ](/knowledge-base/faq) und [Fehlerbehebung](/knowledge-base/troubleshooting)

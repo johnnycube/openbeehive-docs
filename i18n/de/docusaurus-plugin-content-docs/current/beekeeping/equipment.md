@@ -8,7 +8,7 @@ title: "Ausrüstung & Beutentypen"
 Die Imkerei erfordert nicht besonders viel Ausrüstung, aber ein paar gute Werkzeuge machen jeden Besuch ruhiger, sicherer und schneller. Diese Seite behandelt das Wesentliche und gibt dann einen Überblick über die wichtigsten Beutensysteme, damit du das passende auswählen und in Openbeehive korrekt erfassen kannst.
 
 :::tip
-Wenn du in Openbeehive eine Beute anlegst, wählst du ihren Typ (Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar oder Sonstige). Die richtige Wahl hält deine Rähmchenzahlen und Ausrüstungsnotizen über deinen Bienenstand hinweg einheitlich. Siehe [Beuten](/using-the-app/hives).
+Wenn du in Openbeehive eine Beute anlegst, wählst du ihren Typ (Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar oder Sonstige). Die richtige Wahl hält deine Rähmchenzahlen und Ausrüstungsnotizen über deinen Bienenstand hinweg einheitlich. Siehe [Beuten](/using-the-app/hives).
 :::
 
 ## Das Wesentliche
@@ -75,7 +75,7 @@ Die Beutentypen unterscheiden sich hauptsächlich in den Zargen- und Rähmchenma
 
 Systeme mit beweglichen Rähmchen (Langstroth, Dadant, Zander, Deutsch Normal) funktionieren alle nach demselben Grundprinzip — senkrechte Stapel von Zargen mit vollen rechteckigen Rähmchen — und unterscheiden sich hauptsächlich in den Maßen. **Top-bar-** und **Warré**-Beuten verfolgen einen eingriffsärmeren Ansatz: Die Bienen bauen Waben von einfachen Trägern, was eine sanftere Betriebsweise bedeutet, aber keine Honigschleuder (die Wabe wird üblicherweise zerdrückt und gesiebt).
 
-Wenn deine Beute keinem dieser Typen entspricht, wähle in Openbeehive **Sonstige** und notiere die Einzelheiten in der Beschreibung der Beute.
+Wenn deine Beute keinem dieser Typen entspricht, wähle in Openbeehive **Sonstige** und notiere die Einzelheiten in einer Durchsichtsnotiz.
 
 :::note
 Es gibt nicht die eine „beste" Beute. Die praktischste Wahl ist meist das, was dein **örtlicher Verein und benachbarte Imker** verwenden, damit du Ausrüstung leihen, Rähmchen tauschen und praktische Hilfe bekommen kannst. Für einen tieferen Vergleich und Rähmchenmaße siehe [Beutentypen](/knowledge-base/hive-types).

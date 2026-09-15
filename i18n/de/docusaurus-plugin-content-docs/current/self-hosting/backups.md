@@ -8,7 +8,7 @@ title: "Backups & Wiederherstellung"
 Ein paar Minuten, die du jetzt in die Einrichtung von Backups investierst, ersparen dir später viel Sorge. Diese Seite behandelt, was zu sichern ist, wie man es sicher macht und wie man bei Bedarf wiederherstellt.
 
 :::tip Der Server ist die Quelle der Wahrheit
-Openbeehive ist offline-first, sodass jedes Gerät, das deinen Bienenstock nutzt, eine vollständige lokale Kopie seiner Daten im Browser hält. Diese Kopie ist eine Bequemlichkeit, kein Backup: Sie liegt im Speicher des Browsers und kann durch das Löschen von Website-Daten, eine Neuinstallation oder den Verlust des Geräts gelöscht werden.
+Jedes Gerät, das deine Instanz nutzt, hält eine lokale Kopie seiner Daten im Browser. Diese Kopie ist eine Bequemlichkeit, kein Backup: Sie kann durch das Löschen von Website-Daten, eine Neuinstallation oder den Verlust des Geräts gelöscht werden.
 
 Für alles, was über Personen oder Geräte hinweg geteilt wird, ist der **Server** die maßgebliche Kopie. Sichere den Server und du schützt die Aufzeichnungen aller auf einmal.
 :::
@@ -148,9 +148,3 @@ Die `%`-Zeichen müssen innerhalb der Crontab als `\%` maskiert werden. Für Pos
 :::tip Teste deine Wiederherstellungen
 Ein Backup, das du nie wiederhergestellt hast, ist nur eine Hoffnung. Stelle hin und wieder in ein Wegwerf-Verzeichnis oder eine Test-Instanz wieder her und bestätige, dass du die App öffnen und deine Bienenstöcke sehen kannst. Behalte mindestens ein paar Tage datierter Kopien und bewahre eine außer Haus auf (eine externe Festplatte oder ein entfernter Bucket).
 :::
-
-## Wie es weitergeht
-
-- Setze oder prüfe `BEEHIVE_DATABASE_DSN` und `BEEHIVE_BLOB_DIR` auf der Seite [Konfiguration](/self-hosting/configuration).
-- Plane Versions-Updates auf der Seite [Aktualisieren](/self-hosting/upgrading) — sichere immer zuerst.
-- Kehre zur [Self-Hosting-Übersicht](/category/self-hosting) für das vollständige Bereitstellungsbild zurück.

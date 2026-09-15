@@ -77,7 +77,7 @@ Offenes Füttern (das Auslegen von Sirup im Freien, damit jedes Volk ihn nimmt) 
 
 Jede Fütterung ist wert, erfasst zu werden. Zu wissen, wie viel Sirup oder Futterteig ein Volk genommen hat und wann, hilft dir zu beurteilen, ob die Vorräte ausreichen, Völker zu erkennen, die ständig knapp werden, und die Herbstfütterung des nächsten Jahres genauer zu planen.
 
-In Openbeehive protokolliere das Füttern als Teil des jeweiligen Besuchs, sodass es neben allem anderen steht, was du an dem Tag gesehen hast. Notiere die Futterart (leichter Sirup, schwerer Sirup oder Futterteig) und die gegebene Menge. Da die App offline-first ist, kannst du dies am Stock auch ohne Empfang erfassen, und es synchronisiert sich später.
+In Openbeehive protokollierst du das Füttern als Teil der Durchsicht: Trage die Menge im Feld **Gefüttert (kg)** ein und schreibe die Futterart (dünner Sirup, dicker Sirup oder Futterteig) in die Notiz, sodass es neben allem anderen steht, was du an dem Tag gesehen hast.
 
 Siehe [Durchsichten](/using-the-app/inspections), wie du einen Besuch erfasst und Fütterungsmengen festhältst.
 

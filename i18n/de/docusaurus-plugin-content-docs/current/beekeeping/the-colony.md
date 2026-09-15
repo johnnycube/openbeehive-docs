@@ -100,9 +100,3 @@ Selbst gesund aussehende Völker können über den Winter durch Verhungern, Kran
 :::note Regionale Unterschiede
 Das Verhalten von Völkern variiert mit Klima und Unterart. Der obige Zyklus beschreibt ein Volk im gemäßigten Klima; in wärmeren Regionen hört die Brutaufzucht möglicherweise nie ganz auf, und die Zeitpunkte verschieben sich entsprechend. Richte dich stets nach deinem eigenen Standort und örtlichen Mentoren.
 :::
-
-## Wie es weitergeht
-
-- Neu bei Bienen? Beginne mit dem [Einstieg](/beekeeping/getting-started).
-- Bereit, hineinzuschauen? Lies [Durchsehen](/beekeeping/inspecting).
-- Neugierig auf die Ausrüstung? Siehe [Ausrüstung](/beekeeping/equipment).

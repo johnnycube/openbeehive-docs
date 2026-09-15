@@ -101,6 +101,6 @@ Jede Durchsicht ist eine kleine Störung. Halte sie verhältnismäßig. Wenn du 
 
 ## Das Gefundene erfassen
 
-Eine Durchsicht ist nur so nützlich wie die Notizen, die du behältst. Erfasse Wesensart, Vorräte, Platz, Brut und alle Weiselzellen oder Krankheitszeichen, solange die Details frisch sind, idealerweise am Stock auf deinem Handy. Da Openbeehive offline-first ist, kannst du alles am Bienenstand ohne Empfang protokollieren, und es synchronisiert sich später.
+Eine Durchsicht ist nur so nützlich wie die Notizen, die du behältst. Erfasse Wesensart, Vorräte, Platz, Brut und alle Weiselzellen oder Krankheitszeichen, solange die Details frisch sind, idealerweise am Stock auf deinem Handy.
 
 Siehe [Durchsichten erfassen](/using-the-app/inspections), um deine Befunde festzuhalten, und den [Imkerei-Bereich](/category/beekeeping-basics) für den umfassenderen saisonalen Kontext.

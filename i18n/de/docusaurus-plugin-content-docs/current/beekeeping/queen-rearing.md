@@ -149,11 +149,3 @@ Wenn du eine Königin markierst, erfasse ihre Markierungsfarbe in der App auf de
 dem Jahr, sodass du auf einen Blick bestätigen kannst, ob eine Königin das Alter hat,
 das du vermutest.
 :::
-
-## Wie es weitergeht
-
-- Lerne die umfassendere Saison im [Imkerjahr](/beekeeping/beekeeping-year) kennen.
-- Verstehe den Impuls, neue Königinnen zu schaffen, beim
-  [Schwärmen](/beekeeping/swarming).
-- Sieh, wie Völker organisiert sind, in
-  [Das Bienenvolk](/beekeeping/the-colony).

@@ -5,115 +5,91 @@ title: "Authentifizierung"
 
 # Authentifizierung
 
-Mit Openbeehive entscheidest du genau, wie viel Authentifizierung du benötigst. Eine Imkerin oder ein Imker, die oder der das Einzel-Binary allein zu Hause betreibt, kann die Anmeldung ganz überspringen. Eine gemeinsam genutzte Instanz kann Passkeys, die Anmeldung über einen Identity-Provider oder beides verlangen.
-
-Diese Seite behandelt die drei Modi, die Session-Einstellungen, die jedes Mehrbenutzer-Setup benötigt, und wie du die Redirect-URL deines Identity-Providers einrichtest.
-
-:::note
-Authentifizierung schützt den Zugriff auf den *Server* und seine Sync-API. Die App selbst bleibt offline-first: Einmal angemeldet, liest und schreibt dein Gerät weiterhin lokal und synchronisiert im Hintergrund. Siehe [Offline & Sync](/using-the-app/offline-and-sync).
-:::
+Mit Openbeehive entscheidest du selbst, wie viel Authentifizierung du brauchst. Wer das Einzel-Binary allein zu Hause betreibt, kann die Anmeldung ganz überspringen. Eine gemeinsam genutzte Instanz kann integrierte E-Mail-/Passwort-Konten, Passkeys, die Anmeldung über einen Identity-Provider oder eine Kombination davon verwenden.
 
 ## Einen Modus wählen
 
 | Modus | Wann verwenden | Wichtige Einstellungen |
 | --- | --- | --- |
-| Keine Anmeldung (Einzelnutzer) | Eine Person, ein Server, hinter deinem eigenen Netzwerk oder vertrauenswürdigem Reverse Proxy | `BEEHIVE_OIDC_PROVIDERS` leer **und** `BEEHIVE_WEBAUTHN_ENABLED=false` |
-| E-Mail & Passwort (App-interne Konten) | Eine gemeinsam genutzte Instanz, bei der sich Personen selbst registrieren – kein externer Identity-Provider nötig | `BEEHIVE_PASSWORD_AUTH=true` (standardmäßig aktiviert für das `cloud`-Profil) |
-| Passkeys (WebAuthn) | Eine kleine Gruppe; passwortlose Anmeldung mit Gerätebiometrie oder Sicherheitsschlüsseln | `BEEHIVE_WEBAUTHN_ENABLED=true` plus `WEBAUTHN_RP_*` |
-| OIDC-Provider | Du hast bereits Google, Keycloak, Authentik usw. oder möchtest zentrale Kontoverwaltung | `BEEHIVE_OIDC_PROVIDERS` plus provider-spezifische Einstellungen |
+| Keine Anmeldung (Einzelnutzer) | Eine Person, ein Server, im eigenen Netzwerk oder hinter einem vertrauenswürdigen Reverse Proxy | `BEEHIVE_PASSWORD_AUTH` aus (Standard für selfhost), `BEEHIVE_OIDC_PROVIDERS` leer, `BEEHIVE_WEBAUTHN_ENABLED=false` |
+| E-Mail & Passwort (App-interne Konten) | Eine gemeinsam genutzte Instanz ohne externen Identity-Provider | `BEEHIVE_PASSWORD_AUTH=true` (Standard für das `cloud`-Profil) plus `BEEHIVE_ADMIN_EMAIL` / `BEEHIVE_ADMIN_PASSWORD` |
+| Passkeys (WebAuthn) | Passwortlose Anmeldung mit Gerätebiometrie oder Sicherheitsschlüsseln, zusätzlich zu einer anderen Methode | `BEEHIVE_WEBAUTHN_ENABLED=true` plus `BEEHIVE_WEBAUTHN_RP_*` |
+| OIDC-Provider | Du betreibst bereits Google, Keycloak, Authentik oder Ähnliches oder möchtest zentrale Kontoverwaltung | `BEEHIVE_OIDC_PROVIDERS` plus provider-spezifische Einstellungen |
 
-Du kannst all diese Methoden kombinieren. Der Anmeldebildschirm bietet die jeweils aktivierten Methoden an, und das Konto einer Person wird über alle Methoden hinweg geteilt – die Anmeldung über einen Provider wird mit einem bestehenden E-Mail-/Passwort-Konto mit derselben E-Mail-Adresse verknüpft.
+Die Anmeldemethoden lassen sich kombinieren. Der Anmeldebildschirm bietet die jeweils aktivierten Methoden an, und ein Konto funktioniert über alle hinweg: Die Anmeldung über einen Provider wird mit einem bestehenden E-Mail-/Passwort-Konto mit derselben E-Mail-Adresse verknüpft.
+
+Sobald eine Anmeldemethode aktiviert ist, sind auch Mandanten und Einladungen verfügbar (Einstellungen → Mandanten); siehe [Konten & Mandanten](/using-the-app/accounts-tenants).
 
 ## Modus 1: Einzelnutzer, keine Anmeldung
 
-Dies ist das einfachste Setup und der Standardausgangspunkt für eine `selfhost`-Instanz. Lass beide Optionen aus:
+Der Standard für eine `selfhost`-Instanz. Lass alle drei aus:
 
 ```bash
+# BEEHIVE_PASSWORD_AUTH is off by default in the selfhost profile
 BEEHIVE_OIDC_PROVIDERS=
 BEEHIVE_WEBAUTHN_ENABLED=false
 ```
 
-Ohne aktivierte Auth-Methoden läuft Openbeehive als Einzelnutzer-Instanz und fragt nicht nach Anmeldung. Das ist ideal für einen Hobbyisten, der das [Einzel-Binary](/self-hosting/single-binary) auf einer Heimmaschine oder hinter einem privaten Netzwerk betreibt.
+Ohne aktivierte Anmeldemethode läuft Openbeehive als Einzelnutzer-Instanz unter einer festen lokalen Identität und zeigt nie einen Anmeldebildschirm.
 
 :::caution
-"Keine Anmeldung" bedeutet, dass jeder, der den Server erreichen kann, deine Aufzeichnungen lesen und bearbeiten kann. Verwende es nur in einem vertrauenswürdigen Netzwerk, auf `localhost` oder hinter einem Reverse Proxy, der den Zugriff selbst regelt. Wenn deine Instanz aus dem Internet erreichbar ist, aktiviere Passkeys oder OIDC.
+"Keine Anmeldung" bedeutet, dass jeder, der den Server erreichen kann, deine Aufzeichnungen lesen und bearbeiten kann. Verwende es nur in einem vertrauenswürdigen Netzwerk, auf `localhost` oder hinter einem Reverse Proxy, der den Zugriff selbst regelt. Wenn deine Instanz aus dem Internet erreichbar ist, aktiviere eine Anmeldemethode.
 :::
 
 ## Session-Einstellungen (erforderlich, sobald eine Anmeldung aktiviert ist)
 
-Sobald du Passkeys oder OIDC einschaltest, gibt der Server signierte Session-Cookies aus. Du musst ein Session-Secret bereitstellen.
+Sobald eine Anmeldemethode eingeschaltet ist, gibt der Server signierte Session-Tokens aus und braucht dafür ein Secret:
 
 ```bash
 # Generate a strong random secret
 openssl rand -base64 32
 ```
 
-Setze das Ergebnis als `BEEHIVE_SESSION_SECRET` und passe optional an, wie lange Sessions dauern:
-
 ```bash
 BEEHIVE_SESSION_SECRET=PUT_YOUR_GENERATED_SECRET_HERE
 BEEHIVE_SESSION_TTL=720h
 ```
 
-`BEEHIVE_SESSION_TTL` akzeptiert eine Go-Dauer (zum Beispiel `720h` sind 30 Tage, `24h` ist ein Tag). Wenn sie abläuft, melden sich Nutzer erneut an.
+`BEEHIVE_SESSION_TTL` akzeptiert eine Go-Dauer (`720h` sind 30 Tage, `24h` ein Tag). Wenn sie abläuft, melden sich Nutzer erneut an.
 
 :::danger
-Halte `BEEHIVE_SESSION_SECRET` geheim und stabil. Jeder, der es erfährt, kann Sessions fälschen. Wenn du es änderst, werden alle bestehenden Sessions ungültig und jeder muss sich erneut anmelden. Committe es niemals in die Versionsverwaltung.
+Halte `BEEHIVE_SESSION_SECRET` geheim und stabil. Jeder, der es erfährt, kann Sessions fälschen. Wenn du es änderst, werden alle bestehenden Sessions ungültig. Committe es niemals in die Versionsverwaltung.
 :::
 
-Wenn du die App über HTTPS durch einen Reverse Proxy ausliefern lässt, stelle sicher, dass `BEEHIVE_PUBLIC_BASE_URL` `https://` verwendet, damit Cookies und Redirect-URLs korrekt sind. Siehe [Reverse Proxy](/self-hosting/reverse-proxy).
+Wenn du die App über HTTPS durch einen Reverse Proxy ausliefern lässt, stelle sicher, dass `BEEHIVE_PUBLIC_BASE_URL` `https://` verwendet, damit Redirect- und Einladungslinks korrekt sind. Siehe [Reverse Proxy](/self-hosting/reverse-proxy).
 
-## E-Mail & Passwort (App-interne Konten)
-
-Wenn du mehrere Nutzer haben möchtest, aber keinen Identity-Provider betreibst, aktiviere die integrierten
-E-Mail-/Passwort-Konten:
+## Modus 2: E-Mail & Passwort (App-interne Konten)
 
 ```bash
 BEEHIVE_PASSWORD_AUTH=true
 ```
 
-Dies ist **standardmäßig für das `cloud`-Profil aktiviert** und für `selfhost` deaktiviert. Wenn es
-aktiviert ist, bietet der Anmeldebildschirm "Konto erstellen" und "Anmelden", und Personen können
-sich [selbst registrieren](/using-the-app/accounts-tenants).
+Standardmäßig aktiviert für das `cloud`-Profil, deaktiviert für `selfhost` und durch `BEEHIVE_DEMO=true` automatisch eingeschaltet. Der Anmeldebildschirm bietet dann "Anmelden" und "Konto erstellen".
 
-Die Passwort-Anmeldung braucht einen eigenen **Instanz-Admin**, der in der Umgebung
-konfiguriert und nicht über die Registrierung angelegt wird:
+Die Passwort-Anmeldung braucht einen eigenen **Instanz-Admin**, der in der Umgebung konfiguriert und nicht über die Registrierung angelegt wird. Ohne ihn startet der Server nicht:
 
 ```bash
-BEEHIVE_ADMIN_EMAIL=du@example.com
-BEEHIVE_ADMIN_PASSWORD=mindestens-acht-zeichen
+BEEHIVE_ADMIN_EMAIL=you@example.com
+BEEHIVE_ADMIN_PASSWORD=at-least-eight-characters
 ```
 
-Der Server stellt dieses Konto bei jedem Start sicher: Es wird angelegt, falls es fehlt,
-seine Rolle wird auf Admin gesetzt und sein Passwort auf den konfigurierten Wert
-zurückgesetzt. Letzteres dient zugleich als Passwort-Wiederherstellung für den Admin –
-Variable ändern und neu starten. Eine Registrierung vergibt nie die Admin-Rolle, und die
-Admin-E-Mail darf nicht die des Demo-Kontos sein.
+Der Server stellt dieses Konto bei jedem Start sicher: Es wird angelegt, falls es fehlt, seine Rolle wird auf Admin gesetzt und sein Passwort auf den konfigurierten Wert zurückgesetzt. Letzteres dient zugleich als Passwort-Wiederherstellung für den Admin: Variable ändern und neu starten. Eine Registrierung vergibt nie die Admin-Rolle, und die Admin-E-Mail darf nicht die des Demo-Kontos sein.
 
 ### Instanzen nur auf Einladung
 
-Wenn du nicht möchtest, dass Fremde Konten erstellen, setze `BEEHIVE_REGISTRATION=false`,
-um die offene Registrierung zu schließen. Der Instanz-Admin kommt aus der Umgebung, sodass
-eine frische Instanz immer einen hat. Alle anderen können nur über Einladungslinks
-beitreten, die der Admin in den Einstellungen ausstellt und die zur eingeladenen
-E-Mail-Adresse passen müssen. Der Anmeldebildschirm zeigt einen Hinweis, dass die Instanz
-nur auf Einladung zugänglich ist.
+Damit Fremde keine Konten erstellen können, setze `BEEHIVE_REGISTRATION=false`. Der Admin kommt aus der Umgebung, sodass eine frische Instanz immer einen hat. Alle anderen treten über Einladungslinks bei, die ein Mandanten-Admin unter Einstellungen → Mandanten ausstellt. Die Registrierung über einen Einladungslink muss die eingeladene E-Mail-Adresse verwenden. Der Anmeldebildschirm zeigt einen Hinweis, dass die Instanz nur auf Einladung zugänglich ist; bestehende Konten melden sich normal an.
 
-Jedes neue Konto startet mit seinem eigenen persönlichen
-[Mandanten](/using-the-app/accounts-tenants); nur das konfigurierte Admin-Konto trägt die
-Admin-Rolle der Instanz.
+Jedes neue Konto startet mit seinem eigenen persönlichen [Mandanten](/using-the-app/accounts-tenants). Nur das konfigurierte Admin-Konto trägt die Admin-Rolle der Instanz.
 
 ### Optionale E-Mail-Verifizierung
 
-Standardmäßig kann sich ein neues Konto sofort anmelden. Um zu verlangen, dass Personen zuerst ihre
-E-Mail-Adresse bestätigen, aktiviere die Verifizierung:
+Standardmäßig kann sich ein neues Konto sofort anmelden. Damit Personen zuerst ihre E-Mail-Adresse bestätigen müssen:
 
 ```bash
 BEEHIVE_EMAIL_VERIFICATION=true
 ```
 
-Das Konto kann sich dann erst anmelden, wenn es dem Verifizierungslink folgt. Konfiguriere
-SMTP, damit die E-Mail tatsächlich versendet wird:
+Konfiguriere SMTP, damit Verifizierungs- und Einladungs-E-Mails versendet werden:
 
 ```bash
 BEEHIVE_SMTP_HOST=smtp.example.com
@@ -124,14 +100,12 @@ BEEHIVE_SMTP_FROM=Openbeehive <no-reply@example.com>
 ```
 
 :::note
-Wenn `BEEHIVE_SMTP_HOST` leer gelassen wird, schreibt Openbeehive den Verifizierungslink in
-das Server-Log, anstatt ihn per E-Mail zu versenden – praktisch zum Testen, nicht für
-die Produktion.
+Wenn `BEEHIVE_SMTP_HOST` leer ist, schreibt Openbeehive Verifizierungs- und Einladungslinks in das Server-Log, statt sie per E-Mail zu versenden. Einladungslinks werden außerdem dem Admin, der sie erstellt hat, in der App angezeigt.
 :::
 
-## Modus 2: Passkeys (WebAuthn)
+## Modus 3: Passkeys (WebAuthn)
 
-Passkeys lassen Personen sich mit einem Fingerabdruck, Gesichtsscan, einer Geräte-PIN oder einem Hardware-Sicherheitsschlüssel anmelden. Es gibt keine Passwörter zu verwalten.
+Passkeys lassen Personen sich mit einem Fingerabdruck, Gesichtsscan, einer Geräte-PIN oder einem Hardware-Sicherheitsschlüssel anmelden.
 
 ```bash
 BEEHIVE_WEBAUTHN_ENABLED=true
@@ -140,35 +114,30 @@ BEEHIVE_WEBAUTHN_RP_ORIGINS=https://beehive.example.com
 BEEHIVE_WEBAUTHN_RP_DISPLAY_NAME=Openbeehive
 ```
 
-Was jeder Wert bedeutet:
+- `BEEHIVE_WEBAUTHN_RP_ID` ist die Relying-Party-ID: die Domain, die Nutzer besuchen, ohne Schema und ohne Port (zum Beispiel `beehive.example.com` oder `localhost` zum lokalen Testen). Standard ist der Host aus `BEEHIVE_PUBLIC_BASE_URL`. Passkeys sind an diese Domain gebunden.
+- `BEEHIVE_WEBAUTHN_RP_ORIGINS` ist der vollständige Ursprung (oder kommagetrennte Ursprünge), den der Browser sendet, einschließlich Schema und Port. Standard ist `BEEHIVE_PUBLIC_BASE_URL`.
+- `BEEHIVE_WEBAUTHN_RP_DISPLAY_NAME` ist der Name, der in der Passkey-Aufforderung des Browsers angezeigt wird.
 
-- `BEEHIVE_WEBAUTHN_RP_ID` ist die **Relying-Party-ID**: die registrierbare Domain, die Nutzer besuchen, ohne Schema und ohne Port (zum Beispiel `beehive.example.com` oder `localhost` zum lokalen Testen). Passkeys sind an diese Domain gebunden.
-- `BEEHIVE_WEBAUTHN_RP_ORIGINS` ist der vollständige Ursprung (oder kommagetrennte Ursprünge), den der Browser senden wird, einschließlich Schema und etwaigem Port, zum Beispiel `https://beehive.example.com`.
-- `BEEHIVE_WEBAUTHN_RP_DISPLAY_NAME` ist der freundliche Name, der in der Passkey-Aufforderung des Browsers angezeigt wird.
+Ein Passkey wird im angemeldeten Zustand unter **Einstellungen → Passkeys** hinzugefügt, Personen brauchen also zuerst eine andere Anmeldemöglichkeit (E-Mail/Passwort oder einen Provider). Danach bietet der Anmeldebildschirm "Mit Passkey anmelden".
 
 :::caution
-WebAuthn erfordert einen **sicheren Kontext**. Passkeys funktionieren über HTTPS oder über `http://localhost` für die Entwicklung, aber nicht über reines HTTP auf einer entfernten Adresse. Setze den Server hinter TLS, bevor du Passkeys in der Produktion aktivierst. Die `RP_ID` muss mit der Domain in deiner `BEEHIVE_PUBLIC_BASE_URL` übereinstimmen.
+WebAuthn erfordert einen sicheren Kontext: HTTPS oder `http://localhost` für die Entwicklung. Setze den Server hinter TLS, bevor du Passkeys in der Produktion aktivierst. Die RP-ID muss mit der Domain in `BEEHIVE_PUBLIC_BASE_URL` übereinstimmen.
 :::
 
-## Modus 3: OIDC-Provider
+## Modus 4: OIDC-Provider
 
-Verbinde Openbeehive mit einem oder mehreren OpenID-Connect-Identity-Providern. Liste die gewünschten kommagetrennt auf und konfiguriere jeden nach Namen.
-
-:::note Konten werden automatisch verknüpft
-Wenn sich jemand über einen Provider anmeldet, findet oder erstellt Openbeehive das
-App-interne Konto: Es gleicht zuerst die Provider-Identität ab, dann die **E-Mail-Adresse**
-(wodurch ein bestehendes E-Mail-/Passwort-Konto mit diesem Provider verknüpft wird), und andernfalls
-registriert es ein neues Konto. So kann sich eine Person wechselweise über einen Provider oder mit E-Mail
-und Passwort anmelden. Instanz-Admin bleibt das in `BEEHIVE_ADMIN_EMAIL` genannte Konto,
-egal auf welchem Weg es sich anmeldet.
-:::
+Verbinde einen oder mehrere OpenID-Connect-Identity-Provider. Liste sie kommagetrennt auf und konfiguriere jeden nach Namen.
 
 ```bash
 BEEHIVE_OIDC_PROVIDERS=google,keycloak
 BEEHIVE_OIDC_REDIRECT_URL=https://beehive.example.com/auth/callback
 ```
 
-`BEEHIVE_OIDC_REDIRECT_URL` ist die Adresse, an die dein Provider Nutzer nach der Authentifizierung zurücksendet. Sie muss vom Browser erreichbar sein und exakt mit dem übereinstimmen, was du beim Provider registrierst (siehe unten).
+`BEEHIVE_OIDC_REDIRECT_URL` (Standard `<BEEHIVE_PUBLIC_BASE_URL>/auth/callback`) ist die Adresse, an die der Provider Nutzer zurückschickt. Sie muss exakt mit dem übereinstimmen, was du beim Provider registrierst. Jeder aufgeführte Provider braucht einen Issuer und eine Client-ID, sonst startet der Server nicht.
+
+:::note Konten werden automatisch verknüpft
+Wenn sich jemand über einen Provider anmeldet, gleicht Openbeehive zuerst die Provider-Identität ab, dann die E-Mail-Adresse (wodurch ein bestehendes E-Mail-/Passwort-Konto verknüpft wird), und legt andernfalls ein neues Konto an. Instanz-Admin bleibt das in `BEEHIVE_ADMIN_EMAIL` genannte Konto, egal auf welchem Weg es sich anmeldet.
+:::
 
 ### Google
 
@@ -179,11 +148,11 @@ BEEHIVE_OIDC_GOOGLE_CLIENT_SECRET=your-client-secret
 BEEHIVE_OIDC_GOOGLE_SCOPES=openid,email,profile
 ```
 
-Erstelle den Client in der Google Cloud Console unter **APIs & Services -> Credentials -> OAuth client ID** (Typ: Web application).
+Erstelle den Client in der Google Cloud Console unter **APIs & Services → Credentials → OAuth client ID** (Typ: Web application).
 
 ### Keycloak und Authentik
 
-Keycloak, Authentik und andere standardkonforme Provider verwenden die generischen provider-spezifischen Variablen. Der Provider-Name in `BEEHIVE_OIDC_PROVIDERS` wird auf das Variablenpräfix abgebildet.
+Keycloak, Authentik und andere standardkonforme Provider verwenden die generischen provider-spezifischen Variablen. Der Provider-Name in `BEEHIVE_OIDC_PROVIDERS`, großgeschrieben, ist das Variablenpräfix.
 
 ```bash
 BEEHIVE_OIDC_PROVIDERS=keycloak
@@ -192,11 +161,7 @@ BEEHIVE_OIDC_KEYCLOAK_CLIENT_ID=openbeehive
 BEEHIVE_OIDC_KEYCLOAK_CLIENT_SECRET=your-client-secret
 ```
 
-Der Issuer ist die Basis-URL des Realms; Openbeehive ermittelt den Rest aus `<issuer>/.well-known/openid-configuration`. Authentik funktioniert genauso, indem es die OpenID-Konfigurations-URL seiner Anwendung als Issuer verwendet.
-
-:::tip
-Das Variablenpräfix ist einfach der großgeschriebene Provider-Name. Um einen weiteren Provider hinzuzufügen, füge seinen Namen zu `BEEHIVE_OIDC_PROVIDERS` hinzu und gib das passende `BEEHIVE_OIDC_<NAME>_ISSUER`, `BEEHIVE_OIDC_<NAME>_CLIENT_ID` und `BEEHIVE_OIDC_<NAME>_CLIENT_SECRET` an.
-:::
+Der Issuer ist die Basis-URL des Realms; Openbeehive ermittelt den Rest aus `<issuer>/.well-known/openid-configuration`. Authentik funktioniert genauso, mit der OpenID-Konfigurations-URL seiner Anwendung als Issuer. Scopes sind standardmäßig `openid,profile,email`; überschreibe sie mit `BEEHIVE_OIDC_<NAME>_SCOPES`.
 
 ### Die Redirect-URL bei deinem IdP registrieren
 
@@ -206,20 +171,14 @@ Füge in der Client-Konfiguration deines Providers eine autorisierte Redirect-UR
 https://beehive.example.com/auth/callback
 ```
 
-Häufige Stolperfallen:
-
-- Das Schema muss übereinstimmen (`https` in der Produktion, nicht `http`).
-- Kein abschließender Schrägstrich, es sei denn, dein `BEEHIVE_OIDC_REDIRECT_URL` hat einen.
-- Verwende deine öffentliche Domain, nicht einen internen Hostnamen oder `localhost`, es sei denn, du testest lokal.
-
-Wenn die Anmeldung mit einem Redirect-Mismatch fehlschlägt, unterscheiden sich der beim IdP registrierte Wert und der Wert in `BEEHIVE_OIDC_REDIRECT_URL` irgendwo.
+Häufige Stolperfallen: Das Schema muss übereinstimmen (`https` in der Produktion), kein abschließender Schrägstrich, es sei denn, dein Wert hat einen, und verwende deine öffentliche Domain statt eines internen Hostnamens. Ein "redirect mismatch"-Fehler bedeutet, dass sich die beiden Werte irgendwo unterscheiden.
 
 ## Dein Setup überprüfen
 
-Nach dem Ändern einer dieser Einstellungen starte den Server neu und lade die App in einem Browser:
+Starte den Server neu und lade die App in einem Browser:
 
-1. Bei **keiner Anmeldung** öffnet sich das Dashboard direkt.
-2. Bei **Passkeys oder OIDC** solltest du einen Anmeldebildschirm sehen, der jede aktivierte Methode anbietet.
-3. Führe eine Anmeldung durch und bestätige, dass du das Dashboard erreichst und dass Aufzeichnungen synchronisieren.
+1. Bei **keiner Anmeldung** öffnet sich direkt die Übersicht.
+2. Bei aktivierter Anmeldemethode bietet der Anmeldebildschirm jede aktivierte Methode an (und "Demo erkunden", wenn die Demo aktiv ist).
+3. Führe eine Anmeldung durch und bestätige, dass du die Übersicht erreichst und dass Aufzeichnungen synchronisieren.
 
-Wenn etwas nicht funktioniert, prüfe die Server-Logs und den [Fehlerbehebungsleitfaden](/knowledge-base/troubleshooting). Für die vollständige Liste der Einstellungen siehe [Konfiguration](/self-hosting/configuration).
+Wenn etwas nicht funktioniert, prüfe die Server-Logs und die [Fehlerbehebung](/knowledge-base/troubleshooting).

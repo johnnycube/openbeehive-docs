@@ -28,14 +28,14 @@ Wenn du einer Beute eine Behandlung hinzufügst, erfasse so viel des Folgenden, 
 | Feld | Warum es wichtig ist |
 | --- | --- |
 | Produktname | Identifiziert genau, was angewendet wurde. |
-| Active ingredient | Nützlich, wenn Produkte umbenannt werden oder je nach Region variieren. |
+| Wirkstoff | Nützlich, wenn Produkte umbenannt werden oder je nach Region variieren. |
 | Methode | Wie es angewendet wurde — Träufeln, Sublimation, Streifen, Verdunstung. |
 | Dosis / Menge | Die pro Beute angewendete Menge. |
 | Chargen-/Losnummer | Oft gesetzlich vorgeschrieben; verknüpft die Dosis mit einer bestimmten Packung. |
 | Anwendungsdatum | Wann du das Volk behandelt hast. |
-| Withdrawal until | Das Datum, ab dem Honig aus dieser Beute wieder unbedenklich geerntet werden kann. |
+| Wartezeit bis | Das Datum, ab dem Honig aus dieser Beute wieder unbedenklich geerntet werden kann. |
 | Grund | Wogegen du behandelt hast (z. B. Varroa). |
-| Notizen | Wetter, Brutstatus, beobachtete Ergebnisse oder alles andere Erwähnenswerte. |
+| Notiz | Wetter, Brutstatus, beobachtete Ergebnisse oder alles andere Erwähnenswerte. |
 
 :::tip
 Erfasse die Chargennummer direkt von der Verpackung zum Zeitpunkt der Behandlung. Sie lässt sich später so gut wie nicht rekonstruieren, und sie ist genau das Detail, nach dem ein Inspektor oder Prüfer fragen wird.
@@ -44,16 +44,16 @@ Erfasse die Chargennummer direkt von der Verpackung zum Zeitpunkt der Behandlung
 ## Eine Behandlung hinzufügen
 
 1. Öffne die Beute, die du behandelt hast.
-2. Wähle **Behandlung hinzufügen** (Behandlungen können auch aus einer Durchsicht heraus erfasst werden, wenn du während eines Besuchs behandelst).
-3. Gib Produkt, Dosis, Methode und Datum ein sowie die Chargennummer, falls du sie hast.
-4. Setze das **withdrawal until**-Datum, wenn das Mittel eine Wartezeit vorgibt.
+2. Tippe unter **Behandlungen** auf **Behandlung erfassen**.
+3. Gib Datum, Mittel, Wirkstoff, Methode, Dosis, Chargennummer und Grund ein.
+4. Setze das Datum **Wartezeit bis**, wenn das Mittel eine Wartezeit vorgibt.
 5. Speichere.
 
-Da Openbeehive offline-first arbeitet, kannst du das direkt an der Beute ohne Empfang tun. Die Aufzeichnung wird sofort in die lokale Datenbank geschrieben und synchronisiert sich im Hintergrund mit dem Server, sobald du wieder online bist. Nichts geht verloren, wenn du Behandlungen am Bienenstand stehend erfasst.
+Funktioniert offline; siehe [Offline & Synchronisation](/using-the-app/offline-and-sync).
 
 ## Wartezeiten und Ernte
 
-Wenn du ein **withdrawal until**-Datum festlegst, hält Openbeehive fest, ab wann Honig aus dieser Beute wieder unbedenklich geerntet werden kann.
+Wenn du ein Datum **Wartezeit bis** festlegst, hält Openbeehive fest, ab wann Honig aus dieser Beute wieder unbedenklich geerntet werden kann.
 
 Mach es dir zur Gewohnheit, die Behandlungsdaten zu prüfen, bevor du Honigräume abziehst. Wenn ein Volk sich noch innerhalb seines Wartezeitfensters befindet, sieh von der Ernte daraus ab oder halte diesen Honig getrennt und deutlich aus der Lebensmittelkette heraus, bis die Frist verstrichen ist.
 
@@ -70,14 +70,8 @@ Ein paar Gewohnheiten halten deine Aufzeichnungen vertrauenswürdig.
 - **Bearbeite die Historie nicht, um sie aufzuräumen.** Wenn sich etwas geändert hat, füge eine Folgeaufzeichnung hinzu, statt die Vergangenheit umzuschreiben.
 - **Behandle jede Beute einzeln.** Selbst wenn du dasselbe Mittel über einen ganzen Bienenstand hinweg anwendest, erfasse es pro Beute, damit Dosen und Wartezeitfenster für jedes Volk korrekt sind.
 
-Da Behandlungseinträge über deine Geräte hinweg synchronisieren, ist das Protokoll, das du im Feld aufbaust, dasselbe, das du später zu Hause überprüfen oder mit jedem teilen kannst, der Zugriff auf den Bienenstand hat.
+Da Behandlungseinträge über deine Geräte hinweg synchronisieren, ist das Protokoll, das du im Feld aufbaust, dasselbe, das du zu Hause überprüfst, und dasselbe, das die anderen Mitglieder deines Mandanten sehen.
 
 ## Behandlungen und Varroa
 
 Die Varroamilbe ist der Grund, warum die meisten Imker überhaupt zu einer Behandlung greifen, und das richtige Timing über die Saison hinweg ist ein eigenes Thema. Für ein vollständigeres Bild zur Überwachung der Milbenbelastung, zur Wahl eines Ansatzes und zur Planung von Behandlungen rund um das Imkerjahr siehe [den Varroa-Leitfaden](/beekeeping/varroa).
-
-## Verwandte Seiten
-
-- [Durchsichten](/using-the-app/inspections) erfassen, was du siehst; Behandlungen erfassen, was du dagegen tust.
-- [Ernten](/using-the-app/harvests) ist der Ort, an dem Wartezeiten am wichtigsten sind.
-- [Der Varroa-Leitfaden](/beekeeping/varroa) behandelt Überwachung und Timing.

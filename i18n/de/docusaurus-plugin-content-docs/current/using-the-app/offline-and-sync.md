@@ -5,168 +5,81 @@ title: "Offline & Synchronisation"
 
 # Offline & Synchronisation
 
-Openbeehive ist für den Bienenstand gebaut, nicht für das Büro. Draußen im Feld hast
-du selten zuverlässigen Empfang, deshalb ist die App **offline-first**: Alles, was du
-tust, wird sofort auf deinem Gerät gespeichert und später unauffällig im Hintergrund
-mit dem Server synchronisiert.
+Openbeehive ist für den Bienenstand gebaut, nicht für das Büro. Draußen im Feld hast du selten zuverlässigen Empfang, deshalb ist die App **offline-first**: Alles, was du tust, wird sofort auf deinem Gerät gespeichert und später im Hintergrund mit dem Server synchronisiert.
 
-In der Praxis bedeutet das, dass die App dich nie auf das Netzwerk warten lässt.
-Öffne eine Beute, erfasse eine Durchsicht, füge eine Aufgabe hinzu, mach schnell eine
-Notiz über die Königin, alles ist sofort da, mit oder ohne Empfang.
+Die App lässt dich nie auf das Netzwerk warten. Öffne eine Beute, erfasse eine Durchsicht, füge eine Aufgabe hinzu, notiere etwas zur Königin: Alles ist sofort da, mit oder ohne Empfang.
 
 ## Alles wird lokal gespeichert
 
-Wenn du Openbeehive installierst, behält es eine vollständige Kopie deiner
-Aufzeichnungen in einer kleinen Datenbank auf deinem Gerät. Jeder Lese- und jeder
-Schreibvorgang erfolgt zuerst gegen diese lokale Kopie.
+Openbeehive hält eine vollständige Kopie deiner Aufzeichnungen in einer kleinen Datenbank auf deinem Gerät. Jeder Lese- und jeder Schreibvorgang erfolgt zuerst gegen diese lokale Kopie.
 
-Das Ergebnis:
-
-- **Es ist schnell.** Eine Beute zu öffnen oder durch Durchsichten zu scrollen dreht
-  nie an einem Ladebalken.
-- **Es funktioniert ohne Empfang.** Ein Wald, ein Tal, ein Keller voller Honigräume,
-  es macht keinen Unterschied.
-- **Deine Daten gehören dir.** Die Aufzeichnungen leben auf deinem Gerät; der Server
-  ist eine Kopie zum Synchronisieren und Teilen, nicht das einzige Zuhause deiner Daten.
+- **Es ist schnell.** Eine Beute zu öffnen oder durch Durchsichten zu scrollen wartet nie auf einen Ladebalken.
+- **Es funktioniert ohne Empfang.** Ein Wald, ein Tal, ein Keller voller Honigräume.
+- **Deine Daten gehören dir.** Die Aufzeichnungen leben auf deinem Gerät; der Server ist die Kopie zum Synchronisieren und Teilen.
 
 :::tip
-Da Aufzeichnungen auf dem Gerät gespeichert werden, lohnt es sich, Openbeehive als
-App zu installieren, statt es in einem Browser-Tab zu nutzen. Siehe
-[Openbeehive installieren](/using-the-app/install) dafür, wie du es zu deinem
-Smartphone, Tablet oder Desktop hinzufügst.
+Da Aufzeichnungen auf dem Gerät gespeichert werden, installiere Openbeehive als App, statt es in einem Browser-Tab zu nutzen. Siehe [Openbeehive installieren](/using-the-app/install).
 :::
 
-## Das Offline-Banner
+## Die Offline-Anzeige
 
-Wenn die App den Server nicht erreichen kann, erscheint ein kleines Banner, um dich
-wissen zu lassen, dass du offline arbeitest. Das ist rein informativ, du kannst genau
-wie zuvor weitermachen. Erfasse weiter Durchsichten, hake Aufgaben ab, erfasse eine
-Ernte; nichts ist blockiert.
+Hat das Gerät keine Verbindung, wechselt der Konto-Block in der Seitenleiste von **Online** zu **Offline**, und eine Leiste am oberen Rand der Seite meldet, dass Änderungen gespeichert und später synchronisiert werden. Das ist rein informativ; mach genau wie zuvor weiter.
 
-In dem Moment, in dem dein Gerät wieder online ist, verschwindet das Banner und alle
-Änderungen, die du offline vorgenommen hast, werden automatisch hochgesendet. Es gibt
-keine "Jetzt synchronisieren"-Schaltfläche, an die du denken musst, und kein Risiko, das
-Speichern zu vergessen.
+Sobald das Gerät wieder online ist, verschwindet die Leiste und alle offline vorgenommenen Änderungen werden automatisch hochgesendet. Es gibt keinen Button „Jetzt synchronisieren".
 
 :::note
-Ein dauerhaftes Offline-Banner bedeutet meist einfach schwachen Empfang draußen am
-Bienenstand. Wenn es selbst bei guter Verbindung zu Hause bestehen bleibt, wirf einen
-Blick auf die [Fehlerbehebung](/knowledge-base/troubleshooting).
+Eine dauerhafte Offline-Anzeige bedeutet meist schwachen Empfang am Bienenstand. Bleibt sie selbst bei guter Verbindung zu Hause bestehen, siehe [Fehlerbehebung](/knowledge-base/troubleshooting).
 :::
 
 ## Deine erste Synchronisation auf einem neuen Gerät
 
-Wer sich auf einem neuen Gerät anmeldet oder die App nach gelöschtem Speicher wieder öffnet,
-startet mit einer leeren lokalen Datenbank, die sich im Hintergrund füllt. Die App macht
-diesen Zustand sichtbar, statt so zu tun, als gäbe es nichts zu zeigen:
+Wer sich auf einem neuen Gerät anmeldet oder die App nach gelöschtem Speicher wieder öffnet, startet mit einer leeren lokalen Datenbank, die sich im Hintergrund füllt:
 
 - Listen zeigen **schimmernde Platzhalter**, während sie aus der lokalen Datenbank lesen.
-- Solange der erste Download noch läuft, zeigen das Dashboard sowie die Listen der
-  Bienenstände, Beuten und Aufgaben **„Daten werden synchronisiert…“** statt eines leeren
-  Zustands, damit du nie aufgefordert wirst, „deinen ersten Bienenstand anzulegen“, während
-  die Aufzeichnungen gerade eintreffen.
-- Große Datenbestände erscheinen **schrittweise**: Jedes empfangene Paket wird sofort
-  angezeigt, sodass sich der Bildschirm bei einer langen ersten Synchronisation nach und
-  nach füllt statt erst ganz am Ende.
+- Solange der erste Download noch läuft, zeigen die Übersicht sowie die Listen der Bienenstände, Beuten und Aufgaben **„Daten werden synchronisiert…"** statt eines leeren Zustands.
+- Große Datenbestände erscheinen **schrittweise**: Jedes empfangene Paket wird sofort angezeigt.
 
-Erst wenn die App weiß, dass die Daten vollständig sind, zeigt sie einen echten leeren
-Zustand. Ist das Gerät offline oder der Server nicht erreichbar, weicht der Hinweis dem, was
-lokal gespeichert ist, sodass nichts hinter einem Ladekreis verborgen bleibt.
+Erst wenn die App weiß, dass die Daten vollständig sind, zeigt sie einen echten leeren Zustand. Ist das Gerät offline oder der Server nicht erreichbar, weicht der Hinweis dem, was lokal gespeichert ist.
 
 ## Synchronisation über deine Geräte
 
-Du kannst Openbeehive auf mehreren Geräten nutzen, etwa einem Smartphone im Feld und
-einem Laptop zu Hause, und sie bleiben automatisch im Gleichschritt.
-
-Jedes Gerät behält seine eigene lokale Kopie und tauscht Änderungen im Hintergrund mit
-dem Server aus. Erfasse eine Durchsicht auf deinem Smartphone an den Beuten, und wenn
-du dich an deinen Laptop setzt, ist sie bereits da. Bearbeitungen fließen in beide
-Richtungen.
-
-Du musst kein "Haupt"-Gerät wählen oder etwas von Hand übertragen. Solange sich jedes
-Gerät beim selben Konto anmeldet, sehen sie alle dieselben Aufzeichnungen.
+Nutze Openbeehive auf mehreren Geräten, einem Smartphone im Feld und einem Laptop zu Hause, und sie bleiben im Gleichschritt. Jedes Gerät behält seine eigene lokale Kopie und tauscht Änderungen im Hintergrund mit dem Server aus. Erfasse eine Durchsicht auf deinem Smartphone an den Beuten, und wenn du dich an deinen Laptop setzt, ist sie da. Solange sich jedes Gerät beim selben Konto anmeldet, sehen alle dieselben Aufzeichnungen.
 
 ## Was passiert, wenn zwei Geräte dasselbe ändern
 
-Das ist die Frage, die jeder Imker stellt, und die beruhigende Antwort lautet: Du musst
-nicht darüber nachdenken. Openbeehive löst überlappende Änderungen **automatisch** auf,
-ohne "Welche Version möchtest du behalten?"-Abfragen und ohne verlorene Arbeit.
+Openbeehive löst überlappende Änderungen **automatisch** auf, ohne Abfragen der Art „Welche Version möchtest du behalten?".
 
-Ein paar Beispiele, wie es sich verhält:
+- **Du bearbeitest die Notiz eines Bienenstands auf deinem Smartphone, dein Mitimker bearbeitet dieselbe Notiz auf seinem.** Die jüngste Bearbeitung dieses Feldes gewinnt.
+- **Ihr fügt beide offline Fotos zu derselben Durchsicht hinzu.** Beide Fotosätze bleiben erhalten.
+- **Ihr erfasst jeweils eine separate Durchsicht.** Durchsichten, Ernten und Behandlungen werden immer nur hinzugefügt, beide bleiben also nebeneinander erhalten.
 
-- **Du bearbeitest die Notizen einer Beute auf deinem Smartphone, dein Mitimker
-  bearbeitet dieselben Notizen auf seinem.** Die jüngste Bearbeitung dieses Feldes
-  gewinnt; die andere wird sauber überschrieben.
-- **Ihr fügt beide Aufgaben hinzu oder markiert beide die Beute, während ihr offline
-  seid.** Ergänzungen zu Listen werden bewahrt, sodass niemandes Aufgabe oder Markierung verloren geht.
-- **Ihr erfasst jeweils eine separate Durchsicht.** Durchsichten, Ereignisse und
-  ähnliche Aufzeichnungen werden immer nur hinzugefügt, nie überschrieben, sodass beide
-  nebeneinander bewahrt werden.
-
-Das Ergebnis ist, dass jedes Gerät auf denselben, sinnvollen Zustand konvergiert, sobald
-sie alle synchronisiert haben, und du nie eine beschädigte oder halb zusammengeführte
-Aufzeichnung erhältst.
+Jedes Gerät konvergiert auf denselben Zustand, sobald alle synchronisiert haben.
 
 :::tip
-Die Kurzfassung: **füge frei hinzu, bearbeite zuversichtlich, sorge dich nie um
-Datenverlust.** Wenn du neugierig bist, wie das tatsächlich unter der Haube
-funktioniert, erklären die Seiten zum [Sync-Protokoll](/developers/sync-protocol) und zur
-[Architektur](/developers/architecture) es im Detail.
+Die Kurzfassung: füge frei hinzu, bearbeite zuversichtlich. Wie das unter der Haube funktioniert, steht auf den Seiten zum [Sync-Protokoll](/developers/sync-protocol) und zur [Architektur](/developers/architecture).
 :::
 
-## Einen Bienenstand teilen
+## Teilen
 
-Openbeehive teilt Aufzeichnungen auf **Bienenstand**-Ebene. Wenn du einen Bienenstand
-teilst, wird alles darin, seine Beuten, Königinnen, Durchsichten, Aufgaben, Ereignisse,
-Ernten und Behandlungen, mit ihm geteilt. Das hält die Dinge einfach: Du gewährst Zugriff
-auf einen Standort, nicht auf dutzende einzelne Beuten.
-
-Jeder Person, mit der du teilst, wird eine Rolle zugewiesen:
+Aufzeichnungen werden über **Mandanten** geteilt. Jedes Mitglied eines Mandanten sieht und bearbeitet alle seine Bienenstände, Beuten und Aufzeichnungen; ein Teilen pro Bienenstand oder pro Beute gibt es nicht.
 
 | Rolle | Was sie tun kann |
 | --- | --- |
-| **Betrachter** | Den Bienenstand und alle seine Aufzeichnungen ansehen. Kann keine Änderungen vornehmen. |
-| **Imker** | Ansehen und bearbeiten: Durchsichten erfassen, Aufgaben erledigen, Ernten und Behandlungen erfassen, Beuten und Königinnen aktualisieren. |
-| **Besitzer** | Alles, was ein Imker tun kann, plus den Bienenstand selbst verwalten und mit wem er geteilt wird. |
+| **Admin** (Eigentümer des Mandanten) | Alles, was ein Mitglied kann, plus einladen und zurückziehen sowie den Mandanten löschen. |
+| **Mitglied** | Bienenstände, Beuten, Durchsichten, Aufgaben, Ernten und Behandlungen im Mandanten anlegen und bearbeiten. |
 
-Das funktioniert gut für einen Lehrbienenstand eines Vereins, einen Mentor, der die Beuten
-eines neuen Imkers im Auge behält, oder einfach zwei Personen, die sich die Arbeit am selben
-Standort teilen. Geteilte Aufzeichnungen synchronisieren und lösen Konflikte genau auf
-dieselbe Weise wie deine eigenen, sodass die Änderungen eines Partners automatisch auf deinen
-Geräten erscheinen.
-
-:::note
-Das Teilen erfolgt pro Bienenstand, sodass du einen Standort mit einem Mentor teilen
-kannst, während du andere vollständig privat hältst.
-:::
+Um einen Standort mit einem Mentor zu teilen und andere privat zu halten, legst du diesen Standort in einen eigenen Mandanten und lädst den Mentor dorthin ein. Geteilte Aufzeichnungen synchronisieren und lösen Konflikte genau wie deine eigenen. Siehe [Konten & Mandanten](/using-the-app/accounts-tenants).
 
 ## Wenn etwas nicht gespeichert werden kann
 
-Gespeichert wird auf deinem Gerät, deshalb schlägt das praktisch nie fehl. Falls doch — etwa weil der Speicher des Browsers voll oder beschädigt ist — sagt die App das jetzt deutlich: Das Formular bleibt mit allen Eingaben offen, und eine Fehlermeldung erklärt, was schiefgelaufen ist. Nichts verschwindet stillschweigend.
+Gespeichert wird auf deinem Gerät, deshalb schlägt das praktisch nie fehl. Falls doch (etwa weil der Speicher des Browsers voll oder beschädigt ist), bleibt das Formular mit allen Eingaben offen, und eine Fehlermeldung erklärt, was schiefgelaufen ist.
 
-Beim öffentlichen **Demo-Konto** nimmt der Server keine Uploads an (die Demo setzt sich regelmäßig zurück). Du kannst trotzdem alles ausprobieren: Deine Änderungen werden auf deinem Gerät gespeichert und bleiben einfach dort, statt zu synchronisieren.
+Beim öffentlichen **Demo-Konto** lehnt der Server Änderungen ab (die Demo setzt sich stündlich zurück). Deine Änderungen werden auf deinem Gerät gespeichert und bleiben einfach dort, statt zu synchronisieren.
 
-Es gibt eine Situation, in der Speichern funktioniert, aber nicht von Dauer ist: Kann der
-Browser der App ihren privaten Speicher nicht geben, weicht die App auf eine Datenbank im
-Arbeitsspeicher aus und zeigt den Hinweis **„Speicher nicht verfügbar — Änderungen bleiben
-auf diesem Gerät nicht erhalten.“** Für die Sitzung funktioniert alles weiter, und Änderungen
-werden weiterhin mit dem Server synchronisiert, wenn du angemeldet bist, aber die lokale
-Kopie ist weg, sobald der Tab geschlossen wird. Das passiert in privaten Browserfenstern und
-wenn ein zweiter Tab der App den Speicher noch hält; siehe
-[Fehlerbehebung](/knowledge-base/troubleshooting#storage-is-unavailable) für das weitere Vorgehen.
+Es gibt eine Situation, in der Speichern funktioniert, aber nicht von Dauer ist: Kann der Browser der App ihren privaten Speicher nicht geben, weicht die App auf eine Datenbank im Arbeitsspeicher aus und zeigt den Hinweis **„Speicher nicht verfügbar – Änderungen bleiben auf diesem Gerät nicht erhalten."** Für die Sitzung funktioniert alles weiter, und Änderungen werden weiterhin mit dem Server synchronisiert, wenn du angemeldet bist, aber die lokale Kopie ist weg, sobald der Tab geschlossen wird. Das passiert in privaten Browserfenstern und wenn ein zweiter Tab der App den Speicher noch hält; siehe [Fehlerbehebung](/knowledge-base/troubleshooting#storage-is-unavailable).
 
 ## Werde ich jemals Daten verlieren?
 
-Nein. Deine Aufzeichnungen werden zuerst auf dein Gerät geschrieben und nicht einfach
-entfernt, weil du offline bist oder weil die App geschlossen wird. Sie warten sicher auf
-dem Gerät, bis sie synchronisiert werden können, und synchronisieren dann von selbst.
+Deine Aufzeichnungen werden zuerst auf dein Gerät geschrieben und nicht entfernt, weil du offline bist oder die App geschlossen wird. Sie warten auf dem Gerät, bis sie synchronisiert werden können.
 
-Für zusätzliche Sicherheit, besonders wenn du selbst hostest, ist es dennoch gute Praxis,
-Server-Backups vorzuhalten. Siehe [Backups](/self-hosting/backups) dafür, wie.
-
-## Verwandte Seiten
-
-- [Openbeehive installieren](/using-the-app/install)
-- [QR-Etiketten](/using-the-app/qr-labels)
-- [Architektur](/developers/architecture)
-- [Sync-Protokoll](/developers/sync-protocol)
+Wenn du selbst hostest, halte zusätzlich Server-Backups vor. Siehe [Backups](/self-hosting/backups).

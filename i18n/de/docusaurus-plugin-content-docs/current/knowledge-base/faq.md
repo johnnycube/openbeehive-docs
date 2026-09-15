@@ -15,7 +15,7 @@ Der gehostete Dienst unter [app.openbeehive.org](https://app.openbeehive.org) is
 
 ## Sind meine Daten privat?
 
-Deine Aufzeichnungen liegen zuerst auf deinem eigenen Gerät. Openbeehive ist **offline-first**: Die App speichert alles in einer lokalen Datenbank auf deinem Smartphone, Tablet oder Computer und synchronisiert nur im Hintergrund mit dem Server.
+Deine Aufzeichnungen liegen zuerst auf deinem eigenen Gerät: Die App speichert alles in einer lokalen Datenbank auf deinem Smartphone, Tablet oder Computer und synchronisiert im Hintergrund mit dem Server.
 
 Wenn du selbst hostest, verlassen deine Daten niemals deine eigene Infrastruktur. Beim gehosteten Dienst werden deine Aufzeichnungen auf unseren Servern gespeichert, damit sie zwischen deinen Geräten synchronisieren können, aber sie bleiben deine.
 
@@ -39,10 +39,7 @@ Es gibt heute keine separate native App im App Store oder Play Store, und du bra
 
 ## Kann ich meine Daten exportieren?
 
-Ja. Da das Projekt Open Source ist und deine Daten in einer standardmäßigen SQLite-Datenbank gespeichert werden, bist du nie an etwas gebunden.
-
-- **Selbst-Hoster** können die Datenbank direkt sichern. Siehe [Backups](/self-hosting/backups).
-- Beim **gehosteten Dienst** sind Exportwerkzeuge Teil der Roadmap. Deine Aufzeichnungen werden außerdem lokal auf jedem synchronisierten Gerät vorgehalten.
+Ja. **Einstellungen → Daten & Backup** exportiert alles auf deinem Gerät als vollständiges JSON-Backup, als Tabelle (XLSX), als CSV-Dateien in einem ZIP, als BeeXML oder als druckbaren PDF-Bericht und importiert JSON, BeeXML und CSV aus anderen Apps. Siehe [Import & Export](/using-the-app/import-export). Selbst-Hoster können außerdem die Server-Datenbank direkt sichern; siehe [Backups](/self-hosting/backups).
 
 ## Kann ich es selbst hosten?
 
@@ -61,9 +58,7 @@ Für eine private Einzelnutzer-Instanz kannst du die Anmeldung vollständig deak
 
 ## Wie funktioniert das Teilen?
 
-Das Teilen erfolgt auf Ebene des **Bienenstands** über „Scopes“. Wenn du einen Bienenstand teilst, können die Personen, mit denen du ihn teilst, alles darin sehen und dazu beitragen: seine Bienenstöcke, Königinnen, Durchsichten, Aufgaben und mehr.
-
-Die Synchronisierung ist konzeptbedingt konfliktfrei, sodass zwei Personen, die denselben Bienenstand auf verschiedenen Geräten bearbeiten, nicht gegenseitig ihre Arbeit überschreiben. Bearbeitungen werden auch nach langen Offline-Phasen sauber zusammengeführt. Die technischen Einzelheiten werden im [Sync-Protokoll](/developers/sync-protocol) behandelt.
+Aufzeichnungen werden über **Mandanten** geteilt. Jedes Konto hat einen persönlichen Mandanten und kann in weitere eingeladen werden, zum Beispiel den eines Vereins. Alle in einem Mandanten sehen und bearbeiten sämtliche seiner Bienenstände, Bienenstöcke und Aufzeichnungen; ein Teilen einzelner Bienenstände gibt es nicht. Die Synchronisierung ist konfliktfrei, sodass zwei Personen, die im selben Mandanten auf verschiedenen Geräten arbeiten, sich nicht gegenseitig überschreiben. Siehe [Konten & Mandanten](/using-the-app/accounts-tenants).
 
 ## Welche Beutentypen werden unterstützt?
 
@@ -99,7 +94,7 @@ Jeder Bienenstock kann ein druckbares QR-Etikett haben. Durch das Scannen öffne
 
 ## In welchen Sprachen ist es verfügbar?
 
-Openbeehive wird mit Blick auf Internationalisierung entwickelt, wobei Deutsch und Englisch angesichts der Wurzeln des Projekts den ersten Schwerpunkt bilden. Weitere Sprachen sind als Community-Beiträge willkommen.
+Die App wird in fünf Sprachen ausgeliefert: Englisch, Deutsch, Französisch, Spanisch und Italienisch. Umschalten kannst du unter **Einstellungen → Sprache**. Weitere Übersetzungen sind als Beiträge willkommen.
 
 ## Welche Datenbanken und Speicher-Backends werden unterstützt?
 
@@ -110,11 +105,11 @@ Beim Selbst-Hosting ist das Backend austauschbar:
 
 ## Wie melde ich mich an?
 
-Der gehostete Dienst verwendet eine OIDC-Anmeldung (Anmeldung mit einem unterstützten Anbieter), mit optionalen Passkeys (WebAuthn) für ein passwortloses Erlebnis. Selbst-Hoster können ihre eigenen OIDC-Anbieter konfigurieren, Passkeys aktivieren oder die Anmeldung für Einzelnutzer-Installationen vollständig abschalten. Siehe [Authentifizierung](/self-hosting/authentication).
+Der gehostete Dienst verwendet Konten mit E-Mail und Passwort. Selbst-Hoster können E-Mail/Passwort-Konten aktivieren, OIDC-Anbieter hinzufügen (Google, Keycloak, Authentik und ähnliche), Passkeys aktivieren oder die Anmeldung für eine Einzelnutzer-Installation vollständig abschalten. Siehe [Authentifizierung](/self-hosting/authentication).
 
 ## Wie melde ich einen Fehler oder schlage eine Funktion vor?
 
-Bitte eröffne ein Issue in unserer [GitHub-Organisation](https://github.com/johnnycube/openbeehive-app). Klare Schritte zur Reproduktion, deine Plattform und dein Browser sowie ein Screenshot helfen allesamt enorm.
+Bitte eröffne ein Issue im [GitHub-Repository](https://github.com/johnnycube/openbeehive-app). Klare Schritte zur Reproduktion, deine Plattform und dein Browser sowie ein Screenshot helfen.
 
 Die [Seite zur Fehlerbehebung](/knowledge-base/troubleshooting) deckt häufige Probleme möglicherweise bereits ab.
 
@@ -122,8 +117,6 @@ Die [Seite zur Fehlerbehebung](/knowledge-base/troubleshooting) deckt häufige P
 
 Beiträge aller Art sind willkommen: Code, Dokumentation, Übersetzungen, Fehlerberichte und Ideen. Der Stack ist Go im Backend und eine SvelteKit-PWA im Frontend.
 
-Lies den [Leitfaden zum Beitragen](/developers/contributing), um loszulegen, und wirf einen Blick auf die [Architekturübersicht](/developers/architecture), um zu verstehen, wie die Teile zusammenpassen.
-
 ## Welche Version ist das?
 
-Die aktuelle Veröffentlichung ist **v0.1.0**, unsere erste öffentliche Version. Erwarte rasche Verbesserungen und sieh in den [Leitfaden zum Aktualisieren](/self-hosting/upgrading), wenn neue Versionen erscheinen.
+Veröffentlichungen werden auf [GitHub](https://github.com/johnnycube/openbeehive-app/releases) getaggt. Selbst-Hoster betreiben den Tag, den sie gebaut haben, oder den Image-Tag, den sie gezogen haben; sieh in den [Leitfaden zum Aktualisieren](/self-hosting/upgrading), wenn neue Versionen erscheinen.

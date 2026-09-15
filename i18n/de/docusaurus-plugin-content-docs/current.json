@@ -40,7 +40,7 @@
     "description": "The label for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Developers.link.generated-index.description": {
-    "message": "Architektur und Interna — das Offline-First-Synchronisationsmodell, das Event-/Verlaufsdesign und QR-Deeplinks.",
+    "message": "Architektur und Interna: das Offline-First-Synchronisationsmodell, das Event-/Verlaufsdesign und QR-Deeplinks.",
     "description": "The generated-index page description for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API": {
@@ -48,7 +48,7 @@
     "description": "The label for category 'Using the API' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API.link.generated-index.description": {
-    "message": "Openbeehive ist API-first und offen: Alles, was die App tut, läuft über eine öffentliche Connect-RPC API (gRPC und einfaches HTTP/JSON). Erstellen Sie Integrationen, Skripte, Dashboards und automatisierte Sensoren auf Basis desselben Vertrags, den auch die App verwendet.",
+    "message": "Die Connect-RPC API, mit der die App spricht: welche Dienste bereitgestellt werden, wie du dich authentifizierst und wie du sie über HTTP/JSON oder gRPC aufrufst.",
     "description": "The generated-index page description for category 'Using the API' in sidebar 'tutorialSidebar'"
   }
 }

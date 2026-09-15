@@ -49,6 +49,8 @@ Das folgende Diagramm zeigt, wie eine Änderung von einer Berührung in der Ober
 
 Das Sync-Modul tauscht nur die Datensätze aus, die zu den Bereichen (Scopes) gehören, auf die ein Nutzer Zugriff hat, sodass ein Gerät niemals die ganze Welt herunterlädt: nur die Bienenstände, zu denen es berechtigt ist.
 
+Skripte und Sensoren treten über die CRUD-Dienste des Servers in dasselbe Bild ein ([Die API verwenden](/using-the-api/overview)). Deren Schreibvorgänge umgehen diesen Fluss nicht: Der Server wendet jeden mit demselben feldweisen Merge an und hängt ihn an dasselbe Änderungsprotokoll an wie eine gepushte Änderung, sodass ein von einer Stockwaage gesendeter Messwert einfach eine weitere Änderung ist, die die Geräte bei ihrem nächsten Sync abholen.
+
 ## Konfliktauflösung
 
 Zwei Geräte können denselben Bienenstock bearbeiten, während beide offline sind. Wenn sie sich wieder verbinden, führt Openbeehive ihre Änderungen deterministisch zusammen, ohne manuelle Konfliktabfragen. Drei Techniken machen dies konfliktfrei.
@@ -63,11 +65,11 @@ Für einfache Skalarfelder, etwa den Namen oder Typ eines Bienenstocks oder die 
 
 ### OR-Sets für Listenfelder
 
-Listenartige Felder, etwa Tags, verwenden eine Observed-Remove-Menge (OR-Set) mit Add-wins-Semantik. Gleichzeitige Hinzufügungen überleben alle, und eine Entfernung wirkt nur gegen die konkreten Einträge, die sie beobachtet hat. Damit wird das klassische Problem vermieden, bei dem die Hinzufügung einer Person die einer anderen stillschweigend löscht.
+Listenartige Felder (derzeit nur die Foto-Schlüssel einer Durchsicht) verwenden eine Observed-Remove-Menge (OR-Set) mit Add-wins-Semantik. Gleichzeitige Hinzufügungen überleben alle, und eine Entfernung wirkt nur gegen die konkreten Einträge, die sie beobachtet hat. Damit wird das klassische Problem vermieden, bei dem die Hinzufügung einer Person die einer anderen stillschweigend löscht.
 
 ### Append-only-Ereignisse
 
-Datensätze, die Geschehenes beschreiben, etwa Durchsichten, Ereignisse, Ernten und Behandlungen, sind append-only (nur anhängend). Neue Einträge werden einfach hinzugefügt; sie werden von der Sync-Schicht niemals an Ort und Stelle bearbeitet, sodass sie nicht in Konflikt geraten können. Das Ergebnis ist eine unveränderliche, geordnete Historie. Einzelheiten dazu findest du unter [Historie und Ereignisse](/developers/history-and-events).
+Die Tabelle `event` ist per Konvention append-only: Jeder Historien-Schreibvorgang fügt eine neue Zeile mit frischer ID ein, und nichts bearbeitet oder löscht eine, sodass zwei Geräte, die offline Ereignisse hinzufügen, nie dieselbe Zeile berühren. Einzelheiten dazu findest du unter [Historie und Ereignisse](/developers/history-and-events).
 
 :::tip
 Da Zusammenführungen deterministisch sind, berechnen zwei beliebige Geräte, die denselben Satz von Änderungen gesehen haben, stets genau dasselbe Ergebnis, unabhängig von der Reihenfolge, in der diese Änderungen eingetroffen sind.
@@ -88,10 +90,6 @@ Die App ist eine Progressive Web App, in erster Linie für das Telefon in deiner
 - Ein **Service Worker** speichert die Anwendungshülle und Assets zwischen, sodass die App sofort lädt und nach dem ersten Besuch vollständig offline läuft.
 - **SQLite-WASM auf OPFS** stellt eine echte relationale Datenbank im Browser bereit, mit dauerhaftem, origin-privatem Speicher, der Neuladevorgänge übersteht.
 - Die App ist auf dem Startbildschirm installierbar und verhält sich wie eine native App, einschließlich des QR-Scan-Ablaufs, der die App bei einem bestimmten Bienenstock öffnet.
-
-:::note
-Für Nutzer, die eine paketierte App aus den App Stores möchten, kann dieselbe Codebasis mit **Capacitor** umhüllt werden, um native iOS- und Android-Builds auszuliefern. Das ist optional; die PWA ist der primäre Auslieferungskanal.
-:::
 
 ## Wie es zusammenpasst
 

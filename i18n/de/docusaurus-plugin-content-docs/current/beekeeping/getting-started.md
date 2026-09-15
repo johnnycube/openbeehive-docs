@@ -97,10 +97,4 @@ Der Kalender jeder Region ist anders, betrachte dies also eher als Form denn als
 Strebe an, dein Volk durch seinen ersten Winter am Leben und gesund zu halten. Das, und nicht der Honig, ist der wahre Maßstab für ein erfolgreiches erstes Jahr.
 :::
 
-## Wie es weitergeht
-
-- [Das Bienenvolk verstehen](/beekeeping/the-colony) — wer ist wer im Stock und wie das Ganze funktioniert.
-- [Ausrüstung](/beekeeping/equipment) — Beuten, Werkzeuge und Schutzkleidung erklärt.
-- [Das Imkerjahr](/beekeeping/beekeeping-year) — was zu tun ist, Saison für Saison.
-
 Geh es langsam an, führe gute Aufzeichnungen, stütze dich auf deine örtliche Gemeinschaft und respektiere die Regeln dort, wo du lebst. Willkommen in der Imkerei.

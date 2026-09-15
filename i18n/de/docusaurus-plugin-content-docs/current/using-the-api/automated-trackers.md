@@ -1,109 +1,181 @@
 ---
 sidebar_position: 4
-title: "Automatisierte Tracker"
+title: "Automatische Tracker"
 ---
 
-# Automatisierte Tracker & Sensoren
+# Automatische Tracker und Sensoren
 
-Openbeehive erfasst **Temperatur und Luftfeuchtigkeit — innerhalb und außerhalb
-des Stocks**, dazu das Stockgewicht. Du kannst diese Werte während einer
-[Durchsicht](/using-the-app/inspections) von Hand eintragen oder die Hardware
-übernehmen lassen: eine Stockwaage, eine Brutnest-Temperatursonde oder ein
-Feuchtesensor können Messwerte planmäßig direkt in die API schieben. Da die API
-[offen](/using-the-api/overview) ist, können deine Bienen ihr eigenes Tagebuch
-führen.
+Eine Stockwaage, ein Temperaturfühler im Brutnest oder ein Feuchtesensor kann
+seine Messwerte über `InspectionService.CreateInspection` in Openbeehive
+ablegen. Jeder Messwert wird zu einer Durchsichtszeile an der Beute,
+synchronisiert wie ein von Hand erfasster Besuch auf jedes Gerät und fließt
+in die Diagramme unter **Entwicklung** der Beute ein. Diese Seite
+beschreibt, was der Server mit solchen Messwerten tatsächlich macht und wie
+du sie aus einem Skript sendest.
 
-## Die Idee
+## Was ein Messwert ist
 
-Ein Tracker ist einfach ein kleiner Client, der in regelmäßigen Abständen einen
-Messwert an den [`CreateInspection`](/using-the-api/rest)-Endpunkt sendet. Jeder
-Messwert wird zu einem Durchsichts-Datensatz am richtigen Stock und erscheint
-sofort in der App — im Besuchsprotokoll des Stocks und in seinen
-**Entwicklungsdiagrammen** ([Durchsichten](/using-the-app/inspections)).
+Es gibt keine eigene Sensortabelle. Ein Messwert ist eine Durchsicht, bei
+der nur die Messfelder gefüllt sind:
 
+| JSON-Feld | Bedeutung | Einheit |
+| --- | --- | --- |
+| `weightKg` | Stockgewicht | kg |
+| `tempHive` | Temperatur im Stock | °C |
+| `tempOutside` | Außentemperatur | °C |
+| `humidityHive` | Relative Luftfeuchte im Stock | % |
+| `humidityOutside` | Relative Außenluftfeuchte | % |
+| `note` | Freitext, zum Beispiel der Gerätename | |
+
+Sende nur, was dein Gerät misst. Felder, die du weglässt, speichert der
+Server als `0`; die Entwicklungsdiagramme zeichnen nur Werte über null, aber
+die Besuchszusammenfassung in der App zeigt eine Temperatur von `0` als
+gemessene `0 °C` an. Sende also kein Temperaturfeld, das du nicht gemessen
+hast.
+
+Auf dem Server nimmt der Messwert denselben Weg wie ein in der App erfasster
+Besuch: Die Zeile wird mit dem Standort und der regierenden Königin zum
+Zeitpunkt ihres `date` gestempelt, ein `INSPECTION`-Ereignis wird
+geschrieben, und die Änderung wird mit deinem Konto als Autor an das
+Sync-Protokoll angehängt. Siehe den
+[API-Überblick](./overview.md#writes-go-through-sync).
+
+## Was die App daraus macht
+
+- Der Messwert erscheint nach dem nächsten Sync des Geräts in der
+  Durchsichtenliste und den Diagrammen der Beute (die App synchronisiert alle
+  15 Sekunden, solange sie offen ist, und nach jedem lokalen Schreibvorgang).
+- Er zählt als letzte Durchsicht der Beute. Das Feld **Fällige Durchsichten**
+  auf der Übersicht und `StatsService.GetDashboard` berechnen die "Tage seit
+  dem letzten Besuch" aus der neuesten Durchsichtszeile, sodass eine Beute,
+  die täglich meldet, nie als fällig auftaucht, selbst wenn sie seit Wochen
+  niemand geöffnet hat.
+- Jeder Messwert ist ein Besuch in der Liste. Ein Messwert pro Minute erzeugt
+  1.440 Besuche am Tag und schiebt die von Hand geschriebenen Einträge außer
+  Sicht.
+
+Sende höchstens ein paar Messwerte am Tag, oder aggregiere auf dem Gerät und
+sende einen Tageswert. Schreib den Gerätenamen in `note`, damit
+Maschinenmesswerte leicht von deinen eigenen Besuchen zu unterscheiden sind.
+Takte von 15 Minuten und feiner gehören in deinen eigenen
+Zeitreihenspeicher, nicht in die Durchsichtenliste.
+
+## Aus einem Skript authentifizieren
+
+Gib jedem Gerät seinen eigenen API-Schlüssel (siehe
+[Authentifizierung](./overview.md#authentication)):
+
+1. Wechsle in der App in den Mandanten, zu dem die Beute gehört, und öffne
+   **Einstellungen → API-Schlüssel**.
+2. Benenne den Schlüssel nach dem Gerät (zum Beispiel `scale-01`), lass die
+   Berechtigungen auf **Lesen und Schreiben** (ein Sensor legt Durchsichten
+   an, was ein Schlüssel mit **Nur Lesen** nicht kann), wähle, ob er
+   ablaufen soll, und tippe auf **Schlüssel erstellen**. Kopiere den
+   `obhk_...`-Wert; er wird nur einmal angezeigt.
+3. Speichere ihn auf dem Gerät und sende ihn bei jedem Aufruf als
+   `Authorization: Bearer obhk_...`.
+
+Der Schlüssel handelt in diesem Mandanten als du und funktioniert mit jeder
+Anmeldemethode (Passwort, OIDC oder Passkeys). Er läuft nur ab, wenn du ein
+Ablaufdatum gewählt hast (**30 Tagen**, **90 Tagen** oder **1 Jahr**); ein
+abgelaufener Schlüssel bekommt bei jedem Aufruf `unauthenticated`
+(HTTP 401), bis du einen neuen erstellst. Die Einstellungen zeigen, wann
+jeder Schlüssel zuletzt verwendet wurde. Wenn das Gerät ausgemustert wird,
+tippe neben seinem Schlüssel auf **Entfernen**; der nächste Aufruf von ihm
+liefert `unauthenticated`. Der Schlüssel funktioniert auch dann nicht mehr,
+wenn du den Mandanten verlässt. Verwende einen Schlüssel mit **Nur Lesen**
+für alles, was nur liest, etwa ein Dashboard oder ein Exportskript; er
+bekommt `permission_denied` bei `CreateInspection` und jedem anderen
+Schreibvorgang.
+
+Zwei Fälle brauchen keinen Schlüssel oder können keinen verwenden:
+
+- **Instanz ohne Login** (selbst gehostet, kein Passwort, OIDC oder WebAuthn
+  konfiguriert): Jede Anfrage läuft als der lokale Benutzer. Sende keinen
+  Header. Den Bereich API-Schlüssel gibt es dort nicht.
+- **Anmeldung per Sitzung als Ausweichlösung**: Mit aktiviertem
+  Passwort-Login liefert `POST /auth/signin` mit `email` und `password` ein
+  Sitzungs-`token`, das du auf dieselbe Weise senden kannst. Es läuft nach
+  `BEEHIVE_SESSION_TTL` ab (Vorgabe `720h`, 30 Tage), das Skript muss sich
+  bei `unauthenticated` also erneut anmelden. Bevorzuge einen Schlüssel.
+
+Das Demo-Konto ist schreibgeschützt und kann keine Schlüssel erstellen;
+`CreateInspection` liefert dort `permission_denied`.
+
+## Die Beuten-Id finden
+
+`hiveId` ist die UUID der Beute, dieselbe, die in ihrem
+[QR-Etikett](/using-the-app/qr-labels) kodiert ist. Schlag sie einmal nach
+und speichere sie auf dem Gerät:
+
+```bash
+curl -s -X POST "$OB/openbeehive.v1.ApiaryService/ListApiaries" \
+  -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d '{}'
+
+curl -s -X POST "$OB/openbeehive.v1.HiveService/ListHives" \
+  -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" \
+  -d '{"apiaryId":"2b1f6c0e-..."}'
 ```
- sensor (DHT22 / DS18B20 / load cell)
-        │  reads temp / humidity / weight
-        ▼
- microcontroller or Raspberry Pi
-        │  HTTP POST (JSON)
-        ▼
- Openbeehive  →  InspectionService.CreateInspection  →  hive record + charts
-```
 
-## Die Klimafelder
+Beide liefern pro Zeile `id` und `name`. Behalte eine stabile `hiveId` pro
+Sensor; wenn die Beute in der App an einen anderen Standort gewandert wird,
+bleibt die Id dieselbe.
 
-| JSON-Feld | Bedeutung | Einheit | Typischer Sensor |
-| --- | --- | --- | --- |
-| `tempHive` | Temperatur innerhalb des Stocks | °C | DS18B20, Brutsonde |
-| `tempOutside` | Außen- / Umgebungstemperatur | °C | DHT22, BME280 |
-| `humidityHive` | Relative Luftfeuchtigkeit im Stock | % | SHT31, BME280 |
-| `humidityOutside` | Relative Luftfeuchtigkeit außen | % | DHT22, BME280 |
-| `weight_kg` | Stockgewicht | kg | Wägezellen-Waage |
-
-Alle sind optional — sende nur die, die dein Gerät misst.
-
-## Ein minimaler Tracker
-
-Jede Sprache funktioniert; das ist reines HTTP. Ein Messwert alle 15–60 Minuten
-reicht für Brutnestklima und Waagentrends völlig aus.
+## Beispiel: einen Messwert senden
 
 ```bash
 #!/usr/bin/env bash
-# Post one reading for hive h-7. Run from cron, a timer, or your device loop.
-BASE="https://bees.example.com"   # your self-hosted instance
-HIVE="h-7"
+# Post one reading for one hive. Run it from cron a few times a day.
+set -eu
+OB="https://bees.example.com"
+HIVE="c41a..."
+# The API key from Settings -> API keys, stored once on the device.
+TOKEN=$(cat /etc/openbeehive-key)
 
-curl -fsS -X POST \
-  "$BASE/openbeehive.v1.InspectionService/CreateInspection" \
-  -H "Content-Type: application/json" \
-  -d "{
-        \"hiveId\": \"$HIVE\",
-        \"tempHive\": $(read_sensor brood_temp),
-        \"tempOutside\": $(read_sensor ambient_temp),
-        \"humidityHive\": $(read_sensor brood_rh),
-        \"humidityOutside\": $(read_sensor ambient_rh),
-        \"weight_kg\": $(read_sensor scale),
-        \"note\": \"auto\"
-      }"
+body=$(printf '{"hiveId":"%s","weightKg":%s,"tempHive":%s,"humidityHive":%s,"note":"scale-01"}' \
+  "$HIVE" "$(read_sensor weight)" "$(read_sensor brood_temp)" "$(read_sensor brood_rh)")
+
+curl -fsS -X POST "$OB/openbeehive.v1.InspectionService/CreateInspection" \
+  -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" \
+  -d "$body"
 ```
 
-Auf einem Mikrocontroller (ESP32/ESP8266, MicroPython oder Arduino) führst du
-denselben POST mit deiner HTTP-Bibliothek aus, nachdem du die Sensoren
-ausgelesen hast.
+`read_sensor` steht für das, was auch immer deine Hardware ausliest. Ein
+Schlüssel ohne Ablaufdatum braucht keine Erneuerung; ein Exit-Code ungleich
+null mit HTTP 401 bedeutet, dass der Schlüssel entfernt wurde oder abgelaufen
+ist. Auf einer Instanz ohne Login lässt du den `Authorization`-Header weg.
+Dieselbe Anfrage in Python:
 
-## Authentifizierung für unbeaufsichtigte Clients
+```python
+import json, urllib.request
 
-Ein Sensor läuft ohne einen Menschen, der sich anmelden könnte, daher ist das
-reibungsloseste Setup heute eine **selbst gehostete Einzelnutzer-Instanz** ohne
-konfigurierte Anmeldung — das Gerät postet direkt an deinen eigenen Server in
-deinem eigenen Netzwerk. Siehe
-[Authentifizierung](/self-hosting/authentication).
+OB = "https://bees.example.com"
+TOKEN = open("/etc/openbeehive-key").read().strip()  # obhk_...
 
-Wenn bei deiner Instanz die Anmeldung aktiviert ist, sende
-`Authorization: Bearer <token>`. Erstklassige API-Tokens für Geräte stehen auf
-der Roadmap; bis dahin halte das automatisierte Posten auf einer selbst
-gehosteten Instanz, die du kontrollierst.
+def create_inspection(hive_id, **fields):
+    body = json.dumps({"hiveId": hive_id, **fields}).encode()
+    req = urllib.request.Request(
+        f"{OB}/openbeehive.v1.InspectionService/CreateInspection", data=body,
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {TOKEN}"})
+    with urllib.request.urlopen(req) as res:
+        return json.load(res)["inspection"]
+
+create_inspection("c41a...", weightKg=42.5, tempHive=34.2, humidityHive=58, note="scale-01")
+```
+
+Um einen Messwert rückzudatieren (zum Beispiel, wenn das Gerät offline
+gepuffert hat), sende `date` als RFC-3339-String. Der Server löst Standort
+und Königin für dieses Datum auf.
 
 ## Gute Praxis
 
-- **Eine Zuordnung von Stock zu Gerät.** Halte pro Sensor eine stabile `hiveId`;
-  finde sie in der App oder über `ListHives`.
-- **Sinnvolle Taktung.** 15–60 Min. erfassen Brutklima- und Gewichtstrends, ohne
-  das Protokoll zu überfluten. Stündlich ist ein guter Standard.
-- **Puffern bei Offline-Betrieb.** Wenn das Netzwerk oder der Server ausfällt,
-  stelle die Messwerte lokal auf dem Gerät in eine Warteschlange und sende sie
-  später erneut — dasselbe Offline-first-Prinzip, das auch die App verwendet.
-- **Automatisierte Einträge kennzeichnen.** Eine `note` wie `"auto"` macht es
-  leicht, maschinelle Messwerte von handgeschriebenen Besuchen zu unterscheiden.
-- **Auf die Einheiten achten.** Temperatur in °C, Luftfeuchtigkeit in % (0–100),
+- **Offline puffern.** Stelle Messwerte auf dem Gerät in eine Warteschlange
+  und sende sie mit ihrem ursprünglichen `date`, sobald der Server erreichbar
+  ist.
+- **Eine Beute pro Sensor.** Sende denselben Messwert nicht an mehrere
+  Beuten.
+- **Auf die Einheiten achten.** Temperatur in °C, Luftfeuchte von 0 bis 100,
   Gewicht in kg.
-
-## Was du bekommst
-
-Sobald Messwerte einlaufen, stellen die
-[Entwicklungsdiagramme](/using-the-app/inspections) jedes Stocks Temperatur,
-Luftfeuchtigkeit und Gewicht über die Zeit dar — so kannst du sehen, wie sich
-das Brutnest im Frühjahr aufwärmt, die versagende Thermoregulation eines
-weisellosen Volkes erkennen oder die Nektartracht auf der Waage beobachten, ganz
-ohne einen einzigen Stock zu öffnen.
+- **Testdaten aufräumen.** `ListInspections` mit deiner `hiveId` und
+  `DeleteInspection` entfernen Messwerte; die Löschung synchronisiert
+  ebenfalls auf die Geräte.

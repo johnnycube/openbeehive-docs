@@ -16,8 +16,9 @@ Wenn aktiviert, erstellt Openbeehive:
 
 - ein Demo-Konto (`demo@app.openbeehive.org` / `demo` standardmäßig),
 - einen Demo-**Mandanten** mit **15 Völkern auf 4 Bienenständen**,
-- eine ganze Saison an Daten: Königinnen, ~75 Durchsichten (mit Temperatur, Luftfeuchtigkeit,
-  Varroa, Gewicht …), Honigernten und Varroabehandlungen.
+- eine Saison an Daten: Königinnen, 105 Durchsichten (7 pro Beute, verteilt über die
+  letzten zehn Monate, mit Temperatur, Luftfeuchtigkeit, Varroa, Gewicht und mehr), eine
+  Honigernte und zwei Varroabehandlungen pro Beute.
 
 Die Daten werden **jede Stunde neu aufgesetzt**, sodass die Präsentation immer gleich aussieht –
 ein Besucher kann frei bearbeiten, und beim nächsten Zurücksetzen kehrt alles zum
@@ -41,7 +42,7 @@ BEEHIVE_DEMO_EMAIL=demo@app.openbeehive.org
 BEEHIVE_DEMO_PASSWORD=demo
 ```
 
-Starten Sie den Server neu. Sie sehen eine Log-Zeile, die bestätigt, dass die Demo installiert
+Starte den Server neu. Du siehst eine Log-Zeile, die bestätigt, dass die Demo installiert
 wurde, und das Demo-Konto kann sich sofort anmelden. Da der Demo-Modus die
 Passwort-Anmeldung impliziert, braucht die Instanz auch ihren eigenen Admin
 (`BEEHIVE_ADMIN_EMAIL` und `BEEHIVE_ADMIN_PASSWORD`, siehe
@@ -67,14 +68,14 @@ Demo-Button bekommen.
 - Echte Benutzer auf derselben Instanz sind nicht betroffen – sie haben ihre eigenen Mandanten.
 
 :::caution
-Das Demo-Konto ist ein echtes, anmeldbares Konto. Wählen Sie auf einer öffentlichen Instanz ein
-Demo-Passwort, das Sie bedenkenlos teilen können, und verwenden Sie es nirgendwo sonst. Lassen
-Sie `BEEHIVE_DEMO=false` auf privaten Instanzen, die keine Präsentation benötigen.
+Das Demo-Konto ist ein echtes, anmeldbares Konto. Wähle auf einer öffentlichen Instanz ein
+Demo-Passwort, das du bedenkenlos teilen kannst, und verwende es nirgendwo sonst. Lass
+`BEEHIVE_DEMO=false` auf privaten Instanzen, die keine Präsentation benötigen.
 :::
 
 ## Deaktivierung
 
-Setzen Sie `BEEHIVE_DEMO=false` (oder entfernen Sie die Variable) und starten Sie neu. Neue
+Setze `BEEHIVE_DEMO=false` (oder entferne die Variable) und starte neu. Neue
 Anmeldungen am Demo-Konto funktionieren dann nicht mehr; vorhandene Demo-Daten bleiben bestehen,
-bis Sie sie entfernen. Das Demo-Konto und der Demo-Mandant heißen intern `demo-user` /
-`demo-tenant`, falls Sie sie aus der Datenbank löschen möchten.
+bis du sie entfernst. Das Demo-Konto und der Demo-Mandant heißen intern `demo-user` /
+`demo-tenant`, falls du sie aus der Datenbank löschen möchtest.

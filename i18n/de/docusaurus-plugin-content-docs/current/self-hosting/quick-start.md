@@ -5,43 +5,43 @@ title: "Schnelleinstieg"
 
 # Schnelleinstieg
 
-Dies ist der schnellste Weg von null zu einer laufenden Openbeehive-Instanz, die du im Browser öffnen kannst. Wähle eine von zwei Routen:
+Zwei Wege zu einer laufenden Openbeehive-Instanz, die du im Browser öffnen kannst:
 
-- **Variante A — Einzelne Binärdatei.** Baue eine eigenständige Binärdatei, die SQLite und das lokale Dateisystem nutzt. Kein Docker, kein Datenbankserver, kein Objektspeicher. Ideal für einen Heimserver, einen Raspberry Pi oder einen kleinen VPS.
-- **Variante B — Docker.** Lade unser veröffentlichtes Image herunter und starte es mit einem einzigen Befehl.
+- **Variante A, einzelne Binärdatei.** Baue eine eigenständige ausführbare Datei, die SQLite und das lokale Dateisystem nutzt. Kein Docker, kein Datenbankserver, kein Objektspeicher. Gut für einen Heimserver, einen Raspberry Pi oder einen kleinen VPS.
+- **Variante B, Docker.** Starte das veröffentlichte Image mit einem Befehl.
 
-Beide Routen verwenden das Bereitstellungsprofil **selfhost**, das standardmäßig eine eingebettete SQLite-Datenbank und Blob-Speicher im Dateisystem nutzt. Du kannst später auf PostgreSQL und MinIO/S3 umstellen — siehe [Konfiguration](/self-hosting/configuration).
+Beide verwenden das Bereitstellungsprofil **selfhost**, das standardmäßig eine eingebettete SQLite-Datenbank und Blob-Speicher im Dateisystem nutzt. Du kannst später auf PostgreSQL und MinIO/S3 umstellen; siehe [Konfiguration](/self-hosting/configuration).
 
 :::tip Einzelnutzer? Keine Anmeldung nötig
-Wenn du die einzige Person bist, die deine Instanz nutzt, kannst du sie **ganz ohne Authentifizierung** betreiben. Lass einfach `BEEHIVE_OIDC_PROVIDERS` leer und behalte `BEEHIVE_WEBAUTHN_ENABLED=false` bei (beides sind die Standardwerte). Die App öffnet direkt deine Aufzeichnungen. Um später eine Anmeldung hinzuzufügen, siehe [Authentifizierung](/self-hosting/authentication).
+Im selfhost-Profil ist standardmäßig keine Anmeldemethode aktiviert: `BEEHIVE_PASSWORD_AUTH` ist aus, `BEEHIVE_OIDC_PROVIDERS` ist leer und `BEEHIVE_WEBAUTHN_ENABLED=false`. Die App öffnet direkt deine Aufzeichnungen. Um später eine Anmeldung hinzuzufügen, siehe [Authentifizierung](/self-hosting/authentication).
 :::
 
 ## Die kleinstmögliche funktionierende Konfiguration
 
-Welche Route du auch wählst, für den Einstieg sind wirklich nur zwei Einstellungen wichtig:
+Welche Route du auch wählst, für den Einstieg sind zwei Einstellungen wichtig:
 
 ```bash
 BEEHIVE_DEPLOYMENT_PROFILE=selfhost
 BEEHIVE_PUBLIC_BASE_URL=http://localhost:8080
 ```
 
-`BEEHIVE_PUBLIC_BASE_URL` ist die Adresse, über die Personen (und QR-Code-Deeplinks) die App erreichen. Zum lokalen Testen ist `http://localhost:8080` in Ordnung. Für eine echte Bereitstellung setze sie auf deine öffentliche URL, zum Beispiel `https://bees.example.com`.
+`BEEHIVE_PUBLIC_BASE_URL` ist die Adresse, die der Server in die von ihm erzeugten Links einsetzt (OIDC-Redirects, Einladungs- und Verifizierungslinks). Zum lokalen Testen ist `http://localhost:8080` in Ordnung. Für eine echte Bereitstellung setze sie auf deine öffentliche URL, zum Beispiel `https://bees.example.com`.
 
-Alles andere hat sinnvolle Standardwerte für das Self-Hosting. Die vollständige Liste findest du unter [Konfiguration](/self-hosting/configuration).
+Alles andere hat Standardwerte für das Self-Hosting. Die vollständige Liste findest du unter [Konfiguration](/self-hosting/configuration).
 
-## Variante A — Einzelne Binärdatei (kein Docker)
+## Variante A: einzelne Binärdatei (kein Docker)
 
 ### Voraussetzungen
 
 - Go 1.25 oder neuer
-- Node 22 oder neuer
+- Node 24 oder neuer
 - [buf](https://buf.build/docs/installation)
 
 ### Bauen und ausführen
 
 ```bash
 git clone https://github.com/johnnycube/openbeehive-app.git
-cd openbeehive
+cd openbeehive-app
 
 # Generate the Connect-RPC code, then build the server
 make proto
@@ -49,21 +49,21 @@ make build
 
 # Configure
 cp .env.example .env
-# Edit .env: set BEEHIVE_DEPLOYMENT_PROFILE=selfhost and BEEHIVE_PUBLIC_BASE_URL
+# Edit .env: BEEHIVE_DEPLOYMENT_PROFILE=selfhost and BEEHIVE_PUBLIC_BASE_URL
 
 # Run
 ./server/bin/openbeehive
 ```
 
-Standardmäßig lauscht die Binärdatei auf `:8080` und liefert die Web-App selbst aus (`BEEHIVE_SERVE_WEB=true`), sodass die API und die PWA vom selben Ursprung kommen. Öffne die Adresse aus `BEEHIVE_PUBLIC_BASE_URL` und du bist drin.
+Standardmäßig lauscht die Binärdatei auf `:8080` und liefert die Web-App selbst aus (`BEEHIVE_SERVE_WEB=true`), sodass die API und die PWA vom selben Ursprung kommen. Öffne die Adresse aus `BEEHIVE_PUBLIC_BASE_URL`.
 
 :::note Wo deine Daten liegen
-Im selfhost-Modus landen deine Aufzeichnungen in einer lokalen SQLite-Datei und hochgeladene Fotos in einem Blob-Verzeichnis (standardmäßig `./data/blobs`). Sichere diese und du hast alles gesichert — siehe [Backups](/self-hosting/backups).
+Im selfhost-Modus landen deine Aufzeichnungen in einer SQLite-Datei (standardmäßig `openbeehive.db` im Arbeitsverzeichnis) und hochgeladene Fotos in einem Blob-Verzeichnis (standardmäßig `./data/blobs`). Sichere beides und du hast alles gesichert; siehe [Backups](/self-hosting/backups).
 :::
 
-## Variante B — Docker
+## Variante B: Docker
 
-Wenn du Docker installiert hast, ist dies der schnellste Weg überhaupt. Das veröffentlichte Image ist `ghcr.io/johnnycube/openbeehive-app:latest`.
+Das veröffentlichte Image ist `ghcr.io/johnnycube/openbeehive-app:latest`.
 
 ```bash
 docker run -d \
@@ -71,38 +71,31 @@ docker run -d \
   -p 8080:8080 \
   -e BEEHIVE_DEPLOYMENT_PROFILE=selfhost \
   -e BEEHIVE_PUBLIC_BASE_URL=http://localhost:8080 \
+  -e 'BEEHIVE_DATABASE_DSN=file:/data/openbeehive.db?_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)' \
+  -e BEEHIVE_BLOB_DIR=/data/blobs \
   -v openbeehive-data:/data \
   ghcr.io/johnnycube/openbeehive-app:latest
 ```
 
-Das Volume `-v openbeehive-data:/data` hält deine SQLite-Datenbank und Blobs außerhalb des Containers, sodass sie Upgrades und Neustarts überstehen. Sobald es läuft, öffne `http://localhost:8080`.
+Die Zeilen `BEEHIVE_DATABASE_DSN` und `BEEHIVE_BLOB_DIR` sind es, die deine Daten auf das Volume legen. Ohne sie verwendet der Container seine Standardwerte, `openbeehive.db` und `./data/blobs` relativ zum Wurzelverzeichnis des Containers, die außerhalb des Volumes liegen und nach `docker rm` weg sind. Mit ihnen hält das Volume `openbeehive-data` die Datenbank und die Blobs, und sie überstehen Neustarts und Upgrades. Sobald es läuft, öffne `http://localhost:8080`.
 
-So stoppst oder entfernst du es:
+So stoppst oder entfernst du den Container (das Volume bleibt):
 
 ```bash
 docker stop openbeehive
 docker rm openbeehive
 ```
 
+Wenn du die E-Mail-/Passwort-Anmeldung einschaltest (`BEEHIVE_PASSWORD_AUTH=true`), startet der Server erst, wenn auch `BEEHIVE_ADMIN_EMAIL` und `BEEHIVE_ADMIN_PASSWORD` gesetzt sind. Siehe [Authentifizierung](/self-hosting/authentication).
+
 :::tip Lieber Cloud-Stack?
-Die obigen Befehle starten das schlanke selfhost-Profil. Wenn du das vollständige **cloud**-Profil (PostgreSQL + MinIO) möchtest, liefert das Repository eine Compose-Datei mit — führe `docker compose up -d` aus. Details findest du unter [Docker](/self-hosting/docker).
+Der obige Befehl startet das schlanke selfhost-Profil. Für das **cloud**-Profil (PostgreSQL + MinIO) liefert das Repository Compose-Dateien mit; siehe [Docker](/self-hosting/docker).
 :::
 
 ## Erste Schritte nach der Installation
 
-Du hast nun eine funktionierende Instanz. Von hier aus:
+1. Öffne die App unter deiner `BEEHIVE_PUBLIC_BASE_URL` und lege deinen ersten Standort an.
+2. Füge eine Beute hinzu, bearbeite sie, um ihren Typ zu setzen, und erfasse eine Durchsicht.
+3. Drucke ein QR-Etikett für die Beute, damit du im Feld direkt dorthin scannen kannst.
 
-1. Öffne die App unter deiner `BEEHIVE_PUBLIC_BASE_URL` und lege deinen ersten Bienenstand an.
-2. Füge einen Bienenstock hinzu, wähle seinen Typ und erfasse eine Durchsicht.
-3. Drucke optional ein QR-Etikett für den Bienenstock, damit du im Feld direkt dorthin scannen kannst.
-
-Für eine Tour durch die App selbst gehe zu [Die App verwenden](/category/using-the-app). Um deine Instanz produktionsreif zu machen — HTTPS, eine echte Domain, Authentifizierung und Backups — geht es weiter mit:
-
-- [Konfiguration](/self-hosting/configuration) — jede Umgebungsvariable erklärt
-- [Reverse Proxy](/self-hosting/reverse-proxy) — TLS und eine Domain davorschalten
-- [Authentifizierung](/self-hosting/authentication) — OIDC-Anmeldung oder Passkeys hinzufügen
-- [Backups](/self-hosting/backups) — deine Aufzeichnungen schützen
-
-:::caution In der Produktion HTTPS verwenden
-`http://localhost` eignet sich nur zum lokalen Testen. Die App ohne TLS im Internet bereitzustellen, gefährdet deine Daten und beeinträchtigt Funktionen, die einen sicheren Kontext erfordern. Setze `BEEHIVE_PUBLIC_BASE_URL` auf eine `https://`-Adresse und beende TLS an einem Reverse Proxy, bevor du live gehst.
-:::
+Bevor du die Instanz im Internet erreichbar machst, setze einen TLS-terminierenden [Reverse Proxy](/self-hosting/reverse-proxy) davor und setze `BEEHIVE_PUBLIC_BASE_URL` auf die `https://`-Adresse. Richte dann [Backups](/self-hosting/backups) ein.

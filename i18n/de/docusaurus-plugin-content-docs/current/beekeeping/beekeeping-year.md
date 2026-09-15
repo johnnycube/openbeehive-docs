@@ -37,8 +37,8 @@ Was zu tun ist:
 - Wende deine gewählte Schwarmverhinderungsmethode an, wenn Zellen auftauchen (siehe [Schwärmen](/beekeeping/swarming)).
 - Erwäge, neue Königinnen heranzuziehen oder aus starkem Stock Vermehrung zu betreiben (siehe [Königinnenzucht](/beekeeping/queen-rearing)).
 
-:::tip Nutze eine wöchentliche Aufgabe, um im Rhythmus zu bleiben
-Der Sieben-Tage-Durchsichtszyklus ist über mehrere Beuten hinweg leicht aus dem Blick zu verlieren. Erstelle eine wiederkehrende Durchsichtsaufgabe pro Bienenstand, damit der nächste Besuch immer auf deiner Liste steht. Siehe [Aufgaben](/using-the-app/tasks).
+:::tip Nutze Aufgaben, um im Rhythmus zu bleiben
+Der Sieben-Tage-Zyklus ist über mehrere Beuten hinweg leicht aus dem Blick zu verlieren. Lege eine Aufgabe mit Fälligkeitsdatum für den nächsten Besuch an, und wenn du sie abhakst, lege die nächste an. Siehe [Aufgaben](/using-the-app/tasks).
 :::
 
 ## Sommer: die Honigtracht

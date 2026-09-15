@@ -5,7 +5,7 @@ title: "Konfiguration"
 
 # Konfiguration
 
-Openbeehive wird vollständig über Umgebungsvariablen konfiguriert. Diese Seite ist die vollständige Referenz, gruppiert genau so, wie sie in `.env.example` erscheinen.
+Openbeehive wird vollständig über Umgebungsvariablen konfiguriert. Diese Seite ist die vollständige Referenz.
 
 Du kannst diese Variablen in deiner Shell, in einer `.env`-Datei neben der Binärdatei, in deiner `docker compose`-Datei oder über den Secrets-Manager deiner Hosting-Plattform setzen. Der Server liest sie einmal beim Start, daher werden Änderungen erst nach einem Neustart wirksam.
 
@@ -39,15 +39,15 @@ Die beiden Profile werden ausführlich auf ihren eigenen Seiten dokumentiert: [E
 | Variable          | Standard                 | Beschreibung                                                                 |
 | ----------------- | ------------------------ | --------------------------------------------------------------------------- |
 | `BEEHIVE_ADDR`            | `:8080`                  | Adresse und Port, auf dem der Server lauscht. Verwende `127.0.0.1:8080`, um hinter einem Reverse Proxy nur an localhost zu binden. |
-| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | Die öffentliche URL, unter der Benutzer die App erreichen. Wird für QR-Deeplinks, OIDC-Weiterleitungen und absolute Links verwendet. Setze dies in der Produktion auf deine echte Domain. |
+| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | Die öffentliche URL, unter der Benutzer die App erreichen. Wird für OIDC-Weiterleitungen, Einladungs- und Bestätigungslinks sowie Passkey-Standardwerte verwendet. Setze dies in der Produktion auf deine echte Domain. |
 | `BEEHIVE_HTTP_READ_HEADER_TIMEOUT` | `10s` | Zeit zum Lesen der Header einer Anfrage. |
-| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Lesezeitlimit für die gesamte Anfrage; `0` bedeutet keines, was das streamende Sync-Abonnement braucht. |
-| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Schreibzeitlimit für Antworten; `0` bedeutet keines, aus demselben Grund. |
+| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Lesezeitlimit für die gesamte Anfrage; `0` bedeutet keines. |
+| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Schreibzeitlimit für Antworten; `0` bedeutet keines. |
 | `BEEHIVE_HTTP_IDLE_TIMEOUT` | `120s` | Wie lange eine ungenutzte Keep-Alive-Verbindung offen bleibt. |
 | `BEEHIVE_HTTP_SHUTDOWN_TIMEOUT` | `15s` | Gnadenfrist für laufende Anfragen beim Herunterfahren. |
 
 :::caution
-`BEEHIVE_PUBLIC_BASE_URL` muss mit der Adresse übereinstimmen, die Benutzer tatsächlich aufrufen. Ist sie falsch, zeigen QR-Etiketten, Login-Weiterleitungen und geteilte Links an den falschen Ort.
+`BEEHIVE_PUBLIC_BASE_URL` muss mit der Adresse übereinstimmen, die Benutzer tatsächlich aufrufen. Ist sie falsch, zeigen Login-Weiterleitungen und Einladungslinks an den falschen Ort.
 :::
 
 ## Eingebettete Web-App
@@ -144,7 +144,7 @@ die sich registriert. Siehe [Authentifizierung](/self-hosting/authentication).
 | `BEEHIVE_PASSWORD_AUTH` | an für `cloud`, aus für `selfhost` | E-Mail-/Passwort-Registrierung und -Anmeldung aktivieren. Wird auch durch `BEEHIVE_DEMO=true` impliziert. |
 | `BEEHIVE_ADMIN_EMAIL` | (leer) | E-Mail des Instanz-Admins. **Erforderlich, sobald die Passwort-Anmeldung aktiv ist.** Das Konto wird bei jedem Start sichergestellt: angelegt, falls es fehlt, und seine Rolle auf Admin gesetzt. Eine Registrierung vergibt nie die Admin-Rolle. |
 | `BEEHIVE_ADMIN_PASSWORD` | (leer) | Passwort des Instanz-Admins, mindestens 8 Zeichen. Bei jedem Start maßgeblich: Das gespeicherte Passwort wird auf diesen Wert zurückgesetzt – das dient zugleich als Passwort-Wiederherstellung. |
-| `BEEHIVE_REGISTRATION` | `true` | Offene Selbstregistrierung. Auf `false` setzen für eine Instanz nur auf Einladung: Abgesehen vom Admin der Ersteinrichtung können Konten nur über Einladungslinks erstellt werden, und der Anmeldebildschirm zeigt einen entsprechenden Hinweis. |
+| `BEEHIVE_REGISTRATION` | `true` | Offene Selbstregistrierung. Auf `false` setzen für eine Instanz nur auf Einladung: Abgesehen vom konfigurierten Admin können Konten nur über Einladungslinks erstellt werden, und der Anmeldebildschirm zeigt einen entsprechenden Hinweis. |
 | `BEEHIVE_EMAIL_VERIFICATION` | `false` | E-Mail-Bestätigung verlangen, bevor sich ein neues Konto anmelden kann. |
 | `BEEHIVE_SMTP_HOST` | (leer) | SMTP-Server für Bestätigungs-/Einladungs-E-Mails. Wenn leer, werden Links stattdessen ins Log geschrieben. |
 | `BEEHIVE_SMTP_PORT` | `587` | SMTP-Port. |
@@ -203,7 +203,7 @@ BEEHIVE_OIDC_KEYCLOAK_CLIENT_SECRET=...
 ```
 
 :::tip Einzelbenutzer, keine Anmeldung
-Für eine persönliche selbst gehostete Instanz kannst du die Anmeldung komplett überspringen. Lasse `BEEHIVE_OIDC_PROVIDERS` leer **und** setze `BEEHIVE_WEBAUTHN_ENABLED=false`. Die App läuft dann im Einzelbenutzermodus ohne Anmeldeschritt.
+Für eine persönliche selbst gehostete Instanz kannst du die Anmeldung komplett überspringen: Lass `BEEHIVE_PASSWORD_AUTH` aus (der selfhost-Standard), `BEEHIVE_OIDC_PROVIDERS` leer und `BEEHIVE_WEBAUTHN_ENABLED=false`. Die App läuft dann im Einzelbenutzermodus ohne Anmeldeschritt.
 :::
 
 Für Anleitungen zur Anbietereinrichtung, Weiterleitungs-URLs und Sicherheitshinweise siehe [Authentifizierung](/self-hosting/authentication).

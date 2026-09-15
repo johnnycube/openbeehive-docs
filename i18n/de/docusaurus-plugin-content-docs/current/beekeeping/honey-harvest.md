@@ -129,14 +129,10 @@ die Säuglingsbotulismus verursachen. Dieser Warnhinweis ist in vielen Ländern 
 Protokolliere jede Charge als **Ernte**, damit du jedes Los bis zu seinem Bienenstand,
 seiner Beute und seinem Datum zurückverfolgen kannst — genau die Art von Rückverfolgbarkeit, die deine Etiketten versprechen.
 
-Erfasse für jede Ernte Details wie die Quellbeute oder den Bienenstand, das Datum,
-die Menge (Gewicht oder Anzahl der Gläser), die Honigsorte und deine Losnummer. Füge
-Notizen zu Wassergehalt, Geschmack oder Stand hinzu und hänge bei Bedarf ein Foto an.
-
-Da Openbeehive offline-first ist, kannst du Ernten direkt am Stock oder
-im Schleuderraum ohne Empfang erfassen — alles synchronisiert sich später. Die Losnummer, die du
-hier speicherst, ist dieselbe, die du auf das Glas druckst, und schließt den Kreis von der Wabe ins
-Regal.
+Erfasse für jede Ernte das Datum, die Menge in Kilogramm, die Sorte, den
+Wassergehalt, deine Chargennummer und das Mindesthaltbarkeitsdatum sowie eine Notiz
+zu Geschmack oder Stand. Die Chargennummer, die du hier speicherst, ist diejenige, die
+du auf das Glas druckst, und schließt den Kreis von der Wabe ins Regal.
 
 Siehe [Ernten in der App](/using-the-app/harvests), wie du deine Erntedatensätze eingibst und verwaltest,
 und die umfassendere [Imkerei-Anleitung](/category/beekeeping-basics) für die

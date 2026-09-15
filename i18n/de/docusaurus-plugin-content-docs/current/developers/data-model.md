@@ -5,242 +5,220 @@ title: "Datenmodell"
 
 # Datenmodell
 
-Diese Seite beschreibt die zentralen Entitäten, die Openbeehive speichert, wie
-sie zueinander in Beziehung stehen und wie **Scopes** entscheiden, was für wen
-synchronisiert wird. Sie ist aus der Offline-First-Perspektive geschrieben:
-dieselbe Struktur lebt in der SQLite-WASM-Datenbank des Geräts und in der
-austauschbaren Datenbank des Servers, und das [Sync-Protokoll](/developers/sync-protocol)
-hält sie im Gleichschritt.
+Die Tabellen unten stammen aus den Server-Migrationen
+(`server/internal/storage/sql/migrations/`) und dem Spiegelschema des Clients
+(`app/src/lib/local/schema.ts`). Die Spaltennamen sind auf beiden Seiten
+identisch und sind die Schlüssel in den Sync-Payloads. Enum-Spalten speichern
+die Proto-Nummer; das Anzeigelabel ist das, was die App zeigt
+(`app/src/lib/i18n/locales/en.json`).
 
-Wenn Sie sich für die Mechanik der Änderungsverfolgung interessieren
-(HLC-Zeitstempel, Last-Writer-Wins, OR-Sets, Append-only-Events), lesen Sie
-zuerst [Historie und Events](/developers/history-and-events) — diese Seite
-konzentriert sich auf die Entitäten selbst.
+Jede synchronisierte Tabelle trägt drei Verwaltungsspalten, die unten nicht
+wiederholt werden: `organization_id` (Mandant), `field_hlc` (JSON-Feld-Uhr,
+siehe [Sync-Protokoll](/developers/sync-protocol)) und `deleted`
+(Soft-Delete-Flag). Ids sind UUIDs, die auf dem Gerät erzeugt werden oder,
+bei Zeilen, die über die [API](/using-the-api/overview) angelegt werden, vom
+Server. Zeitstempel werden auf dem Client als ISO-8601-Strings und auf dem
+Server als `TIMESTAMP` gespeichert.
 
-## Die Hierarchie
-
-An der Spitze steht der **Bienenstand** (Apiary) (ein Standort oder Platz). Jeder
-Bienenstand enthält **Beuten** (Hives); jede Beute hat eine aktuelle **Königin**
-(Queen) und sammelt im Laufe der Zeit eine Folge von Datensätzen an.
-
-```text
-Apiary
- ├── Hive ──────── Queen (current; queens form a succession over time)
- │     ├── Inspection   (a visit: what you saw)
- │     ├── Task         (something to do, with a due date)
- │     ├── Event        (append-only fact: requeened, split, died, moved…)
- │     ├── Harvest      (honey/wax taken off)
- │     └── Treatment    (varroa or disease treatment applied)
- │
- └── Placement (hive ↔ apiary, time-bounded — where a hive lived, and when)
-
-ApiaryShare (apiary ↔ user — grants another beekeeper access via a scope)
-```
-
-Eine Beute gehört zu einem Zeitpunkt zu genau einem Bienenstand, aber
-**Placement** erfasst die vollständige Historie, wo eine Beute gestanden hat, so
-dass eine Beute zwischen Ständen wandern kann, ohne ihre Datensätze zu verlieren.
-
-## Entitäten und Schlüsselfelder
-
-Jede Entität teilt sich eine gemeinsame Hülle, die für die Synchronisation
-verwendet wird: eine stabile `id` (eine offline erzeugte UUID), eine `scope_id`
-(siehe **Scopes**), HLC-Verwaltungsspalten und ein Soft-Delete-Flag. Die unten
-aufgeführten Felder sind die fachlich bedeutsamen.
-
-### Apiary
-
-Der Container und die Einheit der Freigabe.
-
-| Feld | Hinweise |
-|---|---|
-| `id` | UUID |
-| `name` | z. B. "Hausstand" |
-| `location` | Freitext oder Breiten-/Längengrad |
-| `notes` | Freitext |
-| `scope_id` | entspricht der eigenen `id` des Bienenstands (siehe unten) |
-
-### Hive
-
-Die Behausung eines Volkes innerhalb eines Bienenstands.
-
-| Feld | Hinweise |
-|---|---|
-| `id` | UUID; auch im [Beuten-QR-Etikett](/using-the-app/qr-labels) kodiert |
-| `apiary_id` | aktueller Bienenstand (das aktive Placement) |
-| `name` / `short_code` | menschenlesbares Label und der auf dem QR aufgedruckte Kurzcode |
-| `type` | eines von Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar, Other — siehe [Beutentypen](/knowledge-base/hive-types) |
-| `status` | z. B. aktiv, eingegangen, verkauft |
-| `notes` | Freitext |
-| `scope_id` | die Bienenstand-id |
-
-### Queen
-
-Die regierende Königin einer Beute. Königinnen bilden eine **Abfolge**: wird ein
-Volk umgeweiselt, wird die vorherige Königin abgeschlossen und ein neuer
-Datensatz eröffnet, so dass Sie die vollständige Abstammung behalten.
-
-| Feld | Hinweise |
-|---|---|
-| `id` | UUID |
-| `hive_id` | die Beute, die sie anführt |
-| `year` | Einweiselungs-/Geburtsjahr |
-| `marking_colour` | folgt dem [internationalen Farbschema](/knowledge-base/queen-marking-colours) (1/6 weiß, 2/7 gelb, 3/8 rot, 4/9 grün, 5/0 blau) |
-| `origin` | gezüchtet, gekauft, Schwarm, Nachschaffung… |
-| `clipped` | Flügel beschnitten (boolesch) |
-| `scope_id` | die Bienenstand-id ihrer Beute |
-
-### Inspection
-
-Ein datierter Besuch: die Momentaufnahme dessen, was Sie beobachtet haben.
-
-| Feld | Hinweise |
-|---|---|
-| `id`, `hive_id`, `date` | wer und wann |
-| `brood`, `stores`, `temperament` | typische Beobachtungen |
-| `queen_seen`, `eggs_seen`, `queen_cells` | Schnellprüfungen |
-| `varroa_count` | Milbenfall / Auswaschzahl, falls erhoben |
-| `temp_hive`, `temp_outside` | Temperatur (°C) im Inneren der Beute und außen |
-| `humidity_hive`, `humidity_outside` | relative Luftfeuchtigkeit (%) im Inneren der Beute und außen |
-| `notes` | Freitext |
-| `scope_id` | die Bienenstand-id |
-
-Die Klimafelder sind einfache optionale Skalare, sie synchronisieren also pro
-Feld wie jede andere Spalte und können von Hand oder durch einen automatisierten
-Sensor befüllt werden — siehe
-[Automatisierte Tracker](/using-the-api/automated-trackers).
-
-### Task
-
-Etwas, das für eine Beute oder einen Bienenstand zu erledigen ist, mit einem
-Fälligkeitsdatum und einem Erledigt-Status.
-
-| Feld | Hinweise |
-|---|---|
-| `id` | UUID |
-| `hive_id` / `apiary_id` | der Gegenstand (eine Aufgabe kann auf beiden Ebenen ansetzen) |
-| `title`, `due_date`, `done` | die Grundlagen |
-| `scope_id` | die Bienenstand-id |
-
-### Event
-
-Eine **Append-only**-Tatsache über eine Beute — umgeweiselt, geteilt,
-geschwärmt, eingegangen, gewandert, gefüttert. Events werden nie bearbeitet oder
-zusammengeführt; sie sammeln sich nur an, weshalb sie bei der Synchronisation nie
-in Konflikt geraten. Sie sind das Rückgrat der Beuten-Zeitleiste.
-
-| Feld | Hinweise |
-|---|---|
-| `id`, `hive_id`, `occurred_at` | wann es geschah |
-| `kind` | der Event-Typ |
-| `payload` | typspezifisches Detail (JSON) |
-| `scope_id` | die Bienenstand-id |
-
-Siehe [Historie und Events](/developers/history-and-events) für den vollständigen
-Event-Katalog und wie die Zeitleiste zusammengesetzt wird.
-
-### Harvest
-
-Honig (oder Wachs), der einer Beute entnommen wurde.
-
-| Feld | Hinweise |
-|---|---|
-| `id`, `hive_id`, `date` | die Entnahme |
-| `product` | Honig, Wachs, Propolis… |
-| `quantity`, `unit` | z. B. 12,5 kg |
-| `notes` | z. B. Tracht, Feuchtigkeit |
-| `scope_id` | die Bienenstand-id |
-
-### Treatment
-
-Eine Varroa- oder Krankheitsbehandlung, die an einer Beute durchgeführt wurde.
-
-| Feld | Hinweise |
-|---|---|
-| `id`, `hive_id`, `date` | Gegenstand und Anwendungsdatum |
-| `product`, `active_ingredient` | z. B. Oxuvar / Oxalsäure |
-| `dose`, `method` | z. B. 50 ml, Träufeln |
-| `batch_number` | Charge (oft gesetzlich vorgeschrieben) |
-| `withdrawal_until` | Datum, ab dem Honig wieder unbedenklich geerntet werden kann |
-| `reason` | z. B. Varroa |
-| `note` | Freitext |
-| `apiary_id`, `queen_id` | eingefrorener Kontext zum Anwendungszeitpunkt |
-| `scope_id` | die Bienenstand-id |
-
-:::note
-Behandlungs- und Dosierungsvorschriften unterscheiden sich je nach Land und
-Produktzulassung. Openbeehive erfasst, was Sie getan haben; es schreibt nichts
-vor. Befolgen Sie stets Ihre lokalen Zulassungen — siehe [Varroa](/beekeeping/varroa).
-:::
-
-### Placement
-
-Die zeitlich begrenzte Verbindung zwischen einer Beute und einem Bienenstand: wo
-eine Beute stand und wie lange. Ein neues Placement wird eröffnet, wenn eine
-Beute wandert; das vorherige wird geschlossen.
-
-| Feld | Hinweise |
-|---|---|
-| `id`, `hive_id`, `apiary_id` | die Verbindung |
-| `from` / `until` | Intervall; `until` ist null, solange aktuell |
-| `scope_id` | die Bienenstand-id |
-
-### ApiaryShare
-
-Gewährt einer anderen Imkerin oder einem anderen Imker Zugriff auf einen
-Bienenstand (und alles darunter).
-
-| Feld | Hinweise |
-|---|---|
-| `id`, `apiary_id` | was geteilt wird |
-| `user_id` | mit wem es geteilt wird |
-| `role` | z. B. Betrachter, Bearbeiter |
-
-## Scopes und Sync-Gating
-
-Die Freigabe geschieht auf **Bienenstand**-Ebene, und ein einziger Wert steuert
-sie: jeder Datensatz trägt eine `scope_id`.
-
-- Für bienenstandseigene Daten — Beuten, Königinnen, Inspektionen, Aufgaben,
-  Events, Ernten, Behandlungen, Placements und der Bienenstand selbst — ist die
-  `scope_id` die **id des Bienenstands**.
-- Für Daten, die einer einzelnen Nutzerin oder einem einzelnen Nutzer gehören und
-  nie geteilt werden (z. B. persönliche Einstellungen), nimmt die `scope_id` die
-  Form `user:<id>` an.
-
-Wenn zwei Geräte synchronisieren, tauschen sie nur die Scopes aus, zu denen die
-Nutzerin oder der Nutzer berechtigt ist. Der Server löst die Scope-Menge einer
-Nutzerin oder eines Nutzers wie folgt auf:
+## Hierarchie
 
 ```text
-scopes(user) = { "user:<their id>" }
-             ∪ { apiary.id  for each apiary they own }
-             ∪ { share.apiary_id  for each ApiaryShare granting them access }
+apiary
+ └── hive ── queen (one active, older ones kept with replaced_at set)
+       ├── inspection
+       ├── task        (task.hive_id and task.apiary_id are both optional)
+       ├── harvest
+       ├── treatment
+       ├── placement   (which apiary the hive lived in, and when)
+       └── event       (append-only history with frozen apiary/hive/queen)
 ```
 
-Das Hinzufügen eines `ApiaryShare` lässt daher einen ganzen Bienenstand — jede
-Beute und jeden Datensatz darunter — bei der nächsten Synchronisation auf den
-Geräten des Empfängers erscheinen; das Widerrufen stoppt das weitere Fließen von
-Änderungen. Da das Tor die Spalte `scope_id` ist, ist die Freigabe pro
-Bienenstand alles oder nichts und benötigt keine Berechtigungen pro Datensatz.
+Freigabe und Sync-Partitionierung nutzen `scope_id`: die eigene Id eines
+Standorts für den Standort und alles darunter. Nur `event` speichert
+`scope_id` als Spalte; bei den anderen Tabellen wird sie in der
+`Change`-Message mitgeführt.
 
-:::tip
-Eine Beuten-id allein gewährt nichts. Das Scannen eines
-[QR-Etiketts](/developers/qr-codes) öffnet die App an einer Beute nur dann, wenn
-der Scope dieser Beute tatsächlich auf Ihr Gerät synchronisiert wurde.
-:::
+## apiary
 
-## Warum es sauber zusammenführt
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | |
+| `name` | text | Pflichtfeld |
+| `address` | text | Freitext |
+| `lat`, `lng` | real | `0`, wenn nicht gesetzt |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
 
-Die obigen Strukturen sind so gewählt, dass die Synchronisation nie einen
-Menschen zum Auflösen eines Konflikts braucht:
+## hive
 
-- **Skalare Felder** (die Markierungsfarbe einer Königin, der Name einer Beute)
-  verwenden Last-Writer-Wins pro Feld, entschieden durch HLC-Zeitstempel.
-- **Listen-/Mengenfelder** verwenden Add-Wins-OR-Sets, so dass gleichzeitige
-  Hinzufügungen alle erhalten bleiben.
-- **Events** sind Append-only und unveränderlich, sie sammeln sich also einfach
-  an.
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | auch im [QR-Etikett](/developers/qr-codes) kodiert |
+| `apiary_id` | text | aktueller Standort |
+| `name` | text | |
+| `type` | int | `HiveType`, siehe unten |
+| `status` | int | `HiveStatus`, siehe unten; neue Beuten starten mit `1` |
+| `boxes` | int | Anzahl der Zargen |
+| `colony_origin` | text | z. B. "Schwarm 2024" |
+| `note` | text | |
+| `qr_code` | text | reserviert; der gedruckte Code wird von `shortCode()` in `app/src/lib/qr.ts` aus `id` abgeleitet |
+| `photo` | text | Data-URL oder Blob-Schlüssel |
+| `created_at`, `updated_at` | timestamp | |
 
-Für den vollständigen Algorithmus geht es weiter zum
-[Sync-Protokoll](/developers/sync-protocol).
+`HiveType`: 0 Unbestimmt, 1 Zander, 2 Dadant, 3 Deutsch Normal, 4 Langstroth,
+5 Warré, 6 Top-Bar, 99 Sonstige.
+
+`HiveStatus`: 0 Unbestimmt, 1 Aktiv, 2 Ableger, 3 Weisellos, 4 Verloren,
+5 Aufgelöst.
+
+## queen
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | |
+| `hive_id` | text | |
+| `year` | int | das Jahr der Königin; bestimmt die Standard-Markierungsfarbe |
+| `marking` | int | `MarkingColor`: 1 weiß (Jahre auf 1/6), 2 gelb (2/7), 3 rot (3/8), 4 grün (4/9), 5 blau (5/0); Vorgabe aus `year` |
+| `origin` | text | |
+| `breeder_number` | text | |
+| `introduced_at` | timestamp | Beginn der Regentschaft |
+| `replaced_at` | timestamp | Ende der Regentschaft, null solange sie regiert |
+| `active` | bool | true für die aktuelle Königin |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
+
+Ein Königinnenwechsel setzt `active = 0` und `replaced_at` auf der alten Zeile
+und fügt eine neue ein; alte Königinnen werden nie gelöscht.
+
+## inspection
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id`, `hive_id` | text | |
+| `date` | timestamp | |
+| `weather` | text | |
+| `queen_seen`, `eggs_seen` | bool | |
+| `temperament` | int | 1 Sehr sanft, 2 Sanft, 3 Normal, 4 Nervös, 5 Aggressiv |
+| `calmness` | int | 1 Läuft ab, 2 Unruhig, 3 Ruhig, 4 Sehr ruhig |
+| `frames` | int | besetzte Waben |
+| `brood_frames` | int | |
+| `stores` | int | 1 Gut, 2 Mittel, 3 Wenig, 4 Keines |
+| `queen_cells` | int | gezählte Schwarmzellen |
+| `youngest_larva` | int | Alter in Tagen der jüngsten gesehenen Larve |
+| `covered_larva` | bool | verdeckelte Brut gesehen |
+| `varroa` | text | |
+| `honey_kg`, `fed_kg`, `weight_kg` | real | |
+| `frames_added`, `frames_removed` | int | |
+| `drone_frame_cut`, `super_added` | bool | |
+| `temp_hive`, `temp_outside` | real | °C, null wenn in der App nicht gemessen; `CreateInspection` speichert `0` für weggelassene Felder |
+| `humidity_hive`, `humidity_outside` | real | %, gleiche Regel wie bei den Temperaturen |
+| `note` | text | |
+| `photo_keys` | text | OR-Set-JSON, die einzige Mengenspalte |
+| `created_at` | timestamp | |
+
+## task
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | |
+| `title` | text | |
+| `hive_id`, `apiary_id` | text | optional |
+| `due_at` | timestamp | |
+| `done` | bool | |
+| `priority` | int | `TaskPriority`: 1 Niedrig, 2 Normal, 3 Hoch; die Server-Spalte hat Vorgabe 2, die App schreibt 0 |
+| `note`, `recurrence`, `assigned_to` | text | im Schema vorhanden; das Aufgabenformular füllt nur `title` und `due_at` |
+| `created_at` | timestamp | |
+
+## placement
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id`, `hive_id`, `apiary_id` | text | |
+| `start_at` | timestamp | |
+| `end_at` | timestamp | null für das aktuelle Placement |
+
+Das Anlegen einer Beute eröffnet ein Placement; das Wandern schließt die offene
+Zeile zum Wanderzeitpunkt und eröffnet eine neue.
+
+Eine Aufgabe ohne `apiary_id` synchronisiert unter dem persönlichen Scope
+`user:<user id>` statt unter einer Standort-Id.
+
+## harvest
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | zum Erntezeitpunkt eingefroren |
+| `date` | timestamp | |
+| `variety` | text | |
+| `amount_kg` | real | |
+| `water_content` | real | % |
+| `batch_number` | text | |
+| `best_before` | timestamp | |
+| `note` | text | |
+
+## treatment
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | zum Behandlungszeitpunkt eingefroren |
+| `date` | timestamp | |
+| `product`, `active_ingredient` | text | |
+| `dose`, `method` | text | |
+| `batch_number` | text | |
+| `withdrawal_until` | timestamp | |
+| `reason` | text | Vorgabe `varroa` |
+| `note` | text | |
+
+## event
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | |
+| `scope_id` | text | Standort-Id |
+| `type` | int | `EventType`, siehe unten |
+| `date` | timestamp | |
+| `apiary_id`, `hive_id`, `queen_id` | text | zum Event-Zeitpunkt eingefroren |
+| `ref_entity`, `ref_id` | text | die Detailzeile, z. B. `harvest` / ihre Id |
+| `title` | text | |
+| `amount_kg` | real | aus der Ernte kopiert, damit Ertragsabfragen keinen Join brauchen |
+| `detail` | text | JSON |
+| `author_id` | text | |
+
+`EventType`: 1 Angelegt, 2 Königin eingesetzt, 3 Königin ersetzt, 4 Gewandert,
+5 Durchsicht, 6 Behandlung, 7 Ernte, 8 Status, 9 Aufgelöst. Die App schreibt
+die Typen 1 bis 7 (`app/src/lib/local/history.ts`). Siehe
+[Historie und Events](/developers/history-and-events).
+
+## Tabellen nur auf dem Server
+
+`organization`, `users`, `member`, `invite`, `user_passkey`, `api_key`,
+`apiary_share`, `change_log` und `seq_counter` existieren nur auf dem Server.
+`member.role` ist `owner` oder `member`; `users.role` ist `admin` oder `user`.
+`apiary_share` wird von der Sync-Scope-Prüfung gelesen, aber nichts in der App
+schreibt sie. Der Client ergänzt `outbox` und `sync_meta` für die Sync-Engine.
+
+### api_key
+
+Langlebige Schlüssel für Skripte und Integrationen (Migration
+`0014_api_keys.sql`, `server/internal/auth/apikey.go`). Nicht synchronisiert.
+
+| Spalte | Typ | Hinweise |
+| --- | --- | --- |
+| `id` | text | |
+| `user_id` | varchar(64) | Besitzer; indiziert |
+| `organization_id` | varchar(64) | der Mandant, in dem der Schlüssel handelt, beim Erstellen festgelegt |
+| `name` | text | Bezeichnung, die in den Einstellungen angezeigt wird |
+| `key_prefix` | text | die ersten 12 Zeichen des Klartexts, für die Anzeige |
+| `key_hash` | varchar(64) | hex-SHA-256 des Klartext-Tokens `obhk_...`, eindeutig; der Klartext wird nie gespeichert |
+| `scope` | text | `write` (Vorgabe) oder `read`; ein `read`-Schlüssel darf nur `Get*`, `List*`, `Pull` und `Subscribe` aufrufen |
+| `created_at` | timestamp | |
+| `expires_at` | timestamp | null für Schlüssel, die nie ablaufen; ein Schlüssel nach diesem Zeitpunkt wird abgelehnt |
+| `last_used_at` | timestamp | bei jeder erfolgreich geprüften Verwendung aktualisiert, bis dahin null |
+
+Ein Schlüssel wird geprüft, indem das Bearer-Token gehasht und `key_hash`
+nachgeschlagen wird; beim Entfernen wird die Zeile gelöscht, und ein
+Schlüssel, dessen Besitzer kein `member` von `organization_id` mehr ist oder
+dessen `expires_at` verstrichen ist, wird abgelehnt, ohne gelöscht zu
+werden.

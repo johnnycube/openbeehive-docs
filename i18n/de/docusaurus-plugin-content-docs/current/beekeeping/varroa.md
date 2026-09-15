@@ -151,13 +151,10 @@ Jede Überwachungszählung und jede Behandlung ist wert, erfasst zu werden, sowo
 Trends zu verfolgen als auch um die Aufzeichnungspflichten zu erfüllen, die in vielen
 Ländern für Imker gelten.
 
-In Openbeehive kannst du jede Anwendung als **Behandlung** zu einer Beute protokollieren:
-das verwendete Produkt, den Wirkstoff, die Dosis und das Start- und Enddatum. Mit der
-Zeit entsteht daraus eine klare Geschichte, sodass du sehen kannst, was du verwendet hast,
-wann und wie das Volk reagiert hat.
-
-Siehe [Behandlungen](/using-the-app/treatments), wie du diese Einträge hinzufügst und verwaltest. Da die App offline-first ist, kannst du eine Behandlung am
-Bienenstand ohne Empfang protokollieren, und sie synchronisiert sich später.
+In Openbeehive protokollierst du jede Anwendung als **Behandlung** zu einer Beute:
+Datum, Mittel, Wirkstoff, Methode, Dosis, Chargennummer, Grund und das Datum, bis zu
+dem die Wartezeit läuft. Mit der Zeit entsteht daraus eine klare Geschichte, was du
+wann verwendet hast. Siehe [Behandlungen](/using-the-app/treatments).
 
 :::note
 Das Führen genauer Behandlungsaufzeichnungen ist oft eine gesetzliche Pflicht, besonders

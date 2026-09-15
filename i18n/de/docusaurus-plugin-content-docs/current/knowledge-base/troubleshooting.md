@@ -7,22 +7,22 @@ title: "Fehlerbehebung"
 
 Die meisten Probleme mit Openbeehive fallen in eine Handvoll Kategorien: Synchronisierung, lokaler Speicher, die Kamera/der QR-Scanner oder die Anmeldung. Diese Seite geht jede davon durch, mit praktischen Prüfungen, die du selbst durchführen kannst, bevor du Hilfe suchst.
 
-Die gute Nachricht: Da Openbeehive offline-first ist, liegen deine Aufzeichnungen in einer lokalen Datenbank auf deinem Gerät. Fast nichts, was du hier tust, kann Daten verlieren, die bereits zum Server synchronisiert wurden.
+Deine Aufzeichnungen liegen in einer lokalen Datenbank auf deinem Gerät, sodass fast nichts hier Daten verlieren kann, die bereits zum Server synchronisiert wurden.
 
 ## Daten synchronisieren nicht
 
 Deine Änderungen werden sofort auf dem Gerät gespeichert. Die Synchronisierung mit dem Server geschieht still im Hintergrund, sodass eine Verzögerung normal und selten ein Grund zur Sorge ist. Wenn Änderungen, die du auf einem Gerät vorgenommen hast, auf einem anderen nicht erscheinen, arbeite diese Liste durch.
 
-**1. Prüfe, ob du online bist.** Die Synchronisierung läuft nur, wenn du eine Netzwerkverbindung hast. Sieh dir die Synchronisierungs-Statusanzeige in der App an. Wenn du im Feld ohne Empfang gearbeitet hast, sind deine Bearbeitungen sicher in der Warteschlange und werden gesendet, sobald du wieder verbunden bist.
+**1. Prüfe, ob du online bist.** Die Seitenleiste zeigt neben deinem Konto **Online** oder **Offline** an. Wenn du im Feld ohne Empfang gearbeitet hast, sind deine Bearbeitungen in der Warteschlange und werden gesendet, sobald du wieder verbunden bist.
 
-**2. Prüfe, ob du angemeldet bist.** Die Synchronisierung erfordert eine authentifizierte Sitzung. Wenn deine Sitzung abgelaufen ist, kannst du weiterhin lokal lesen und bearbeiten, aber nichts wird synchronisiert, bis du dich erneut anmeldest. Öffne das Kontomenü und bestätige, dass du angemeldet bist.
+**2. Prüfe, ob du angemeldet bist.** Die Synchronisierung erfordert eine Sitzung. Wenn sie abgelaufen ist, kannst du weiterhin lokal lesen und bearbeiten, aber nichts wird synchronisiert, bis du dich erneut anmeldest. **Einstellungen → Konto** zeigt, als wer du angemeldet bist.
 
-**3. Prüfe den Bienenstand-Scope.** Das Teilen in Openbeehive erfolgt auf Ebene des Bienenstands über **Scopes**. Wenn ein Bienenstock oder eine Durchsicht auf einem anderen Gerät oder bei einer anderen Person fehlt, bestätige, dass der betreffende Bienenstand mit diesem Konto geteilt ist. Aufzeichnungen in einem Bienenstand, auf den du keinen Zugriff hast, werden niemals erscheinen.
+**3. Prüfe den aktiven Mandanten.** Aufzeichnungen gehören zu einem Mandanten. Wenn ein Bienenstock auf einem anderen Gerät fehlt, öffne dort **Einstellungen → Mandanten** und stelle sicher, dass derselbe Mandant aktiv ist. Fehlt er bei einer anderen Person, ist sie kein Mitglied dieses Mandanten; ein Mandanten-Admin kann sie einladen.
 
 **4. Gib ihm einen Moment, dann öffne es erneut.** Die Hintergrundsynchronisierung läuft periodisch. Das Schließen und erneute Öffnen der App oder das Wechseln zu ihr aus dem Hintergrund stößt einen neuen Synchronisierungsversuch an.
 
 :::note
-Die Synchronisierung ist konzeptbedingt konfliktfrei. Openbeehive verwendet Hybrid Logical Clocks mit Last-Writer-Wins für einzelne Felder und Add-wins-Mengen für Listen, und nur anfügbare Events (Durchsichten, Behandlungen, Ernten) kollidieren nie. Du verlierst keine Arbeit, weil zwei Geräte gleichzeitig bearbeitet haben. Die jüngste Bearbeitung eines bestimmten Feldes gewinnt; beide Hinzufügungen zu einer Liste bleiben erhalten.
+Die Synchronisierung ist konzeptbedingt konfliktfrei. Die jüngste Bearbeitung eines Feldes gewinnt, Hinzufügungen (Fotos, Durchsichten, Ernten, Behandlungen) bleiben erhalten, und du verlierst keine Arbeit, weil zwei Geräte gleichzeitig bearbeitet haben.
 :::
 
 Wenn du selbst hostest und die Synchronisierung für alle fehlschlägt, liegt das Problem eher serverseitig. Siehe [Selbst-Hosting-Konfiguration](/self-hosting/configuration) und prüfe die Serverprotokolle.
@@ -99,8 +99,8 @@ Auf iPhone und iPad kann der App-interne Scanner eingeschränkt sein. Wenn das S
 
 - **Beim Anmeldebildschirm hängengeblieben.** Bestätige, dass du die richtige Adresse erreichst (die gehostete App ist unter app.openbeehive.org). Nach der Anmeldung bei deinem Anbieter solltest du automatisch zurückgeleitet werden; falls nicht, lade die Seite neu.
 - **Weiterleitung schlägt fehl oder „ungültige Weiterleitung“-Fehler (Selbst-Hosting).** Das bedeutet fast immer, dass die OIDC-Weiterleitungs-URL oder `BEEHIVE_PUBLIC_BASE_URL` falsch konfiguriert ist. Siehe [Authentifizierung und Konfiguration](/self-hosting/authentication).
-- **Passkey nicht angeboten.** WebAuthn/Passkeys müssen aktiviert sein, und du musst einen Passkey auf diesem Gerät registriert haben. Falls nicht verfügbar, melde dich stattdessen mit deinem üblichen Anbieter an.
-- **Einzelnutzer-Selbst-Hosting ohne Anmeldung.** Wenn du ohne OIDC-Anbieter und mit deaktiviertem WebAuthn betreibst, gibt es überhaupt keinen Anmeldeschritt. Wenn du unerwartet einen Anmeldebildschirm siehst, prüfe deine Serverkonfiguration.
+- **Passkey nicht angeboten.** Passkeys müssen auf dem Server aktiviert sein, und du musst unter Einstellungen → Passkeys einen hinzugefügt haben. Andernfalls melde dich mit einer anderen Methode an.
+- **Einzelnutzer-Selbst-Hosting ohne Anmeldung.** Mit ausgeschalteter Passwort-Anmeldung, ohne OIDC-Anbieter und mit deaktiviertem WebAuthn gibt es überhaupt keinen Anmeldeschritt. Wenn du unerwartet einen Anmeldebildschirm siehst, prüfe deine Serverkonfiguration.
 
 ## Einen guten Fehlerbericht einreichen
 
@@ -111,7 +111,7 @@ Wenn nichts davon hilft, eröffne bitte ein Issue unter [github.com/johnnycube/o
 | Was du getan hast | „Auf Speichern bei einer neuen Durchsicht getippt“ |
 | Was du erwartet hast | „Durchsicht erscheint in der Zeitleiste des Bienenstocks“ |
 | Was stattdessen geschah | „Ladekreis, dann verschwand der Eintrag“ |
-| App-Version | v0.1.0 (im Info-Bildschirm der App angezeigt) |
+| App-Version | Die Version, die du betreibst: bei einer selbst gehosteten Instanz der Image-Tag oder Git-Tag |
 | Plattform & Browser | iPhone 14, iOS 17, Safari |
 | Gehostet oder selbst gehostet | Selbst gehostet, `selfhost`-Profil, SQLite |
 | Online oder offline | „War im Feld offline, synchronisiere gerade“ |
@@ -121,4 +121,4 @@ Wenn nichts davon hilft, eröffne bitte ein Issue unter [github.com/johnnycube/o
 Bitte füge keine Geheimnisse ein. Schwärze Sitzungsgeheimnisse, OIDC-Client-Geheimnisse, Datenbankpasswörter und personenbezogene Daten, bevor du Protokolle oder Konfiguration teilst.
 :::
 
-Für Fragen zum Selbst-Hosting rund um Datenbanken, Speicher, Authentifizierung und Umgebungsvariablen sind der [Selbst-Hosting-Bereich](/category/self-hosting) und die [Konfigurationsreferenz](/self-hosting/configuration) die besten Ausgangspunkte. Siehe auch die [FAQ](/knowledge-base/faq).
+Für Fragen zum Selbst-Hosting beginne mit der [Konfigurationsreferenz](/self-hosting/configuration).

@@ -7,9 +7,9 @@ title: "Referenz der Beutentypen"
 
 Wenn du in Openbeehive einen Bienenstock anlegst, wählst du einen **Typ**. Dieser einzelne Wert hält das Beutensystem fest, das du betreibst, was dir hilft, Rähmchen, Honigräume und Ersatzteile in deinem Bienenstand kompatibel zu halten.
 
-Der Typ ist lediglich ein Etikett für deine eigenen Aufzeichnungen. Er ändert nichts daran, wie Durchsichten, Behandlungen oder Ernten funktionieren, also mach dir keine Sorgen, ihn „falsch“ zu wählen — du kannst ihn jederzeit in den Einstellungen des Bienenstocks ändern. Siehe [Bienenstöcke](/using-the-app/hives), um zu erfahren, wie du einen Bienenstock hinzufügst und bearbeitest.
+Der Typ ist lediglich ein Etikett für deine eigenen Aufzeichnungen. Er ändert nichts daran, wie Durchsichten, Behandlungen oder Ernten funktionieren, also mach dir keine Sorgen, ihn „falsch“ zu wählen: Du kannst ihn jederzeit ändern, indem du den Bienenstock bearbeitest. Siehe [Bienenstöcke](/using-the-app/hives), um zu erfahren, wie du einen Bienenstock hinzufügst und bearbeitest.
 
-Openbeehive bietet sieben Optionen: **Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar** und **Sonstige**.
+Openbeehive bietet sieben Optionen: **Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar** und **Sonstige**.
 
 ## Kurzvergleich
 
@@ -33,7 +33,7 @@ Ein paar praktische Hinweise zur Auswahl eines Werts:
 
 - **Richte dich nach deinen Rähmchen, nicht nach deinen Wünschen.** Wähle das System, dessen Rähmchen heute physisch in deine Zargen passen. Die Kompatibilität von Rähmchen und Honigräumen ist der Hauptgrund, weshalb dieses Feld von Bedeutung ist.
 - **Bleibe innerhalb eines Bienenstands konsistent.** Ein System pro Bienenstand zu betreiben macht es weitaus einfacher, Rähmchen zwischen Völkern zu tauschen, Ersatz-Honigräume zu teilen und deine Vorräte zu verwalten.
-- **Geerbte oder gemischte Ausrüstung?** Wenn ein Bienenstock keinem Standard entspricht, wähle **Sonstige** und vermerke die Einzelheiten in der Beschreibung des Bienenstocks.
+- **Geerbte oder gemischte Ausrüstung?** Wenn ein Bienenstock keinem Standard entspricht, wähle **Sonstige** und vermerke die Einzelheiten in einer Durchsichtsnotiz.
 
 ### Beuten mit senkrechten Rähmchen
 
@@ -57,10 +57,10 @@ Naturwabenbeuten können manche Arbeiten erschweren. Ohne Rähmchen ist die Wabe
 ## Häufig gefragt
 
 **Kann ich den Typ eines Bienenstocks später ändern?**
-Ja. Öffne den Bienenstock, bearbeite seine Einstellungen und wähle einen neuen Typ. Da Openbeehive offline-first ist, wird die Änderung sofort lokal gespeichert und im Hintergrund synchronisiert — siehe [Offline und Synchronisierung](/using-the-app/offline-and-sync).
+Ja. Öffne den Bienenstock, tippe auf **Beute bearbeiten** und wähle einen neuen Typ.
 
 **Mein System ist nicht aufgeführt. Was nun?**
-Wähle **Sonstige** und vermerke die Einzelheiten (Rähmchengröße, Anzahl der Zargen, Lieferant) in den Notizen des Bienenstocks, damit deine Aufzeichnungen klar bleiben.
+Wähle **Sonstige** und vermerke die Einzelheiten (Rähmchengröße, Anzahl der Zargen, Lieferant) in einer Durchsichtsnotiz, damit deine Aufzeichnungen klar bleiben.
 
 **Beeinflusst der Typ Behandlungen oder Ernten?**
 Nein. Er ist ein beschreibendes Etikett. Alle Durchsichten, Behandlungen, Aufgaben und Ernten funktionieren unabhängig vom Typ gleich.
