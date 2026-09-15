@@ -107,10 +107,3 @@ De nombreuses maladies et ravageurs se propagent entre colonies par le pillage, 
 :::tip Connaissez vos règles régionales
 Le statut sanitaire, les affections à déclaration obligatoire et les traitements autorisés varient tous selon le pays et parfois selon la région. Inscrivez-vous à votre dispositif national de santé apicole s'il en existe un, et apprenez à connaître votre association locale et votre inspecteur apicole avant d'en avoir besoin.
 :::
-
-## Voir aussi
-
-- [Varroa](/beekeeping/varroa) pour des consignes complètes de surveillance et de traitement
-- [Inspecter](/beekeeping/inspecting) pour savoir quoi chercher à chaque visite
-- [Glossaire](/knowledge-base/glossary) pour les termes employés ici
-- [FAQ](/knowledge-base/faq) et [Dépannage](/knowledge-base/troubleshooting)

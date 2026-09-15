@@ -7,22 +7,22 @@ title: "Dépannage"
 
 La plupart des problèmes avec Openbeehive entrent dans une poignée de catégories : la synchronisation, le stockage local, l'appareil photo / le scanner QR, ou la connexion. Cette page passe en revue chacune d'elles, avec des vérifications pratiques que vous pouvez effectuer vous-même avant de demander de l'aide.
 
-La bonne nouvelle : comme Openbeehive fonctionne hors ligne d'abord, vos archives résident dans une base de données locale sur votre appareil. Presque rien de ce que vous faites ici ne peut perdre des données déjà synchronisées sur le serveur.
+Vos archives résident dans une base de données locale sur votre appareil, si bien que presque rien de ce que vous faites ici ne peut perdre des données déjà synchronisées sur le serveur.
 
 ## Les données ne se synchronisent pas
 
 Vos modifications sont enregistrées instantanément sur l'appareil. La synchronisation vers le serveur se fait discrètement en arrière-plan, donc un délai est normal et rarement préoccupant. Si des modifications faites sur un appareil n'apparaissent pas sur un autre, parcourez cette liste.
 
-**1. Vérifiez que vous êtes en ligne.** La synchronisation ne s'exécute que lorsque vous avez une connexion réseau. Regardez l'indicateur d'état de synchronisation dans l'application. Si vous avez travaillé sur le terrain sans réseau, vos modifications sont mises en file d'attente en toute sécurité et seront envoyées dès la reconnexion.
+**1. Vérifiez que vous êtes en ligne.** La barre latérale affiche **En ligne** ou **Hors ligne** à côté de votre compte. Si vous avez travaillé sur le terrain sans réseau, vos modifications sont mises en file d'attente et sont envoyées dès la reconnexion.
 
-**2. Vérifiez que vous êtes connecté.** La synchronisation nécessite une session authentifiée. Si votre session a expiré, vous pourrez toujours lire et modifier localement, mais rien ne se synchronisera tant que vous ne vous reconnecterez pas. Ouvrez le menu du compte et confirmez que vous êtes connecté.
+**2. Vérifiez que vous êtes connecté.** La synchronisation nécessite une session. Si elle a expiré, vous pouvez toujours lire et modifier localement, mais rien ne se synchronise tant que vous ne vous reconnectez pas. **Paramètres → Compte** indique avec quel compte vous êtes connecté.
 
-**3. Vérifiez la portée du rucher.** Le partage dans Openbeehive se fait au niveau du rucher via des **portées** (scopes). Si une ruche ou une inspection manque sur un autre appareil ou pour une autre personne, vérifiez que le rucher concerné est bien partagé avec ce compte. Les archives d'un rucher auquel vous n'avez pas accès n'apparaîtront jamais.
+**3. Vérifiez l'espace actif.** Les archives appartiennent à un espace (tenant). Si une ruche manque sur un autre appareil, ouvrez-y **Paramètres → Espaces** et assurez-vous que le même espace est actif. Si elle manque pour une autre personne, celle-ci n'est pas membre de cet espace ; un administrateur de l'espace peut l'inviter.
 
 **4. Patientez un instant, puis rouvrez.** La synchronisation en arrière-plan s'exécute périodiquement. Fermer et rouvrir l'application, ou y revenir depuis l'arrière-plan, déclenche une nouvelle tentative de synchronisation.
 
 :::note
-La synchronisation est sans conflit par conception. Openbeehive utilise des horloges logiques hybrides avec « le dernier qui écrit l'emporte » pour les champs individuels et des ensembles « l'ajout l'emporte » pour les listes, et les événements en ajout seul (inspections, traitements, récoltes) n'entrent jamais en conflit. Vous ne perdrez pas de travail parce que deux appareils ont modifié en même temps. La modification la plus récente d'un champ donné l'emporte ; les deux ajouts à une liste sont conservés.
+La synchronisation est sans conflit par conception. La modification la plus récente d'un champ l'emporte, les ajouts (photos, visites, récoltes, traitements) sont conservés, et vous ne perdrez pas de travail parce que deux appareils ont modifié en même temps.
 :::
 
 Si vous l'hébergez vous-même et que la synchronisation échoue pour tout le monde, le problème est plus probablement côté serveur. Voir [Configuration de l'auto-hébergement](/self-hosting/configuration) et vérifiez les journaux du serveur.
@@ -43,7 +43,7 @@ Les outils de navigateur qui « effacent les données du site », « effacent le
 
 ### « unable to open database file » ou un bouton qui ne fait rien
 
-Les versions antérieures à la 0.2.2 pouvaient épuiser les emplacements réservés du stockage local ; chaque enregistrement échouait alors avec `SQLITE_CANTOPEN: unable to open database file` — visible comme un bouton qui semblait ne rien faire. Depuis la 0.2.2, l'application réserve d'emblée assez d'emplacements et répare automatiquement le stockage quand il vient à manquer. Si l'erreur persiste, rechargez l'application deux fois (pour que la nouvelle version prenne le relais) et réessayez ; les enregistrements déjà sauvegardés ne sont pas affectés.
+Les versions antérieures à la 0.2.2 pouvaient épuiser les emplacements réservés du stockage local ; chaque enregistrement échouait alors avec `SQLITE_CANTOPEN: unable to open database file`, visible comme un bouton qui semblait ne rien faire. Depuis la 0.2.2, l'application réserve d'emblée assez d'emplacements et répare automatiquement le stockage quand il vient à manquer. Si l'erreur persiste, rechargez l'application deux fois (pour que la nouvelle version prenne le relais) et réessayez ; les enregistrements déjà sauvegardés ne sont pas affectés.
 
 ### « Le stockage est indisponible — les modifications ne seront pas conservées sur cet appareil » \{#storage-is-unavailable}
 
@@ -100,8 +100,8 @@ Sur iPhone et iPad, le scanner intégré à l'application peut être restreint. 
 
 - **Bloqué sur l'écran de connexion.** Confirmez que vous accédez à la bonne adresse (l'application hébergée est sur app.openbeehive.org). Après vous être connecté avec votre fournisseur, vous devriez être redirigé automatiquement ; sinon, rechargez la page.
 - **Échec de redirection ou erreurs « invalid redirect » (auto-hébergement).** Cela signifie presque toujours que l'URL de redirection OIDC ou `BEEHIVE_PUBLIC_BASE_URL` est mal configurée. Voir [Authentification et configuration](/self-hosting/authentication).
-- **Clé d'accès non proposée.** WebAuthn / les clés d'accès doivent être activées et vous devez avoir enregistré une clé d'accès sur cet appareil. Si elle n'est pas disponible, connectez-vous plutôt avec votre fournisseur habituel.
-- **Auto-hébergement à utilisateur unique sans connexion.** Si vous fonctionnez sans fournisseur OIDC et avec WebAuthn désactivé, il n'y a aucune étape de connexion. Si vous voyez de manière inattendue un écran de connexion, vérifiez la configuration de votre serveur.
+- **Passkey non proposée.** Les passkeys doivent être activées sur le serveur et vous devez en avoir ajouté une sous Paramètres → Passkeys. Sinon, connectez-vous avec une autre méthode.
+- **Auto-hébergement à utilisateur unique sans connexion.** Avec l'authentification par mot de passe désactivée, sans fournisseur OIDC et avec WebAuthn désactivé, il n'y a aucune étape de connexion. Si vous voyez de manière inattendue un écran de connexion, vérifiez la configuration de votre serveur.
 
 ## Rédiger un bon rapport de bug
 
@@ -112,7 +112,7 @@ Si rien de ce qui précède n'aide, veuillez ouvrir un ticket sur [github.com/jo
 | Ce que vous avez fait | « Appuyé sur Enregistrer pour une nouvelle inspection » |
 | Ce que vous attendiez | « L'inspection apparaît dans la chronologie de la ruche » |
 | Ce qui s'est passé à la place | « Roue de chargement, puis l'entrée a disparu » |
-| Version de l'application | v0.1.0 (affichée dans l'écran À propos de l'application) |
+| Version de l'application | La version que vous exécutez : le tag d'image ou le tag git sur une instance auto-hébergée |
 | Plateforme et navigateur | iPhone 14, iOS 17, Safari |
 | Hébergé ou auto-hébergé | Auto-hébergé, profil `selfhost`, SQLite |
 | En ligne ou hors ligne | « J'étais hors ligne sur le terrain, en cours de synchronisation » |
@@ -122,4 +122,4 @@ Si rien de ce qui précède n'aide, veuillez ouvrir un ticket sur [github.com/jo
 Veuillez ne pas coller de secrets. Masquez les secrets de session, les secrets client OIDC, les mots de passe de base de données et les données personnelles avant de partager des journaux ou de la configuration.
 :::
 
-Pour les questions d'auto-hébergement sur les bases de données, le stockage, l'authentification et les variables d'environnement, la [section Auto-hébergement](/category/self-hosting) et la [référence de configuration](/self-hosting/configuration) sont les meilleurs points de départ. Voir aussi la [FAQ](/knowledge-base/faq).
+Pour les questions d'auto-hébergement, commencez par la [référence de configuration](/self-hosting/configuration).

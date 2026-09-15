@@ -5,181 +5,81 @@ title: "Hors ligne et synchronisation"
 
 # Hors ligne et synchronisation
 
-Openbeehive est conçu pour le rucher, pas pour le bureau. Sur le terrain, vous avez
-rarement un réseau fiable, c'est pourquoi l'application fonctionne en **mode hors
-ligne d'abord** : tout ce que vous faites est enregistré immédiatement sur votre
-appareil et synchronisé avec le serveur plus tard, discrètement, en arrière-plan.
+Openbeehive est conçu pour le rucher, pas pour le bureau. Sur le terrain, vous avez rarement un signal fiable ; l'application fonctionne donc **hors ligne d'abord** : tout ce que vous faites est enregistré immédiatement sur votre appareil et synchronisé avec le serveur plus tard, en arrière-plan.
 
-En pratique, cela signifie que l'application ne vous fait jamais attendre le réseau.
-Ouvrez une ruche, consignez une inspection, ajoutez une tâche, prenez une note sur
-la reine, tout cela est instantané, avec ou sans réseau.
+L'application ne vous fait jamais attendre le réseau. Ouvrez une ruche, enregistrez une visite, ajoutez une tâche, notez quelque chose sur la reine : tout est instantané, avec ou sans signal.
 
 ## Tout est enregistré localement
 
-Lorsque vous installez Openbeehive, il conserve une copie complète de vos
-enregistrements dans une petite base de données sur votre appareil. Chaque lecture
-et chaque écriture s'effectue d'abord sur cette copie locale.
+Openbeehive conserve une copie complète de vos enregistrements dans une petite base de données sur votre appareil. Chaque lecture et chaque écriture se fait d'abord sur cette copie locale.
 
-Le résultat :
-
-- **C'est rapide.** Ouvrir une ruche ou faire défiler les inspections ne reste
-  jamais bloqué sur une barre de chargement.
-- **Cela fonctionne sans réseau.** Un bois, une vallée, une cave pleine de hausses,
-  cela ne fait aucune différence.
-- **Vos données vous appartiennent.** Les enregistrements vivent sur votre appareil ;
-  le serveur est une copie pour la synchronisation et le partage, et non le seul
-  foyer de vos données.
+- **C'est rapide.** Ouvrir une ruche ou faire défiler les visites n'attend jamais une barre de chargement.
+- **Ça fonctionne sans signal.** Un bois, une vallée, une cave pleine de hausses.
+- **Vos données sont à vous.** Les enregistrements vivent sur votre appareil ; le serveur est la copie qui sert à la synchronisation et au partage.
 
 :::tip
-Parce que les enregistrements sont stockés sur l'appareil, il vaut la peine
-d'installer Openbeehive comme une application plutôt que de l'utiliser dans un
-onglet de navigateur. Consultez
-[Installer Openbeehive](/using-the-app/install) pour savoir comment l'ajouter à
-votre téléphone, votre tablette ou votre ordinateur.
+Comme les enregistrements sont stockés sur l'appareil, installez Openbeehive comme une application plutôt que de l'utiliser dans un onglet de navigateur. Voir [Installer Openbeehive](/using-the-app/install).
 :::
 
-## La bannière hors ligne
+## L'indicateur hors ligne
 
-Lorsque l'application ne peut pas joindre le serveur, une petite bannière apparaît
-pour vous faire savoir que vous travaillez hors ligne. C'est purement informatif,
-vous pouvez continuer exactement comme avant. Continuez à consigner des inspections,
-à cocher des tâches, à enregistrer une récolte ; rien n'est bloqué.
+Lorsque l'appareil n'a pas de connexion, le bloc de compte dans la barre latérale passe de **En ligne** à **Hors ligne** et une barre en haut de la page indique « Hors ligne : les modifications sont enregistrées et synchronisées plus tard. » C'est purement informatif ; continuez exactement comme avant.
 
-Dès que votre appareil est de nouveau en ligne, la bannière disparaît et toutes les
-modifications que vous avez effectuées hors ligne sont envoyées automatiquement. Il
-n'y a pas de bouton « synchroniser maintenant » à retenir ni de risque d'oublier
-d'enregistrer.
+Lorsque l'appareil est de nouveau en ligne, la barre disparaît et les modifications faites hors ligne sont envoyées automatiquement. Il n'y a pas de bouton « synchroniser maintenant ».
 
 :::note
-Une bannière hors ligne persistante signifie généralement simplement une couverture
-faible au rucher. Si elle reste affichée même avec une bonne connexion à la maison,
-jetez un œil au [Dépannage](/knowledge-base/troubleshooting).
+Un indicateur hors ligne persistant signifie généralement une couverture faible au rucher. S'il reste affiché même avec une bonne connexion à la maison, consultez [Dépannage](/knowledge-base/troubleshooting).
 :::
 
 ## Votre première synchronisation sur un nouvel appareil
 
-Se connecter sur un nouvel appareil, ou rouvrir l'application après un effacement de son
-stockage, commence avec une base de données locale vide qui se remplit en arrière-plan.
-L'application rend cet état visible au lieu de faire comme s'il n'y avait rien à montrer :
+Se connecter sur un nouvel appareil, ou rouvrir l'application après l'effacement de son stockage, démarre avec une base de données locale vide qui se remplit en arrière-plan :
 
-- Les listes affichent des **espaces réservés scintillants** pendant qu'elles lisent la base
-  de données locale.
-- Tant que le premier téléchargement est en cours, le tableau de bord et les listes de
-  ruchers, de ruches et de tâches affichent **« Synchronisation de vos données… »** plutôt
-  qu'un état vide, pour que l'on ne vous invite jamais à « créer votre premier rucher »
-  par-dessus des enregistrements sur le point d'arriver.
-- Les grands jeux de données apparaissent **progressivement** : chaque lot reçu est affiché
-  aussitôt, si bien qu'une longue première synchronisation remplit l'écran au fur et à
-  mesure plutôt qu'à la toute fin.
+- Les listes affichent des **espaces réservés scintillants** pendant qu'elles lisent la base de données locale.
+- Tant que le premier téléchargement est en cours, la Vue d'ensemble et les listes de ruchers, de ruches et de tâches affichent **« Synchronisation de vos données… »** plutôt qu'un état vide.
+- Les grands jeux de données apparaissent **progressivement** : chaque lot reçu par l'application est affiché aussitôt.
 
-Ce n'est qu'une fois que l'application sait que les données sont complètes qu'elle affiche
-un vrai état vide. Si l'appareil est hors ligne ou le serveur injoignable, l'indication laisse
-place à ce qui est stocké localement, pour que rien ne reste caché derrière une roue de
-chargement.
+Ce n'est qu'une fois que l'application sait que les données sont complètes qu'elle affiche un véritable état vide. Si l'appareil est hors ligne ou que le serveur est injoignable, l'indication cède la place à ce qui est stocké localement.
 
 ## Synchroniser entre vos appareils
 
-Vous pouvez utiliser Openbeehive sur plusieurs appareils, par exemple un téléphone
-sur le terrain et un ordinateur portable à la maison, et ils resteront synchronisés
-automatiquement.
-
-Chaque appareil conserve sa propre copie locale et échange les modifications avec le
-serveur en arrière-plan. Consignez une inspection sur votre téléphone aux ruches, et
-au moment où vous vous asseyez devant votre ordinateur portable, elle y est déjà.
-Les modifications circulent dans les deux sens.
-
-Vous n'avez pas à choisir un appareil « principal » ni à copier quoi que ce soit à
-la main. Tant que chaque appareil se connecte au même compte, ils voient tous les
-mêmes enregistrements.
+Utilisez Openbeehive sur plusieurs appareils, un téléphone sur le terrain et un ordinateur portable à la maison, et ils restent en phase. Chaque appareil conserve sa propre copie locale et échange les modifications avec le serveur en arrière-plan. Enregistrez une visite sur votre téléphone aux ruches, et le temps de vous asseoir devant votre ordinateur portable, elle y est. Tant que chaque appareil se connecte au même compte, ils voient tous les mêmes enregistrements.
 
 ## Que se passe-t-il quand deux appareils modifient la même chose
 
-C'est la question que pose chaque apiculteur, et la réponse rassurante est : vous
-n'avez pas à y penser. Openbeehive résout les modifications qui se chevauchent
-**automatiquement**, sans invites du type « quelle version voulez-vous garder ? » et
-sans perte de travail.
+Openbeehive résout les modifications qui se chevauchent **automatiquement**, sans question du type « quelle version voulez-vous garder ? ».
 
-Quelques exemples de son comportement :
+- **Vous modifiez la note d'un rucher sur votre téléphone, votre coapiculteur modifie la même note sur le sien.** La modification la plus récente de ce champ l'emporte.
+- **Vous ajoutez tous les deux des photos à la même visite hors ligne.** Les deux séries de photos sont conservées.
+- **Vous consignez chacun une visite distincte.** Les visites, récoltes et traitements ne font que s'ajouter ; les deux sont donc conservées côte à côte.
 
-- **Vous modifiez les notes d'une ruche sur votre téléphone, votre coapiculteur
-  modifie les mêmes notes sur le sien.** La modification la plus récente de ce champ
-  l'emporte ; l'autre est remplacée proprement.
-- **Vous ajoutez tous deux des tâches, ou marquez tous deux la ruche, hors ligne.**
-  Les ajouts aux listes sont conservés, de sorte que la tâche ou le marquage de
-  personne n'est perdu.
-- **Vous consignez chacun une inspection distincte.** Les inspections, les événements
-  et les enregistrements similaires ne sont jamais qu'ajoutés, jamais écrasés, de
-  sorte que les deux sont conservés côte à côte.
-
-Le résultat est que chaque appareil converge vers le même état, cohérent et sensé,
-une fois qu'ils se sont tous synchronisés, et vous n'obtenez jamais d'enregistrement
-corrompu ou à moitié fusionné.
+Chaque appareil converge vers le même état une fois que tous ont synchronisé.
 
 :::tip
-La version courte : **ajoutez librement, modifiez en toute confiance, ne vous
-inquiétez jamais de perdre des données.** Si vous êtes curieux de savoir comment cela
-fonctionne réellement sous le capot, les pages
-[protocole de synchronisation](/developers/sync-protocol) et
-[architecture](/developers/architecture) l'expliquent en détail.
+En bref : ajoutez librement, modifiez en confiance. Le fonctionnement sous le capot est décrit sur les pages [protocole de synchronisation](/developers/sync-protocol) et [architecture](/developers/architecture).
 :::
 
-## Partager un rucher
+## Partage
 
-Openbeehive partage les enregistrements au niveau du **rucher**. Lorsque vous
-partagez un rucher, tout ce qu'il contient, ses ruches, reines, inspections, tâches,
-événements, récoltes et traitements, est partagé avec lui. Cela garde les choses
-simples : vous accordez l'accès à un emplacement, et non à des dizaines de ruches
-individuelles.
+Les enregistrements se partagent via les **espaces** (tenants). Chaque membre d'un espace voit et modifie tous ses ruchers, ruches et enregistrements ; il n'y a pas de partage par rucher ou par ruche.
 
-Chaque personne avec qui vous partagez se voit attribuer un rôle :
-
-| Rôle | Ce qu'elle peut faire |
+| Rôle | Ce qu'il peut faire |
 | --- | --- |
-| **Observateur** | Voir le rucher et tous ses enregistrements. Ne peut pas effectuer de modifications. |
-| **Apiculteur** | Voir et modifier : consigner des inspections, terminer des tâches, enregistrer des récoltes et des traitements, mettre à jour les ruches et les reines. |
-| **Propriétaire** | Tout ce qu'un apiculteur peut faire, plus gérer le rucher lui-même et avec qui il est partagé. |
+| **Admin** (propriétaire de l'espace) | Tout ce qu'un membre peut faire, plus inviter et révoquer, et supprimer l'espace. |
+| **Membre** | Ajouter et modifier des ruchers, ruches, visites, tâches, récoltes et traitements dans l'espace. |
 
-Cela fonctionne bien pour un rucher école d'association, un mentor gardant un œil sur
-les ruches d'un nouvel apiculteur, ou simplement deux personnes partageant le travail
-sur le même emplacement. Les enregistrements partagés se synchronisent et résolvent
-les conflits exactement de la même manière que les vôtres, de sorte que les
-modifications d'un partenaire apparaissent sur vos appareils automatiquement.
-
-:::note
-Le partage se fait par rucher, vous pouvez donc partager un emplacement avec un
-mentor tout en gardant les autres entièrement privés.
-:::
+Pour partager un emplacement avec un mentor tout en gardant les autres privés, placez cet emplacement dans son propre espace et invitez-y le mentor. Les enregistrements partagés se synchronisent et résolvent les conflits exactement comme les vôtres. Voir [Comptes et espaces](/using-the-app/accounts-tenants).
 
 ## Si quelque chose ne peut pas être enregistré
 
-L'enregistrement se fait sur votre appareil, il n'échoue donc pratiquement jamais. Si cela arrive malgré tout — par exemple parce que le stockage du navigateur est plein ou endommagé — l'application le dit clairement : le formulaire reste ouvert avec tout ce que vous avez saisi, et un message d'erreur explique ce qui n'a pas fonctionné. Rien ne disparaît en silence.
+L'enregistrement se fait sur votre appareil, il n'échoue donc pratiquement jamais. Si cela arrive (par exemple parce que le stockage du navigateur est plein ou endommagé), le formulaire reste ouvert avec tout ce que vous avez saisi et un message d'erreur explique ce qui s'est passé.
 
-Sur le **compte de démonstration** public, le serveur n'accepte pas les envois (la démo se réinitialise régulièrement). Vous pouvez tout de même tout essayer : vos modifications sont enregistrées sur votre appareil et y restent simplement, sans être synchronisées.
+Sur le **compte de démonstration** public, le serveur rejette les modifications (la démo se réinitialise toutes les heures). Vos modifications sont enregistrées sur votre appareil et y restent simplement au lieu de se synchroniser.
 
-Il existe une situation où l'enregistrement fonctionne mais ne dure pas : si le navigateur
-ne peut pas fournir à l'application son stockage privé, celle-ci se rabat sur une base de
-données en mémoire et affiche le message **« Le stockage est indisponible — les modifications
-ne seront pas conservées sur cet appareil. »** Tout continue de fonctionner pendant la
-session, et les modifications se synchronisent toujours avec le serveur si vous êtes
-connecté, mais la copie locale disparaît à la fermeture de l'onglet. Cela se produit dans les
-fenêtres de navigation privée et lorsqu'un second onglet de l'application détient encore le
-stockage ; voir [Dépannage](/knowledge-base/troubleshooting#storage-is-unavailable) pour la
-marche à suivre.
+Il existe une situation où l'enregistrement fonctionne mais ne dure pas : si le navigateur ne peut pas donner à l'application son stockage privé, l'application se rabat sur une base de données en mémoire et affiche le message **« Le stockage est indisponible : les modifications ne seront pas conservées sur cet appareil. »** Tout continue de fonctionner pendant la session, et les modifications se synchronisent toujours avec le serveur si vous êtes connecté, mais la copie locale disparaît à la fermeture de l'onglet. Cela se produit dans les fenêtres de navigation privée et lorsqu'un second onglet de l'application détient encore le stockage ; voir [Dépannage](/knowledge-base/troubleshooting#storage-is-unavailable).
 
-## Vais-je un jour perdre des données ?
+## Vais-je perdre des données ?
 
-Non. Vos enregistrements sont d'abord écrits sur votre appareil et ne sont pas
-supprimés simplement parce que vous êtes hors ligne ou parce que l'application se
-ferme. Ils attendent en sécurité sur l'appareil jusqu'à ce qu'ils puissent être
-synchronisés, puis se synchronisent d'eux-mêmes.
+Vos enregistrements sont d'abord écrits sur votre appareil et ne sont pas supprimés parce que vous êtes hors ligne ou que l'application se ferme. Ils attendent sur l'appareil jusqu'à pouvoir être synchronisés.
 
-Pour une tranquillité d'esprit supplémentaire, en particulier si vous auto-hébergez,
-il reste de bonne pratique de conserver des sauvegardes serveur. Consultez
-[Sauvegardes](/self-hosting/backups) pour savoir comment.
-
-## Pages associées
-
-- [Installer Openbeehive](/using-the-app/install)
-- [Étiquettes QR](/using-the-app/qr-labels)
-- [Architecture](/developers/architecture)
-- [Protocole de synchronisation](/developers/sync-protocol)
+Si vous auto-hébergez, conservez aussi des sauvegardes du serveur. Voir [Sauvegardes](/self-hosting/backups).

@@ -101,6 +101,6 @@ Chaque visite est une petite perturbation. Gardez-la proportionnée. Si vous ave
 
 ## Consigner ce que vous trouvez
 
-Une visite n'est utile que dans la mesure des notes que vous conservez. Consignez le tempérament, les réserves, l'espace, le couvain et toute cellule royale ou signe de maladie tant que les détails sont frais, idéalement au pied de la ruche sur votre téléphone. Comme Openbeehive fonctionne en mode hors ligne d'abord, vous pouvez tout consigner au rucher sans signal et cela se synchronisera plus tard.
+Une visite n'est utile que dans la mesure des notes que vous conservez. Consignez le tempérament, les réserves, l'espace, le couvain et toute cellule royale ou signe de maladie tant que les détails sont frais, idéalement au pied de la ruche sur votre téléphone.
 
 Consultez [enregistrer les visites](/using-the-app/inspections) pour saisir vos observations, et la [section Apiculture](/category/beekeeping-basics) pour le contexte saisonnier plus large.

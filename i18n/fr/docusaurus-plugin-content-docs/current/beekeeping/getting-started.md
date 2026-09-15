@@ -97,10 +97,4 @@ Le calendrier de chaque région diffère, alors considérez ceci comme une forme
 Visez à maintenir votre colonie vivante et en bonne santé tout au long de son premier hiver. C'est cela, et non le miel, qui est la véritable mesure d'une première année réussie.
 :::
 
-## Pour aller plus loin
-
-- [Comprendre la colonie](/beekeeping/the-colony) — qui est qui à l'intérieur de la ruche et comment tout cela fonctionne.
-- [Équipement](/beekeeping/equipment) — les ruches, les outils et les vêtements de protection expliqués.
-- [L'année apicole](/beekeeping/beekeeping-year) — quoi faire, saison après saison.
-
 Allez-y doucement, tenez de bons registres, appuyez-vous sur votre communauté locale, et respectez les règles de votre lieu de résidence. Bienvenue en apiculture.

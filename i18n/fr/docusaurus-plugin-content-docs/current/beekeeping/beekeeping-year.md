@@ -37,8 +37,8 @@ Que faire :
 - Appliquez la méthode de contrôle de l'essaimage que vous avez choisie si des cellules apparaissent (consultez [Essaimage](/beekeeping/swarming)).
 - Envisagez d'élever de nouvelles reines ou de faire des divisions à partir d'un cheptel fort (consultez [Élevage de reines](/beekeeping/queen-rearing)).
 
-:::tip Utilisez une tâche hebdomadaire pour garder le rythme
-Le cycle d'inspection de sept jours est facile à perdre de vue lorsqu'on a plusieurs ruches. Créez une tâche d'inspection récurrente par rucher afin que la prochaine visite soit toujours sur votre liste. Consultez [Tâches](/using-the-app/tasks).
+:::tip Utilisez les tâches pour garder le rythme
+Le cycle de sept jours est facile à perdre de vue lorsqu'on a plusieurs ruches. Ajoutez une tâche avec une date d'échéance pour la prochaine visite et, lorsque vous la cochez, ajoutez la suivante. Consultez [Tâches](/using-the-app/tasks).
 :::
 
 ## Été : la miellée

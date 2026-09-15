@@ -5,127 +5,120 @@ title: "Mise à niveau"
 
 # Mise à niveau
 
-Garder votre instance Openbeehive à jour vous apporte de nouvelles fonctionnalités, des correctifs et des correctifs de sécurité. Les mises à niveau sont volontairement simples : remplacez le binaire ou récupérez une nouvelle image, redémarrez, et le serveur met votre base de données à jour de lui-même.
-
-Cette page couvre la routine de mise à niveau sûre, la numérotation des versions, et comment revenir en arrière si quelque chose tourne mal.
+Les mises à niveau sont simples : remplacez le binaire ou récupérez une nouvelle image, redémarrez, et le serveur met le schéma de la base de données à jour de lui-même.
 
 :::caution Sauvegardez d'abord, à chaque fois
-Faites toujours une sauvegarde avant de mettre à niveau. Cela ne prend qu'un instant et c'est la seule chose qui transforme une mauvaise mise à niveau en non-événement. Voir [Sauvegardes](/self-hosting/backups) pour savoir comment prendre un instantané de votre base de données et de votre stockage de blobs.
+Faites une sauvegarde avant de mettre à niveau. Voir [Sauvegardes](/self-hosting/backups).
 :::
 
 ## Avant de commencer
 
-Une bonne mise à niveau prend cinq minutes et un peu de lecture :
-
-1. **Lisez les notes de version.** Consultez le [CHANGELOG](https://github.com/johnnycube/openbeehive-app) et la version GitHub vers laquelle vous passez. Notez tout changement incompatible, toute nouvelle configuration requise, ou toute étape manuelle.
-2. **Sauvegardez** votre base de données et votre stockage de blobs.
-3. **Notez votre version actuelle** afin de savoir vers quoi revenir si nécessaire.
-4. **Choisissez un moment calme.** Les mises à niveau impliquent un court redémarrage. Comme l'application est hors-ligne d'abord, quiconque l'utilise continue de travailler localement et se synchronise une fois le serveur de retour.
+1. **Lisez les notes de version.** Consultez le [CHANGELOG](https://github.com/johnnycube/openbeehive-app/blob/main/CHANGELOG.md) et la [version GitHub](https://github.com/johnnycube/openbeehive-app/releases) vers laquelle vous passez. Notez toute nouvelle configuration requise ou toute étape manuelle.
+2. **Sauvegardez** la base de données et le stockage de blobs.
+3. **Notez votre version actuelle** (le tag que vous avez compilé ou le tag d'image que vous exécutez) afin de savoir vers quoi revenir.
+4. **Choisissez un moment calme.** Le redémarrage est court ; les appareils continuent de fonctionner localement et se synchronisent une fois le serveur de retour.
 
 ## Comment fonctionnent les migrations
 
-Les migrations de schéma de base de données s'exécutent **automatiquement** au démarrage du serveur. Il n'y a pas de commande de migration distincte à retenir.
-
-Au démarrage, le serveur vérifie la version du schéma enregistrée dans votre base de données, applique dans l'ordre toutes les migrations en attente, et ce n'est qu'ensuite qu'il commence à servir les requêtes. Cela fonctionne de la même manière sur tous les pilotes pris en charge (PostgreSQL, MySQL et SQLite).
+Les migrations de schéma s'exécutent automatiquement au démarrage du serveur. Au démarrage, le serveur applique dans l'ordre toutes les migrations en attente, et ce n'est qu'ensuite qu'il commence à servir les requêtes. Cela fonctionne de la même manière pour PostgreSQL, MySQL et SQLite.
 
 :::note
-Comme les migrations s'exécutent au démarrage, le tout premier lancement d'une nouvelle version peut prendre un peu plus de temps que d'habitude pendant la mise à jour du schéma. Surveillez les logs pour confirmer qu'il se termine proprement avant d'y diriger du trafic.
+Le premier lancement d'une nouvelle version peut prendre un peu plus de temps pendant la mise à jour du schéma. Surveillez les logs pour confirmer qu'il se termine avant d'y diriger du trafic.
 :::
 
 ## Mettre à niveau le binaire unique
 
-Si vous exécutez la build `selfhost` en un seul fichier, une mise à niveau est un échange de fichier.
-
 ```bash
-# 1. Arrêter le service en cours d'exécution
+# 1. Stop the running service
 sudo systemctl stop openbeehive
 
-# 2. Sauvegarder le binaire et vos données
-cp ./server/bin/openbeehive ./server/bin/openbeehive.bak
-# (sauvegardez aussi votre base de données SQLite + le répertoire de blobs — voir Sauvegardes)
+# 2. Back up the binary and your data
+cp /opt/openbeehive/openbeehive /opt/openbeehive/openbeehive.bak
+# (also back up the SQLite database and blob directory; see Backups)
 
-# 3. Remplacer le binaire par la nouvelle version, puis redémarrer
+# 3. Replace the binary with the new build, then restart
 sudo systemctl start openbeehive
 
-# 4. Vérifier les logs pour confirmer que les migrations se sont exécutées
+# 4. Check the logs to confirm migrations ran
 sudo journalctl -u openbeehive -f
 ```
 
-Vous compilez plutôt depuis les sources ? Récupérez le nouveau tag et recompilez :
+Pour compiler la nouvelle version depuis les sources, basculez sur son tag et recompilez :
 
 ```bash
 git fetch --tags
-git checkout v0.1.0
+git checkout vX.Y.Z
 make proto && make build
 ```
 
-Cela produit un nouveau `./server/bin/openbeehive`. Voir [Binaire unique](/self-hosting/single-binary) pour les prérequis de compilation complets (Go 1.25+, Node 22+, buf).
+Cela produit un nouveau `./server/bin/openbeehive`. Les prérequis sont dans [Binaire unique](/self-hosting/single-binary) (Go 1.25+, Node 24+, buf).
 
 ## Mettre à niveau avec Docker
 
-Pour le profil `cloud` (ou tout déploiement Docker), récupérez la nouvelle image et recréez le conteneur.
+La commande nécessaire dépend de la provenance de l'image.
+
+**Image publiée** (le `docker run` mono-conteneur du [démarrage rapide](/self-hosting/quick-start), ou un fichier Compose avec une ligne `image:` tel que `docker-compose.demo.yml`) :
 
 ```bash
-# 1. Récupérer la nouvelle image
-docker compose pull
-
-# 2. Recréer les conteneurs avec la nouvelle image
-docker compose up -d
-
-# 3. Suivre les logs pour confirmer un démarrage propre et les migrations
-docker compose logs -f openbeehive
+docker compose -f docker-compose.demo.yml pull
+docker compose -f docker-compose.demo.yml up -d
+docker compose -f docker-compose.demo.yml logs -f server
 ```
 
-L'image publiée est `ghcr.io/johnnycube/openbeehive-app:latest`. Pour des déploiements reproductibles, épinglez un tag de version spécifique plutôt que `latest`, afin de toujours savoir exactement ce qui tourne.
+Pour un simple conteneur `docker run` : `docker pull ghcr.io/johnnycube/openbeehive-app:latest`, puis `docker rm -f openbeehive` et relancez la même commande `docker run`. Le volume nommé conserve vos données.
+
+**Compilée depuis les sources** (le `docker-compose.yml` du dépôt a une section `build:`, donc `pull` ne fait rien pour lui) :
+
+```bash
+git pull
+docker compose up -d --build
+docker compose logs -f server
+```
+
+Les tags d'image sont `latest`, `X.Y` (dernier correctif d'une version mineure) et `X.Y.Z`. Pour des déploiements reproductibles, épinglez une version spécifique plutôt que `latest` :
 
 ```docker
-image: ghcr.io/johnnycube/openbeehive-app:v0.1.0
+image: ghcr.io/johnnycube/openbeehive-app:X.Y.Z
 ```
-
-Voir [Docker](/self-hosting/docker) pour la configuration Compose complète.
 
 ## Versionnage
 
 Openbeehive suit le [versionnage sémantique](https://semver.org) : `MAJOR.MINOR.PATCH`.
 
-| Partie | Exemple | Signifie |
-| --- | --- | --- |
-| MAJOR | `1.0.0` | Changements incompatibles ; lisez attentivement les notes de mise à niveau |
-| MINOR | `0.2.0` | Nouvelles fonctionnalités, rétrocompatibles |
-| PATCH | `0.1.1` | Corrections de bugs et correctifs de sécurité, rétrocompatibles |
+| Partie | Signifie |
+| --- | --- |
+| MAJOR | Changements incompatibles ; lisez attentivement les notes de mise à niveau |
+| MINOR | Nouvelles fonctionnalités, rétrocompatibles |
+| PATCH | Corrections de bugs et correctifs de sécurité, rétrocompatibles |
 
-La version actuelle est **v0.1.0**, la première version publique.
-
-:::caution La v0.1.x est un logiciel jeune
-Tant qu'Openbeehive est dans la série `0.x`, les versions mineures peuvent inclure des changements qui nécessitent des étapes manuelles ou qui ne sont pas entièrement rétrocompatibles. Lisez les notes de version pour chaque mise à niveau, pas seulement les majeures, et gardez vos sauvegardes à portée de main.
+:::caution La 0.x est un logiciel jeune
+Tant qu'Openbeehive est dans la série `0.x`, les versions mineures peuvent inclure des changements qui nécessitent des étapes manuelles ou qui ne sont pas entièrement rétrocompatibles. Lisez les notes de version pour chaque mise à niveau, et gardez vos sauvegardes à portée de main.
 :::
 
 ## Revenir en arrière
 
-Si une mise à niveau se comporte mal, revenez à la version d'où vous venez.
-
-La règle importante : **un schéma plus récent peut ne pas être lisible par un binaire plus ancien.** Une fois les migrations exécutées, simplement rétrograder l'application n'est pas garanti de fonctionner. La façon fiable de revenir en arrière est de restaurer à la fois l'application *et* la base de données d'avant la mise à niveau.
+Un schéma plus récent peut ne pas être lisible par un binaire plus ancien. Une fois les migrations exécutées, rétrograder seulement l'application n'est pas garanti de fonctionner. Restaurez l'application *et* la base de données d'avant la mise à niveau :
 
 1. Arrêtez le service.
-2. Restaurez la base de données (et, le cas échéant, le stockage de blobs) à partir de la sauvegarde que vous avez prise avant la mise à niveau. Voir [Sauvegardes](/self-hosting/backups).
+2. Restaurez la base de données (et, le cas échéant, le stockage de blobs) à partir de la sauvegarde que vous avez prise avant la mise à niveau.
 3. Réinstallez la version précédente du binaire ou de l'image.
 4. Démarrez le service et confirmez qu'il démarre proprement.
 
 ```bash
-# Exemple Docker : revenir à la version précédente
+# Docker example: pin back to the previous version
 docker compose down
-# modifiez votre fichier compose vers le tag précédent, par exemple v0.1.0
+# edit the compose file back to the previous tag, e.g. X.Y.Z
 docker compose up -d
 ```
 
 :::danger
-Ne restaurez pas une ancienne base de données sous un binaire plus récent, et n'exécutez pas une base de données plus récente sous un binaire plus ancien, sauf pour la paire appariée que vous avez sauvegardée ensemble. Un schéma et un code incompatibles peuvent corrompre les données. Restaurez toujours le binaire et la base de données comme un ensemble.
+Ne restaurez pas une ancienne base de données sous un binaire plus récent, et n'exécutez pas une base de données plus récente sous un binaire plus ancien, sauf pour la paire appariée que vous avez sauvegardée ensemble. Restaurez toujours le binaire et la base de données comme un ensemble.
 :::
 
 ## Après la mise à niveau
 
 - Vérifiez les logs pour détecter des erreurs ou des avertissements de migration.
-- Ouvrez l'application et confirmez que vos ruchers, ruches et visites récentes apparaissent comme prévu.
-- Déclenchez une synchronisation depuis un appareil client et confirmez que les changements circulent dans les deux sens.
+- Ouvrez l'application et confirmez que vos ruchers, ruches et visites récentes apparaissent.
+- Enregistrez quelque chose sur un appareil et confirmez que cela se synchronise.
 
-Si quelque chose semble anormal, voir [Dépannage](/knowledge-base/troubleshooting), et n'hésitez pas à revenir à votre sauvegarde pendant que vous enquêtez.
+Si quelque chose semble anormal, voir [Dépannage](/knowledge-base/troubleshooting) et revenez à votre sauvegarde pendant que vous enquêtez.

@@ -5,220 +5,236 @@ title: "Protocole de synchronisation"
 
 # Protocole de synchronisation
 
-Openbeehive est [offline-first](/using-the-app/offline-and-sync). Chaque lecture et écriture se produit
-sur une base de données SQLite-WASM locale sur l'appareil, et un processus
-d'arrière-plan réconcilie cet état local avec le serveur. Cette page documente le
-protocole filaire qui fait fonctionner la réconciliation : le service Connect-RPC,
-ses trois méthodes, et les règles que les deux côtés appliquent lors de la fusion
-des changements.
-
-Si vous n'avez pas encore lu l'[aperçu du modèle de synchronisation](/category/developers), commencez par là.
-Cette page suppose que vous savez déjà qu'Openbeehive utilise des horloges
-logiques hybrides (HLC), le « dernier écrivain gagne » par champ (LWW) pour les
-scalaires, des OR-Sets (« l'ajout gagne ») pour les champs de liste, et des
-événements en ajout seul qui n'entrent jamais en conflit.
+L'application lit et écrit une base de données SQLite-WASM locale et la
+réconcilie avec le serveur via `SyncService`. Cette page documente le contrat
+filaire défini dans `proto/openbeehive/v1/sync.proto` et les règles de fusion de
+`server/internal/sync/merge.go` et `app/src/lib/local/merge.ts`.
 
 ## Le service
 
-La synchronisation est exposée comme un service Connect-RPC, de sorte que chaque
-méthode est accessible à la fois en gRPC et en HTTP/JSON simple. Il y a trois
-méthodes :
+```protobuf
+service SyncService {
+  rpc Pull(PullRequest) returns (PullResponse);
+  rpc Push(PushRequest) returns (PushResponse);
+  rpc Subscribe(SubscribeRequest) returns (stream SubscribeEvent);
+}
+```
 
-| Méthode | Direction | Objet |
-| --- | --- | --- |
-| `Pull` | client ← serveur | Récupérer les changements que le client n'a pas encore vus |
-| `Push` | client → serveur | Envoyer les changements locaux au serveur |
-| `Subscribe` | serveur → client (flux) | « Coup de pouce » optionnel quasi temps réel lorsque de nouveaux changements arrivent |
+La boucle client (`app/src/lib/local/sync.ts`, `syncOnce`) : pousser l'outbox,
+puis tirer jusqu'à ce que `has_more` soit false. Elle s'exécute toutes les
+15 secondes, après chaque écriture locale et sur l'événement `online` du
+navigateur. Les exécutions sont sérialisées ; un appel qui arrive pendant qu'une
+exécution est en cours planifie une passe supplémentaire. Le client n'appelle
+pas `Subscribe`.
 
-Une boucle client typique : `Push` sa file d'attente locale, puis `Pull` tout ce
-qui est nouveau, puis attente jusqu'à ce que `Subscribe` la pousse (ou qu'un
-minuteur se déclenche) et recommence.
+## Change
 
-## Les curseurs par rapport à la HLC
+Chaque modification de ligne voyage sous la forme d'un `Change` :
 
-L'idée la plus importante de ce protocole est que le **curseur de synchronisation
-n'est pas la HLC**.
+```protobuf
+enum ChangeOp {
+  CHANGE_OP_UNSPECIFIED = 0;
+  CHANGE_OP_UPSERT = 1;
+  CHANGE_OP_DELETE = 2;
+}
 
-La HLC est un *horodatage logique* attaché à chaque écriture de champ. Elle décide
-*quelle valeur l'emporte* lors d'une fusion — elle répond à « cette modification
-est-elle plus récente que celle que j'ai déjà ? ». Les HLC proviennent de nombreux
-appareils, peuvent légèrement se désordonner par rapport à l'heure murale, et ne
-sont pas globalement monotones dans l'ordre d'arrivée.
+message Change {
+  string entity = 1;       // table name: apiary, hive, queen, inspection, task,
+                           // placement, harvest, treatment, event
+  string entity_id = 2;    // row id (UUID minted on the device)
+  string scope_id = 3;     // apiary id, or "user:<id>"
+  ChangeOp op = 4;
+  string payload_json = 5; // JSON object of changed columns; ignored on delete
+  string hlc = 6;          // Hybrid Logical Clock of the write
+  string author_id = 7;    // user id of the device or API caller that wrote it
+}
+```
 
-Le curseur est une *séquence de réception assignée par le serveur* — un entier
-unique, strictement croissant (`seq`) que le serveur estampille sur chaque
-changement à mesure qu'il est accepté durablement. Il répond à une question
-complètement différente : « qu'ai-je déjà remis à ce client ? ».
+`payload_json` est un delta partiel, pas la ligne entière : le `patch()` du
+client n'écrit que les colonnes qu'il a modifiées. Les clés sont les noms de
+colonnes en `snake_case` du [modèle de données](/developers/data-model). Une
+ligne créée sur l'appareil est un delta contenant toutes les colonnes. Une
+suppression est `op = CHANGE_OP_DELETE` ; le destinataire positionne
+`deleted = true` et ignore la charge utile.
 
-Utiliser la séquence de réception comme curseur nous donne deux garanties que la
-HLC ne peut pas offrir :
+Les colonnes de type ensemble (actuellement seulement `inspection.photo_keys`)
+utilisent une forme de charge utile différente :
 
-- **Ordre total de livraison.** Parce que `seq` est assigné dans l'ordre où le
-  serveur accepte les écritures, un client peut demander « tout ce qui est après
-  seq N » et être certain de ne rien manquer, même si ces changements portent des
-  HLC désordonnées.
-- **Sûreté de rejeu.** Un client peut persister son curseur et reprendre
-  exactement là où il s'était arrêté après être passé hors ligne, avoir planté ou
-  avoir été réinstallé.
+```json
+{ "photo_keys": { "add": ["k1"] } }
+{ "photo_keys": { "remove": ["k2"], "removed_tags": { "k2": ["<hlc>", "<hlc>"] } } }
+```
 
-:::note
-N'utilisez jamais une HLC comme curseur de pagination. Deux appareils peuvent
-légitimement produire la même région de HLC hors ligne, et les HLC ne sont pas
-assignées dans l'ordre d'arrivée — paginer par HLC sauterait ou dupliquerait des
-changements. Paginez par `seq`, fusionnez par HLC.
-:::
+`removed_tags` liste les tags d'ajout que l'appareil qui supprime avait observés.
+Les deltas qui ne le contiennent pas (clients plus anciens) suppriment tous les
+tags que le destinataire détient.
+
+### Format HLC
+
+`"<ms:15>:<counter:5>:<node>"`, par exemple
+`001781234567890:00003:a1b2c3d4`. L'heure murale en millisecondes complétée par
+des zéros sur 15 chiffres, un compteur à 5 chiffres, puis un id de nœud
+(8 caractères aléatoires stockés dans le `localStorage` de l'appareil ;
+`BEEHIVE_NODE_ID`, `server` par défaut, sur le serveur). Une simple comparaison
+de chaînes ordonne les HLC. Les deux côtés appellent `recv()` sur chaque HLC
+entrante afin que leurs horloges restent en avance sur tout ce qu'ils ont vu.
 
 ## Pull
 
-`Pull` retourne les changements que le client n'a pas vus, dans l'ordre `seq`,
-plus le curseur à utiliser la prochaine fois.
-
-```text
-Pull(PullRequest { since_cursor: int64, limit: int32 })
-  -> PullResponse { changes: Change[], next_cursor: int64, has_more: bool }
-```
-
-- `since_cursor` est le dernier curseur que le client a appliqué avec succès.
-  Envoyez `0` pour une première synchronisation complète.
-- `changes` sont retournés ordonnés par `seq` croissant, restreints aux scopes que
-  l'appelant peut lire (voir **Réplication partielle**).
-- `next_cursor` est le `seq` le plus élevé inclus dans cette page. Ne le persistez
-  qu'après que toute la page a été appliquée localement.
-- `has_more` est `true` lorsque le résultat a été tronqué par `limit` ; le client
-  devrait immédiatement refaire `Pull` avec le nouveau `next_cursor`.
-
-Un seul `Change` porte assez d'informations pour être fusionné indépendamment :
-
-```json
-{
-  "entity": "hive",
-  "entity_id": "01HZX...",
-  "scope_id": "apiary-01HZ...",
-  "kind": "field",
-  "field": "name",
-  "value": "Hive 3 (north row)",
-  "hlc": "2026-06-19T09:14:02.117Z-0003-nodeA",
-  "seq": 48213
+```protobuf
+message PullRequest {
+  string cursor = 1; // last seen server sequence, "" for a first sync
+  int32 limit = 2;   // 0 = server default (200), max 500
+}
+message PullResponse {
+  repeated Change changes = 1;
+  string next_cursor = 2;
+  bool has_more = 3;
 }
 ```
 
-`kind` distingue les trois stratégies de fusion : `field` (LWW scalaire),
-`set_add` / `set_remove` (appartenance à un OR-Set), et `event` (ajout seul).
+Le curseur est la chaîne décimale de la séquence de réception du serveur
+(`change_log.seq`), pas une HLC. Le serveur retourne les lignes dont
+`seq > cursor` et dont le `scope_id` fait partie de l'ensemble de scopes de
+l'appelant, ordonnées par `seq`, et positionne `next_cursor` sur le dernier
+`seq` retourné (ou renvoie le curseur de la requête lorsque rien ne correspond).
+Ne persistez `next_cursor` qu'après avoir appliqué toute la page. `has_more`
+signifie que la page a été tronquée à `limit` ; tirez à nouveau immédiatement.
+
+Les lignes dans les scopes que vous ne pouvez pas lire consomment quand même des
+numéros de séquence, donc les valeurs que vous voyez comportent des trous.
 
 ## Push
 
-`Push` envoie un lot de changements locaux au serveur. Le serveur applique
-chacun d'eux avec les mêmes règles de fusion que le client utilise, assigne un
-nouveau `seq` à chaque changement accepté, et fait son rapport.
-
-```text
-Push(PushRequest { changes: Change[] })
-  -> PushResponse { server_cursor: int64, conflicts: Conflict[] }
-```
-
-- Le serveur valide que l'appelant peut écrire le `scope_id` de chaque changement.
-- Pour chaque changement de `field` scalaire, il applique le LWW par champ : la
-  valeur entrante ne l'emporte que si sa HLC est supérieure à la HLC actuellement
-  stockée pour ce champ.
-- Les opérations d'ensemble sont appliquées comme add/remove d'OR-Set ; les ajouts
-  l'emportent sur les suppressions concurrentes.
-- Les changements `event` sont ajoutés inconditionnellement — ils n'entrent jamais
-  en conflit.
-- Chaque changement accepté se voit assigner un nouveau `seq` strictement
-  croissant.
-- `server_cursor` est le `seq` le plus élevé assigné dans ce lot, de sorte que le
-  client peut avancer rapidement sans un aller-retour `Pull` supplémentaire pour
-  ses propres écritures.
-
-### Conflits
-
-`conflicts` n'est **pas** une liste d'erreurs — la fusion est toujours
-déterministe et réussit toujours. C'est une liste informative de champs où le
-serveur détenait déjà une valeur avec une HLC supérieure, de sorte que la valeur
-poussée par le client n'a *pas* été adoptée.
-
-```json
-{
-  "entity_id": "01HZX...",
-  "field": "queen_status",
-  "rejected_hlc": "2026-06-19T09:13:55.000Z-0001-nodeB",
-  "winning_hlc": "2026-06-19T09:14:10.421Z-0007-nodeA"
+```protobuf
+message PushRequest { repeated Change changes = 1; }
+message Conflict {
+  string entity = 1;
+  string entity_id = 2;
+  string winning_hlc = 3;
+}
+message PushResponse {
+  string server_cursor = 1;      // global sequence after this push
+  repeated Conflict conflicts = 2;
 }
 ```
 
-Le client devrait traiter un conflit comme un signal pour rafraîchir ce champ lors
-du prochain `Pull`, où il recevra la valeur gagnante. Aucune nouvelle tentative
-n'est nécessaire.
+Le serveur traite le lot dans une seule transaction :
 
-:::tip
-Parce que le LWW est déterministe et ordonné par HLC, `Push` est idempotent :
-renvoyer un changement dont la HLC a déjà perdu (ou déjà gagné) laisse l'état du
-serveur inchangé. Les clients peuvent réessayer un `Push` en toute sécurité après
-une connexion interrompue.
-:::
+1. `hlc.Recv(change.hlc)`.
+2. Les valeurs d'`entity` inconnues sont ignorées.
+3. `scope_id` doit faire partie de l'ensemble de scopes de l'appelant, sauf
+   qu'un changement `apiary` dont le `scope_id` est égal à son propre
+   `entity_id` ouvre un nouveau scope. Tout autre scope inconnu fait échouer
+   l'ensemble du push avec `permission_denied`.
+4. L'`organization_id` de la charge utile, s'il est présent et non vide, doit
+   correspondre à l'espace (tenant) actif de l'appelant ; une ligne existante
+   doit appartenir à cet espace. Les nouvelles lignes sont estampillées avec
+   l'espace de l'appelant. Une divergence fait échouer le push avec
+   `permission_denied`.
+5. Le changement est fusionné champ par champ (voir ci-dessous) et ajouté à
+   `change_log` avec un nouveau `seq`.
+
+`conflicts` est toujours vide dans le serveur actuel : les champs périmés sont
+abandonnés silencieusement lors de la fusion et la valeur plus récente arrive au
+prochain `Pull`. `server_cursor` est la séquence globale après le push ; le
+client le stocke comme curseur, ce qui lui évite de retirer ses propres
+changements.
+
+Le client abandonne tout le lot de l'outbox lorsque `Push` retourne
+`permission_denied` (session de démonstration en lecture seule ou scope non
+inscriptible). Les lignes restent dans les tables locales ; seul l'envoi est
+abandonné. Toute autre erreur conserve l'outbox pour la prochaine exécution.
+
+## Règles de fusion
+
+Les deux côtés appliquent le même algorithme (`applyChange` dans
+`server/internal/service/sync.go`, `applyRemote` dans
+`app/src/lib/local/sync.ts`).
+
+Chaque table synchronisée possède une colonne `field_hlc` contenant une map JSON
+`{ "<column>": "<hlc>" }`, l'horloge de champ.
+
+**Nouvelle ligne.** Insérer chaque colonne de la charge utile et estampiller
+chacune avec la HLC du changement.
+
+**Ligne existante, colonne scalaire.** Appliquer la valeur seulement si la HLC du
+changement est supérieure à l'entrée de la colonne dans `field_hlc`, puis mettre
+à jour cette entrée. Deux appareils qui modifient des colonnes différentes de la
+même ligne gagnent tous les deux ; deux appareils qui modifient la même colonne
+sont départagés par la HLC la plus élevée.
+
+**Ligne existante, colonne de type ensemble.** La valeur stockée est un OR-Set :
+`{ "<element>": { "a": ["<tag>", ...], "r": ["<tag>", ...] } }`. Les éléments
+`add` reçoivent la HLC du changement comme nouveau tag dans `a`. Les éléments
+`remove` déplacent les tags listés dans `removed_tags` (ou tous les tags `a`
+actuels) dans `r`. Un élément est visible tant qu'il possède un tag dans `a` qui
+n'est pas dans `r`, de sorte qu'un ajout que le supprimeur n'a jamais vu survit
+(l'ajout gagne). Les colonnes de type ensemble ne sont jamais écrasées par le
+LWW.
+
+**Suppression.** `deleted` est une colonne scalaire normale et suit le LWW avec
+la HLC de la suppression. Les lignes ne sont jamais retirées ; les lecteurs
+filtrent sur `deleted = 0`.
+
+Si rien dans le changement ne bat l'horloge de champ, la ligne est laissée
+intacte.
+
+## Scopes
+
+Le serveur calcule l'ensemble de scopes d'un appelant ainsi :
+
+```text
+{ "user:<user id>" }
+  ∪ { id of every apiary in the caller's active tenant }
+  ∪ { apiary_id from apiary_share rows for the caller }
+```
+
+Le même ensemble contrôle `Pull` et `Push`. Les ruchers utilisent leur propre id
+comme `scope_id` ; tout ce qui se trouve sous un rucher (ruches, reines, visites,
+tâches, placements, récoltes, traitements, événements) porte l'id du rucher.
+Rien dans l'application actuelle n'écrit `apiary_share`, donc en pratique
+l'ensemble de scopes correspond aux ruchers de l'espace.
 
 ## Subscribe
 
-`Subscribe` est un canal optionnel diffusé par le serveur, utilisé purement comme
-signal de réveil. Il ne transporte pas de données.
-
-```text
-Subscribe(SubscribeRequest { scopes: string[] })
-  -> stream Poke { scope_id: string, server_cursor: int64 }
+```protobuf
+message SubscribeRequest { string cursor = 1; }
+message SubscribeEvent { string server_cursor = 1; }
 ```
 
-Lorsqu'une écriture arrive dans l'un des scopes lisibles du client, le serveur
-émet un `Poke`. Le client répond en appelant `Pull(since_cursor)` comme
-d'habitude. Garder les données réelles sur `Pull` signifie que le flux peut être
-lacunaire sans affecter la justesse — un poke manqué signifie simplement que le
-prochain `Pull` déclenché par minuteur rattrape.
+Un flux serveur. Toutes les deux secondes, le serveur lit le compteur de
+séquence global et envoie `server_cursor` lorsqu'il a dépassé le curseur de la
+requête et la dernière valeur envoyée. Il ne transporte aucun changement ; un
+destinataire appelle `Pull`. Le compteur est global, pas par scope, donc un
+événement peut conduire à un pull vide. L'application ne l'utilise pas.
 
-:::note
-`Subscribe` est une optimisation de latence, pas une exigence. Un client qui ne
-sonde `Pull` que par minuteur est entièrement correct ; il est simplement moins
-réactif.
-:::
+## Tables côté serveur
 
-## Réplication partielle par scope
-Le partage dans Openbeehive se fait au niveau du **rucher** via des *scopes*. Un
-utilisateur ne réplique que les données comprises dans les scopes qu'il peut lire,
-pas la base de données entière.
+`change_log` est le flux : `seq`, `scope_id`, `entity`, `entity_id`, `op`,
+`payload`, `hlc`, `author_id`, `org_id`. `seq_counter` contient l'unique ligne
+de compteur (`name = 'change'`) qui est incrémentée à chaque changement accepté.
+Côté client, `outbox` contient les changements pas encore poussés sous la même
+forme et `sync_meta` stocke le curseur sous la clé `cursor`.
 
-Ceci est appliqué sur `Pull` et `Push` :
+## Changements émis par le serveur
 
-- `Pull` filtre `changes` selon les scopes lisibles de l'appelant avant de
-  paginer par `seq`. Le curseur avance donc sur une *vue par appelant* de la
-  séquence globale — deux utilisateurs partageant un rucher verront les changements
-  de ce rucher au même `seq`, tandis que chacun voit également ses propres scopes
-  privés.
-- `Push` rejette les écritures vers les scopes que l'appelant ne peut pas écrire.
-
-Parce que le curseur est la séquence de réception globale, un client peut voir des
-lacunes dans les valeurs `seq` qu'il reçoit (les changements dans les scopes qu'il
-ne peut pas lire sont sautés). Les lacunes sont attendues et inoffensives — le
-client n'a jamais besoin que du *prochain* curseur pour en demander davantage.
-
-## Logique de fusion en miroir
-
-Les fonctions de fusion — comparaison HLC, LWW par champ, résolution d'OR-Set,
-ajout d'événement — sont **identiques sur le client et le serveur**. La même
-logique que la PWA SvelteKit exécute lors de l'application d'un `Pull` est la
-logique que le backend Go exécute lors de l'application d'un `Push`.
-
-Cette mise en miroir est ce qui rend le système véritablement exempt de conflit
-plutôt que simplement résolveur de conflit :
-
-- Un changement produit le même résultat fusionné quel que soit l'*endroit* où il
-  est appliqué ou l'*ordre* dans lequel il arrive, de sorte que le client et le
-  serveur convergent sans négociation.
-- Le serveur n'est pas un arbitre privilégié qui peut écraser l'état des
-  appareils ; il applique les mêmes règles déterministes, puis assigne un `seq`
-  pour l'ordonnancement.
-- Les nouveaux types d'entité n'ont besoin de définir leurs règles de fusion
-  qu'une seule fois, dans la sémantique partagée, et les deux côtés les honorent.
-
-Pour les détails sous-jacents de l'horloge et de la structure de données, voir
-l'[aperçu de l'architecture](/developers/architecture) et le
-[modèle de données](/developers/data-model). Pour la façon dont les événements
-s'inscrivent dans le chemin d'ajout seul, voir
-[historique et événements](/developers/history-and-events).
+Les services CRUD (`ApiaryService`, `HiveService`, `QueenService`,
+`InspectionService`, `TaskService`, `TreatmentService`) n'écrivent pas
+directement dans les tables d'entités. Chaque RPC d'écriture construit un
+`Change` et le fait passer par `applyChange` et `appendChangeLog` dans une
+seule transaction (`server/internal/service/writer.go`), les deux mêmes étapes
+que `Push` effectue pour chaque changement. Un tel changement a un `author_id`
+positionné sur l'id utilisateur de l'appelant de l'API, une `hlc` tirée de
+l'horloge propre du serveur (id de nœud `BEEHIVE_NODE_ID`, l'horloge partagée
+avec le handler `Push` afin qu'elle reste en avance sur tout ce qui a été
+reçu), et un `scope_id` correspondant au rucher auquel la ligne appartient :
+l'id propre d'un rucher, le rucher de la ruche pour les ruches, reines,
+visites et traitements, et `user:<id>` pour une tâche sans rucher. Son
+`payload_json` est un delta partiel comme celui d'un appareil, de sorte qu'une
+modification ultérieure d'une autre colonne depuis un appareil fusionne avec
+lui, et la ligne apparaît au prochain `Pull` de chaque appareil qui peut lire
+le scope. Les suppressions via l'API sont des tombstones `CHANGE_OP_DELETE`.
+Les flux multi-lignes (ruche plus placement plus événement, remplacement de
+reine, contexte figé pour les visites et les traitements) ajoutent un
+changement par ligne, à l'image de `app/src/lib/local/history.ts`.

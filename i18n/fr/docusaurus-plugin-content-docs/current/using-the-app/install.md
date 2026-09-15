@@ -21,12 +21,11 @@ enregistrements disponibles même lorsque vous êtes au rucher sans réseau.
 - **Une icône d'application** sur votre écran d'accueil ou dans votre lanceur d'applications.
 - **Une fenêtre plein écran** sans habillage de navigateur, de sorte qu'il y a plus
   de place pour vos ruches et vos inspections.
-- **Un accès en mode hors ligne d'abord.** Vos enregistrements vivent dans une base
-  de données locale sur l'appareil et se synchronisent en arrière-plan. Les lectures
-  et les écritures sont instantanées, avec ou sans réseau. Consultez
-  [Hors ligne et synchronisation](/using-the-app/offline-and-sync) pour comprendre le fonctionnement.
+- **Un accès hors ligne.** Vos enregistrements vivent dans une base de données locale
+  sur l'appareil et se synchronisent en arrière-plan. Consultez
+  [Hors ligne et synchronisation](/using-the-app/offline-and-sync).
 - **Un scan QR rapide.** Scanner l'[étiquette QR](/using-the-app/qr-labels) d'une ruche
-  ouvre directement l'application installée sur cette ruche.
+  ouvre cette ruche.
 
 :::tip
 Vous pouvez continuer à utiliser Openbeehive dans un onglet de navigateur normal sans
@@ -130,11 +129,3 @@ désinstallez, ils ne vivent que dans la base de données locale de l'appareil e
 peuvent être perdus. Assurez-vous que l'application s'est synchronisée avant de la
 supprimer. Consultez [Hors ligne et synchronisation](/using-the-app/offline-and-sync).
 :::
-
-## Une note sur les applications natives
-
-Openbeehive est d'abord une PWA, et pour presque tout le monde la PWA installée est
-indiscernable d'une application native. Un wrapper natif (utilisant Capacitor) pour
-l'Apple App Store et Google Play est envisagé pour une version future, principalement
-pour atteindre les personnes qui préfèrent les boutiques. La PWA restera le moyen
-principal d'installation et conservera toutes ses capacités de mode hors ligne d'abord.

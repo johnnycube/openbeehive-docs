@@ -8,7 +8,7 @@ title: "Sauvegardes et restauration"
 Quelques minutes passées à configurer les sauvegardes maintenant vous épargneront beaucoup de soucis plus tard. Cette page couvre ce qu'il faut sauvegarder, comment le faire en toute sécurité, et comment restaurer le moment venu.
 
 :::tip Le serveur est la source de vérité
-Openbeehive est hors-ligne d'abord, donc chaque appareil qui utilise votre ruche conserve une copie locale complète de ses données dans le navigateur. Cette copie est une commodité, pas une sauvegarde : elle réside dans le stockage du navigateur et peut être effacée en vidant les données du site, en réinstallant, ou en perdant l'appareil.
+Chaque appareil qui utilise votre instance conserve une copie locale de ses données dans le navigateur. Cette copie est une commodité, pas une sauvegarde : elle peut être effacée en vidant les données du site, en réinstallant, ou en perdant l'appareil.
 
 Pour tout ce qui est partagé entre personnes ou appareils, le **serveur** est la copie de référence. Sauvegardez le serveur, et vous protégez les enregistrements de tous d'un seul coup.
 :::
@@ -33,8 +33,8 @@ Sauvegardez **à la fois** la base de données et les blobs. La base de données
 
 SQLite stocke vos données dans un seul fichier (par exemple `openbeehive.db`) plus deux fichiers compagnons lorsque la journalisation en écriture anticipée est activée :
 
-- `openbeehive.db-wal` — les changements récents pas encore intégrés au fichier principal
-- `openbeehive.db-shm` — l'index en mémoire partagée pour le WAL
+- `openbeehive.db-wal` : les changements récents pas encore intégrés au fichier principal
+- `openbeehive.db-shm` : l'index en mémoire partagée pour le WAL
 
 :::caution Ne copiez pas le fichier `.db` seul pendant que le serveur fonctionne
 Avec le WAL activé (le paramètre recommandé), les données les plus récentes peuvent encore se trouver dans le fichier `-wal`. Un simple `cp openbeehive.db backup.db` d'une base de données en cours d'exécution peut produire une copie incohérente ou obsolète.
@@ -42,7 +42,7 @@ Avec le WAL activé (le paramètre recommandé), les données les plus récentes
 
 Vous avez deux options sûres.
 
-### Option A — arrêter le service, puis copier
+### Option A : arrêter le service, puis copier
 
 La méthode fiable la plus simple. Arrêtez Openbeehive pour que rien n'écrive, copiez les trois fichiers ensemble, puis redémarrez-le.
 
@@ -56,9 +56,9 @@ cp openbeehive.db-shm /backups/openbeehive.db-shm 2>/dev/null || true
 systemctl start openbeehive
 ```
 
-Les fichiers `-wal` et `-shm` peuvent ne pas exister si la base de données vient d'être checkpointée — c'est normal, d'où le `|| true`.
+Les fichiers `-wal` et `-shm` peuvent ne pas exister si la base de données vient d'être checkpointée, c'est normal, d'où le `|| true`.
 
-### Option B — sauvegarde à chaud sûre pour le WAL (sans interruption)
+### Option B : sauvegarde à chaud sûre pour le WAL (sans interruption)
 
 L'outil en ligne de commande de SQLite peut prendre un instantané cohérent pendant que le serveur continue de fonctionner, en utilisant l'API de sauvegarde intégrée :
 
@@ -96,7 +96,7 @@ Mirorez le bucket avec le client MinIO ou l'AWS CLI :
 
 ```bash
 mc mirror --overwrite myminio/openbeehive /backups/blobs/
-# ou
+# or
 aws s3 sync s3://openbeehive /backups/blobs/
 ```
 
@@ -112,7 +112,7 @@ Restaurez la base de données et les blobs ensemble, puis redémarrez le service
 systemctl stop openbeehive
 
 cp /backups/openbeehive.db ./openbeehive.db
-rm -f ./openbeehive.db-wal ./openbeehive.db-shm   # laisser SQLite les reconstruire
+rm -f ./openbeehive.db-wal ./openbeehive.db-shm   # let SQLite rebuild these
 rsync -a --delete /backups/blobs/ ./data/blobs/
 
 systemctl start openbeehive
@@ -139,7 +139,7 @@ Après une restauration, les appareils connectés se réconcilient avec le serve
 Une tâche nocturne qui prend un instantané de la base de données et mirore les blobs suffit à la plupart des auto-hébergeurs. Ajoutez ceci à votre crontab avec `crontab -e` :
 
 ```bash
-# Sauvegarde nocturne d'Openbeehive à 02h30
+# Nightly Openbeehive backup at 02:30
 30 2 * * * sqlite3 /srv/openbeehive/openbeehive.db ".backup '/backups/openbeehive-$(date +\%F).db'" && rsync -a --delete /srv/openbeehive/data/blobs/ /backups/blobs/
 ```
 
@@ -148,9 +148,3 @@ Les caractères `%` doivent être échappés en `\%` dans la crontab. Pour Postg
 :::tip Testez vos restaurations
 Une sauvegarde que vous n'avez jamais restaurée n'est qu'un espoir. De temps en temps, restaurez dans un répertoire jetable ou une instance de test et confirmez que vous pouvez ouvrir l'application et voir vos ruches. Conservez au moins quelques jours de copies datées, et stockez-en une hors site (un disque externe ou un bucket distant).
 :::
-
-## Où aller ensuite
-
-- Définissez ou vérifiez `BEEHIVE_DATABASE_DSN` et `BEEHIVE_BLOB_DIR` sur la page [Configuration](/self-hosting/configuration).
-- Planifiez les mises à jour de version sur la page [Mise à niveau](/self-hosting/upgrading) — sauvegardez toujours d'abord.
-- Revenez à la [présentation de l'auto-hébergement](/category/self-hosting) pour la vue d'ensemble complète du déploiement.

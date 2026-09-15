@@ -5,7 +5,7 @@ title: "Configuration"
 
 # Configuration
 
-Openbeehive se configure entièrement au moyen de variables d'environnement. Cette page constitue la référence complète, regroupées exactement comme elles apparaissent dans `.env.example`.
+Openbeehive se configure entièrement au moyen de variables d'environnement. Cette page constitue la référence complète.
 
 Vous pouvez définir ces variables dans votre shell, dans un fichier `.env` à côté du binaire, dans votre fichier `docker compose`, ou via le gestionnaire de secrets de votre plateforme d'hébergement. Le serveur les lit une seule fois au démarrage, de sorte que les modifications prennent effet après un redémarrage.
 
@@ -20,7 +20,7 @@ Le réglage le plus important est `BEEHIVE_DEPLOYMENT_PROFILE`. Il choisit des v
 | Profil     | Base de données par défaut | Stockage d'objets par défaut | Destiné à                              |
 | ---------- | ---------------- | -------------------- | ------------------------------------- |
 | `selfhost` | SQLite (fichier) | Système de fichiers local | Un binaire unique, sans Docker, un seul hôte |
-| `cloud`    | PostgreSQL       | MinIO / S3           | Le déploiement hébergé, multi-locataires |
+| `cloud`    | PostgreSQL       | MinIO / S3           | Le déploiement hébergé, multi-tenant |
 
 Le profil ne fait que définir des *valeurs par défaut*. Toute variable que vous définissez explicitement l'emporte toujours. Par exemple, vous pouvez exécuter le profil `selfhost` tout en le pointant vers PostgreSQL en définissant vous-même `BEEHIVE_DATABASE_DRIVER` et `BEEHIVE_DATABASE_DSN`.
 
@@ -39,15 +39,15 @@ Les deux profils sont documentés en détail sur leurs propres pages : [Binaire 
 | Variable          | Défaut                   | Description                                                                 |
 | ----------------- | ------------------------ | --------------------------------------------------------------------------- |
 | `BEEHIVE_ADDR`            | `:8080`                  | Adresse et port sur lesquels le serveur écoute. Utilisez `127.0.0.1:8080` pour ne lier qu'à localhost derrière un reverse proxy. |
-| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | L'URL publique où les utilisateurs accèdent à l'application. Utilisée pour les liens profonds QR, les redirections OIDC et les liens absolus. Définissez-la sur votre véritable domaine en production. |
+| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | L'URL publique où les utilisateurs accèdent à l'application. Utilisée pour les redirections OIDC, les liens d'invitation et de vérification, et les valeurs par défaut des passkeys. Définissez-la sur votre véritable domaine en production. |
 | `BEEHIVE_HTTP_READ_HEADER_TIMEOUT` | `10s` | Temps accordé pour lire les en-têtes d'une requête. |
-| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Limite de lecture de la requête entière ; `0` signifie aucune, ce dont l'abonnement de synchronisation en flux a besoin. |
-| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Limite d'écriture de la réponse ; `0` signifie aucune, pour la même raison. |
+| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Limite de lecture de la requête entière ; `0` signifie aucune. |
+| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Limite d'écriture de la réponse ; `0` signifie aucune. |
 | `BEEHIVE_HTTP_IDLE_TIMEOUT` | `120s` | Durée pendant laquelle une connexion keep-alive inactive reste ouverte. |
 | `BEEHIVE_HTTP_SHUTDOWN_TIMEOUT` | `15s` | Délai de grâce pour les requêtes en cours à l'arrêt. |
 
 :::caution
-`BEEHIVE_PUBLIC_BASE_URL` doit correspondre à l'adresse que les utilisateurs visitent réellement. Si elle est incorrecte, les étiquettes QR, les redirections de connexion et les liens partagés pointeront vers le mauvais endroit.
+`BEEHIVE_PUBLIC_BASE_URL` doit correspondre à l'adresse que les utilisateurs visitent réellement. Si elle est incorrecte, les redirections de connexion et les liens d'invitation pointent vers le mauvais endroit.
 :::
 
 ## Application web intégrée
@@ -144,7 +144,7 @@ personne à s'inscrire. Consultez [Authentification](/self-hosting/authenticatio
 | `BEEHIVE_PASSWORD_AUTH` | activé pour `cloud`, désactivé pour `selfhost` | Active l'inscription et la connexion par e-mail/mot de passe. Également impliqué par `BEEHIVE_DEMO=true`. |
 | `BEEHIVE_ADMIN_EMAIL` | (vide) | E-mail de l'administrateur de l'instance. **Requis dès que l'authentification par mot de passe est activée.** Le compte est garanti à chaque démarrage : créé s'il manque, et son rôle forcé à administrateur. L'inscription n'accorde jamais le rôle d'administrateur. |
 | `BEEHIVE_ADMIN_PASSWORD` | (vide) | Mot de passe de l'administrateur de l'instance, 8 caractères au minimum. Fait foi à chaque démarrage : le mot de passe stocké est réinitialisé à cette valeur, ce qui sert aussi de récupération de mot de passe. |
-| `BEEHIVE_REGISTRATION` | `true` | Inscription libre. Réglez sur `false` pour une instance sur invitation uniquement : au-delà de l'administrateur du premier démarrage, les comptes ne peuvent être créés que via des liens d'invitation, et l'écran de connexion affiche un avis indiquant que l'instance est sur invitation uniquement. |
+| `BEEHIVE_REGISTRATION` | `true` | Inscription libre. Réglez sur `false` pour une instance sur invitation uniquement : en dehors de l'administrateur configuré, les comptes ne peuvent être créés que via des liens d'invitation, et l'écran de connexion affiche un avis indiquant que l'instance est sur invitation uniquement. |
 | `BEEHIVE_EMAIL_VERIFICATION` | `false` | Exige une confirmation par e-mail avant qu'un nouveau compte puisse se connecter. |
 | `BEEHIVE_SMTP_HOST` | (vide) | Serveur SMTP pour les e-mails de vérification/invitation. Si vide, les liens sont écrits dans le journal à la place. |
 | `BEEHIVE_SMTP_PORT` | `587` | Port SMTP. |
@@ -152,25 +152,25 @@ personne à s'inscrire. Consultez [Authentification](/self-hosting/authenticatio
 | `BEEHIVE_SMTP_PASS` | (vide) | Mot de passe SMTP. |
 | `BEEHIVE_SMTP_FROM` | `Openbeehive <no-reply@openbeehive.org>` | Adresse d'expéditeur pour le courrier sortant. |
 
-## Locataire de démonstration
+## Espace de démonstration
 
-Installe un compte et un locataire de démonstration de présentation. Désactivé par défaut — consultez
+Installe un compte et un espace (tenant) de démonstration de présentation. Désactivé par défaut, consultez
 [Mode démo](/self-hosting/demo).
 
 | Variable | Défaut | Description |
 | --- | --- | --- |
-| `BEEHIVE_DEMO` | `false` | Installe un compte + locataire de démonstration (15 ruches réparties sur 4 ruchers, réinitialisé toutes les heures). Implique `BEEHIVE_PASSWORD_AUTH=true`. |
+| `BEEHIVE_DEMO` | `false` | Installe un compte + espace de démonstration (15 ruches réparties sur 4 ruchers, réinitialisé toutes les heures). Implique `BEEHIVE_PASSWORD_AUTH=true`. |
 | `BEEHIVE_DEMO_AUTOLOGIN` | `false` | Connecte directement les visiteurs anonymes à la démo au lieu d'afficher l'écran de connexion. Réservé aux hôtes de pure démonstration ; laissez-le désactivé sur une instance qui sert aussi de vrais utilisateurs. |
 | `BEEHIVE_DEMO_EMAIL` | `demo@app.openbeehive.org` | E-mail du compte de démonstration. |
 | `BEEHIVE_DEMO_PASSWORD` | `demo` | Mot de passe du compte de démonstration. |
 
-## WebAuthn / clés d'accès
+## WebAuthn / passkeys
 
-Authentification sans mot de passe optionnelle utilisant des clés d'accès.
+Authentification sans mot de passe optionnelle utilisant des passkeys.
 
 | Variable                  | Défaut  | Description                                                            |
 | ------------------------- | ------- | --------------------------------------------------------------------- |
-| `BEEHIVE_WEBAUTHN_ENABLED`        | `false` | Active la connexion WebAuthn / par clé d'accès.                       |
+| `BEEHIVE_WEBAUTHN_ENABLED`        | `false` | Active la connexion WebAuthn / par passkey.                       |
 | `BEEHIVE_WEBAUTHN_RP_ID`          | hôte de `BEEHIVE_PUBLIC_BASE_URL` | ID de la partie de confiance (Relying Party), normalement votre domaine nu (par ex. `openbeehive.org`). |
 | `BEEHIVE_WEBAUTHN_RP_ORIGINS`     | `BEEHIVE_PUBLIC_BASE_URL` | Origines autorisées pour les cérémonies WebAuthn, séparées par des virgules. |
 | `BEEHIVE_WEBAUTHN_RP_DISPLAY_NAME`| `Openbeehive` | Nom lisible affiché aux utilisateurs lors de l'enregistrement.        |
@@ -203,7 +203,7 @@ BEEHIVE_OIDC_KEYCLOAK_CLIENT_SECRET=...
 ```
 
 :::tip Mono-utilisateur, sans connexion
-Pour une instance auto-hébergée personnelle, vous pouvez ignorer entièrement la connexion. Laissez `BEEHIVE_OIDC_PROVIDERS` vide **et** définissez `BEEHIVE_WEBAUTHN_ENABLED=false`. L'application s'exécute alors en mode mono-utilisateur, sans étape de connexion.
+Pour une instance auto-hébergée personnelle, vous pouvez ignorer entièrement la connexion : laissez `BEEHIVE_PASSWORD_AUTH` désactivé (la valeur par défaut de selfhost), `BEEHIVE_OIDC_PROVIDERS` vide et `BEEHIVE_WEBAUTHN_ENABLED=false`. L'application s'exécute alors en mode mono-utilisateur, sans étape de connexion.
 :::
 
 Pour les guides de configuration des fournisseurs, les URL de redirection et les conseils de sécurité, consultez [Authentification](/self-hosting/authentication).
@@ -224,8 +224,8 @@ ajoutez aussi l'administrateur dédié :
 
 ```bash
 BEEHIVE_PASSWORD_AUTH=true
-BEEHIVE_ADMIN_EMAIL=vous@example.com
-BEEHIVE_ADMIN_PASSWORD=un-long-mot-de-passe-que-vous-pourrez-retrouver
+BEEHIVE_ADMIN_EMAIL=you@example.com
+BEEHIVE_ADMIN_PASSWORD=a-long-password-you-can-recover-with
 ```
 
 C'est tout ce dont un apiculteur seul a besoin. Ajoutez un reverse proxy en façade pour le HTTPS et vous êtes prêt à tenir vos registres.

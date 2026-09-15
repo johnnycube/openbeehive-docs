@@ -24,7 +24,7 @@ pose problème.
 
 | Terme | Signification |
 | --- | --- |
-| **Rucher** | Un emplacement où sont gardées une ou plusieurs ruches. Dans Openbeehive, le rucher est le sommet de la hiérarchie et l'unité de partage. Voir [ruchers](/using-the-app/apiaries). |
+| **Rucher** | Un emplacement où sont gardées une ou plusieurs ruches. Dans Openbeehive, le rucher est le sommet de la hiérarchie. Voir [ruchers](/using-the-app/apiaries). |
 | **Espace abeille** | L'intervalle d'environ 6 à 9 mm que les abeilles laissent comme passage. Les espaces plus petits sont comblés de propolis ; les plus grands sont remplis de rayon. Un espace abeille correct permet de garder les cadres mobiles. |
 | **Couvain** | Les jeunes en développement : œufs, larves et nymphes. Un « cadre de couvain » sain est compact, avec peu de trous. |
 | **Corps de ruche** | La caisse inférieure (ou les caisses) où la reine pond et où le couvain est élevé, par opposition aux hausses situées au-dessus. |
@@ -34,7 +34,7 @@ pose problème.
 | **Rayon** | La structure de cire en alvéoles hexagonales servant à stocker le miel, le pollen et à élever le couvain. |
 | **Rayon étiré (bâti)** | Cire gaufrée que les abeilles ont étirée en alvéoles complètes et utilisables. |
 | **Mâle (faux-bourdon)** | Une abeille mâle. Les mâles ne butinent pas et n'ont pas de dard ; leur rôle est de féconder les reines. |
-| **Reine pondeuse de mâles** | Une reine défaillante ou non fécondée qui ne pond que des œufs non fécondés (de mâles) — signe qu'elle doit être remplacée. |
+| **Reine pondeuse de mâles** | Une reine défaillante ou non fécondée qui ne pond que des œufs non fécondés (de mâles), signe qu'elle doit être remplacée. |
 | **Cire gaufrée** | Une feuille de cire d'abeille ou de plastique, souvent gaufrée d'un motif d'alvéoles, qui offre aux abeilles une base pour bâtir leur rayon. |
 | **Butin (ressources)** | Le nectar, le pollen, l'eau et la propolis que les abeilles récoltent ; désigne aussi l'acte de les récolter. |
 | **Cadre** | Un rectangle amovible en bois ou en plastique qui tient le rayon ou la cire gaufrée et permet de le sortir pour l'inspection. |
@@ -43,7 +43,7 @@ pose problème.
 | **Inspection** | Une visite au cours de laquelle vous ouvrez une ruche, vérifiez son état et notez ce que vous y trouvez. Voir [inspecter](/beekeeping/inspecting). |
 | **Ouvrière pondeuse** | Une ouvrière qui se met à pondre (uniquement des œufs de mâles) lorsqu'une colonie est irrémédiablement orpheline. |
 | **Miellée** | Une période durant laquelle les plantes produisent du nectar en abondance et où les colonies gagnent rapidement du poids. |
-| **Nucleus (nuc)** | Une petite colonie de départ — généralement 3 à 5 cadres avec une reine, du couvain, des réserves et des abeilles. Un moyen courant d'acheter des abeilles ou de faire de l'essaimage artificiel. |
+| **Nucleus (nuc)** | Une petite colonie de départ, généralement 3 à 5 cadres avec une reine, du couvain, des réserves et des abeilles. Un moyen courant d'acheter des abeilles ou de faire de l'essaimage artificiel. |
 | **Propolis** | Une résine végétale collante que les abeilles utilisent pour boucher les interstices et vernir les surfaces. |
 | **Reine** | L'unique femelle fertile qui pond les œufs. Sa qualité conditionne toute la colonie. Voir [reines](/using-the-app/queens). |
 | **Cellule royale** | Une grande cellule en forme de cacahuète dans laquelle une nouvelle reine est élevée. Sa présence signale un essaimage, une supersédure ou un remérage d'urgence. |
@@ -55,7 +55,7 @@ pose problème.
 | **Essaim** | La reproduction de la colonie : la vieille reine part avec environ la moitié des abeilles pour fonder un nouveau foyer. Voir [essaimage](/beekeeping/swarming). |
 | **Traitement** | Une intervention contre les ravageurs ou les maladies, le plus souvent contre le varroa. Voir [traitements](/using-the-app/treatments) et [varroa](/beekeeping/varroa). |
 | **Varroa** | *Varroa destructor*, un acarien parasite qui affaiblit les abeilles et propage des virus ; le ravageur le plus grave dans la plupart des régions. Voir [varroa](/beekeeping/varroa). |
-| **Délai d'attente** | Le temps qui doit s'écouler après un traitement avant que le miel puisse être récolté pour la consommation humaine. Il varie selon le produit et le pays — suivez toujours l'étiquette. |
+| **Délai d'attente** | Le temps qui doit s'écouler après un traitement avant que le miel puisse être récolté pour la consommation humaine. Il varie selon le produit et le pays : suivez toujours l'étiquette. |
 | **Ouvrière** | Une abeille femelle infertile. Les ouvrières accomplissent la quasi-totalité du travail de la colonie : nourrissage, construction, garde et butinage. |
 
 :::caution
@@ -74,11 +74,11 @@ référence et vérifiez les règles en vigueur dans votre pays.
 | **Hors ligne d'abord** | Le principe de conception selon lequel tout fonctionne localement et instantanément, sans réseau, et se synchronise en arrière-plan dès qu'une connexion revient. Voir [hors ligne et synchronisation](/using-the-app/offline-and-sync). |
 | **OPFS** | L'Origin Private File System, un espace privé de votre navigateur où Openbeehive stocke sa base de données SQLite locale. |
 | **OR-Set** | Un ensemble « add-wins » (l'ajout l'emporte) utilisé pour les champs de type liste, afin que les ajouts simultanés provenant de différents appareils survivent tous à une fusion. Voir [protocole de synchronisation](/developers/sync-protocol). |
-| **PWA** | Progressive Web App — l'application web installable et utilisable hors ligne que vous exécutez sur téléphone, tablette ou ordinateur. Voir [installation](/using-the-app/install). |
+| **PWA** | Progressive Web App, l'application web installable et utilisable hors ligne que vous exécutez sur téléphone, tablette ou ordinateur. Voir [installation](/using-the-app/install). |
 | **Étiquette QR** | Un code imprimable sur une ruche qui encode un lien profond ; le scanner ouvre l'application directement sur cette ruche. Voir [étiquettes QR](/using-the-app/qr-labels). |
-| **Portée (scope)** | La frontière de partage dans Openbeehive. Le partage se fait au niveau du rucher : une portée accorde à d'autres l'accès à un rucher et à tout ce qu'il contient. |
 | **Synchronisation** | La fusion en arrière-plan, sans conflit, de vos modifications locales avec le serveur et vos autres appareils. Voir [hors ligne et synchronisation](/using-the-app/offline-and-sync). |
-| **Tâche** | Un rappel ou une chose à faire liée à une ruche ou un rucher — par exemple « ajouter une hausse » ou « traiter contre le varroa ». Voir [tâches](/using-the-app/tasks). |
+| **Tâche** | Un rappel avec un titre et une date d'échéance facultative, par exemple « ajouter une hausse » ou « traiter contre le varroa ». Voir [tâches](/using-the-app/tasks). |
+| **Espace (tenant)** | Un ensemble de ruchers, de ruches et d'archives partagé par ses membres. Chaque compte possède un espace personnel et peut être invité dans d'autres ; il n'existe pas de partage plus fin. Voir [comptes et espaces](/using-the-app/accounts-tenants). |
 
 :::note
 Les mécanismes plus profonds des HLC, des OR-Sets et des événements en ajout seul

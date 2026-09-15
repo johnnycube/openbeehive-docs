@@ -77,7 +77,7 @@ Le nourrissement à l'air libre (laisser du sirop à découvert pour n'importe q
 
 Chaque nourrissement mérite d'être consigné. Savoir combien de sirop ou de candi une colonie a pris, et quand, vous aide à juger si les réserves sont suffisantes, à repérer les colonies qui manquent régulièrement, et à planifier le nourrissement d'automne de l'année suivante plus précisément.
 
-Dans Openbeehive, enregistrez le nourrissement dans le cadre de la visite concernée afin qu'il figure aux côtés de tout ce que vous avez observé ce jour-là. Notez le type de nourrissement (sirop léger, sirop lourd ou candi) et la quantité donnée. Comme l'application fonctionne en mode hors ligne d'abord, vous pouvez consigner ceci au pied de la ruche même sans signal, et cela se synchronisera plus tard.
+Dans Openbeehive, enregistrez le nourrissement dans le cadre de la visite : saisissez la quantité dans le champ **Nourri (kg)** et indiquez le type de nourrissement (sirop léger, sirop lourd ou candi) dans la note, afin qu'il figure aux côtés de tout ce que vous avez observé ce jour-là.
 
 Consultez [Visites](/using-the-app/inspections) pour savoir comment enregistrer une visite et saisir les quantités de nourrissement.
 

@@ -28,7 +28,7 @@ operculant les cellules avec de la cire. L'operculation est leur signal que le m
 terminé et stable.
 
 La règle empirique fiable : un rayon est prêt lorsque environ **80 % ou plus des cellules
-sont operculées**. Pour la partie non operculée restante, utilisez le *test de secousse* —
+sont operculées**. Pour la partie non operculée restante, utilisez le *test de secousse* :
 tenez le cadre à l'horizontale et donnez-lui une secousse sèche. Si du nectar gicle, il est
 encore trop humide ; si rien ne sort, il est mûr.
 
@@ -38,10 +38,10 @@ La mesure objective est la **teneur en eau**, lue avec un réfractomètre à mie
 | --- | --- |
 | Moins de 18 % | Excellent, très stable |
 | 18 à 20 % | Convient pour la récolte et le stockage |
-| Plus de 20 % | Trop humide — risque de fermentation ; laissez plus longtemps ou séchez-le |
+| Plus de 20 % | Trop humide, risque de fermentation ; laissez plus longtemps ou séchez-le |
 
 :::tip
-Le miel de bruyère (Calluna) est une exception — il est thixotrope (gélatineux) et retient
+Le miel de bruyère (Calluna) est une exception : il est thixotrope (gélatineux) et retient
 naturellement plus d'eau, souvent jusqu'à environ 23 %. Il ne peut pas non plus être
 extrait normalement sans pressage ni brassage. Traitez-le comme un cas particulier.
 :::
@@ -74,7 +74,7 @@ Travaillez dans une pièce propre et étanche aux abeilles. Le miel chaud coule 
 extrayez le jour du retrait si possible, ou gardez les cadres au chaud.
 
 1. **Désoperculation.** Retirez les opercules de cire avec une fourchette à désoperculer,
-   un couteau dentelé, ou un couteau chauffant. Récupérez les opercules — ils contiennent
+   un couteau dentelé, ou un couteau chauffant. Récupérez les opercules, ils contiennent
    du miel et de la bonne cire.
 2. **Centrifugation.** Placez les cadres dans un extracteur et faites tourner. Les
    extracteurs tangentiels nécessitent de retourner les cadres pour faire les deux faces ;
@@ -99,7 +99,7 @@ laissant un miel clair en dessous.
 
 Si le miel est arrivé un peu humide, vous pouvez réduire l'humidité en le gardant au chaud
 (autour de 30 °C, pas chaud) avec une faible humidité et une bonne circulation d'air avant
-la mise en pots. Ne surchauffez jamais le miel — les températures élevées détruisent les
+la mise en pots. Ne surchauffez jamais le miel : les températures élevées détruisent les
 enzymes, foncent la couleur et créent du HMF. Une chaleur douce uniquement.
 
 ## Mise en pots, stockage et étiquetage
@@ -112,7 +112,7 @@ Stockez les pots dans un endroit frais, sombre et sec. Un miel correctement mûr
 conserve des années ; la cristallisation est naturelle et inoffensive, ce n'est pas un
 signe d'altération.
 
-Pour l'étiquetage — surtout si vous vendez — la plupart des juridictions attendent tout ou
+Pour l'étiquetage (surtout si vous vendez), la plupart des juridictions attendent tout ou
 partie de ceci :
 
 - Le mot **miel** et, le cas échéant, le type ou la source florale
@@ -139,17 +139,13 @@ légalement requis dans de nombreux pays.
 ## Consigner la récolte dans Openbeehive
 
 Enregistrez chaque lot en tant que **Récolte** afin de pouvoir retracer chaque lot jusqu'à
-son rucher, sa ruche et sa date — exactement le genre de traçabilité que vos étiquettes
+son rucher, sa ruche et sa date, exactement le genre de traçabilité que vos étiquettes
 promettent.
 
-Pour chaque récolte, consignez des détails tels que la ruche ou le rucher source, la date,
-la quantité (poids ou nombre de pots), le type de miel, et votre numéro de lot. Ajoutez des
-notes sur la teneur en eau, le goût ou la prise, et joignez une photo si vous le souhaitez.
-
-Comme Openbeehive fonctionne en mode hors ligne d'abord, vous pouvez consigner les récoltes
-directement au pied de la ruche ou dans la pièce d'extraction sans signal — tout se
-synchronise plus tard. Le numéro de lot que vous enregistrez ici est le même que celui à
-imprimer sur le pot, bouclant la boucle du rayon à l'étagère.
+Pour chaque récolte, consignez la date, la quantité en kilogrammes, la variété, la teneur
+en eau, votre numéro de lot et la date de durabilité minimale (à consommer de préférence
+avant), ainsi qu'une note pour le goût ou la prise. Le numéro de lot que vous enregistrez
+ici est celui à imprimer sur le pot, bouclant la boucle du rayon à l'étagère.
 
 Consultez [Récoltes dans l'application](/using-the-app/harvests) pour savoir comment saisir
 et gérer vos enregistrements de récolte, et le [guide apicole](/category/beekeeping-basics)

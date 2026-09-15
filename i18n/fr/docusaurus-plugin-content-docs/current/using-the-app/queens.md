@@ -5,29 +5,27 @@ title: "Reines"
 
 # Reines
 
-La reine est le cœur d'une colonie. Openbeehive vous permet de consigner qui elle est, d'où elle vient, comment elle est marquée, et quand son règne a commencé et pris fin. Parce que chaque reine est conservée dans l'enregistrement, vous construisez un historique vivant de votre cheptel au fil des saisons.
+Openbeehive enregistre qui est la reine, d'où elle vient, comment elle est marquée, et quand son règne a commencé et pris fin. Chaque reine reste dans l'enregistrement, de sorte que chaque ruche construit un historique de son cheptel au fil des saisons.
 
-## Ce que contient un enregistrement de reine
+## Ce que contient la fiche d'une reine
 
-Chaque reine appartient à une ruche et capture les détails qui comptent pour l'élevage et la tenue des registres :
+Définissez ou remplacez la reine depuis la page de la ruche. Le formulaire comporte :
 
 | Champ | Ce qu'il signifie |
 | --- | --- |
-| Année | L'année où la reine a été élevée ou a commencé à diriger la colonie. Cela détermine sa couleur de marquage. |
-| Numéro | Un numéro d'éleveur ou de séquence facultatif, utile si vous élevez plusieurs reines par an. |
-| Origine | D'où elle vient : votre propre élevage, une reine achetée, un essaim, une supersédure, etc. |
-| Race / lignée | La souche, telle que Buckfast, Carnica, Ligustica, Mellifera, ou une lignée locale. |
-| Couleur de marquage | La couleur du point sur son thorax (voir ci-dessous). |
-| Clippée | Indique si une aile a été clippée. |
-| Notes | Tout le reste : tempérament, schéma de ponte, éleveur d'origine. |
+| Année | L'année d'élevage de la reine. Détermine sa couleur de marquage. |
+| Numéro | Un numéro d'éleveur ou de séquence facultatif, par exemple « 12 ». |
+| Origine | D'où elle vient : élevage personnel, Buckfast, un essaim, une supersédure, etc. |
+| Marquage | La couleur du point sur son thorax. Suit automatiquement l'année ; décochez **auto** pour choisir une couleur à la main. |
+| Commentaire | Tout le reste : lignée d'élevage, comportement, qualité de ponte, éleveur d'origine. |
 
 :::tip Consigner l'origine honnêtement
-Une origine claire rend vos enregistrements bien plus utiles par la suite. « Élevage personnel, fille de la n°214 » ou « Achetée à l'association locale, Buckfast » vous en dira beaucoup plus dans deux ans que « reine » ne le fera jamais.
+« Élevage personnel, fille de la n°214 » ou « Achetée à l'association locale, Buckfast » vous en dira bien plus dans deux ans que « reine ».
 :::
 
 ## Couleur de marquage par année
 
-Openbeehive suit le code international des couleurs de reine, de sorte que la couleur que vous consignez correspond au point qu'utiliserait un éleveur. La couleur change tous les cinq ans selon le dernier chiffre de l'année :
+Openbeehive suit le code international de couleur des reines, qui tourne tous les cinq ans selon le dernier chiffre de l'année :
 
 | L'année se termine par | Couleur |
 | --- | --- |
@@ -37,51 +35,22 @@ Openbeehive suit le code international des couleurs de reine, de sorte que la co
 | 4 ou 9 | Vert |
 | 5 ou 0 | Bleu |
 
-Lorsque vous définissez l'année d'une reine, Openbeehive suggère automatiquement la couleur correspondante. Vous pouvez la remplacer si votre reine se trouve être marquée différemment, mais s'en tenir au code permet de garder votre rucher cohérent avec le monde apicole au sens large.
-
-Pour le code complet, le moyen mnémotechnique et les références imprimables, consultez [Couleurs de marquage des reines](/knowledge-base/queen-marking-colours).
-
-:::note
-La couleur enregistre comment la reine *est* marquée, ce qui correspond normalement à son année de naissance. Si vous marquez une reine tardivement, ou achetez une reine déjà marquée, consignez la couleur qu'elle porte réellement afin que le point dans vos enregistrements corresponde au point sur l'abeille.
-:::
+Lorsque vous définissez l'année, la couleur correspondante est sélectionnée. Décochez **auto** pour enregistrer une autre couleur si la reine que vous avez achetée en porte une, afin que le point dans vos enregistrements corresponde au point sur l'abeille. Pour le code complet et le moyen mnémotechnique, consultez [Couleurs de marquage des reines](/knowledge-base/queen-marking-colours).
 
 ## Remplacer une reine
 
-Une colonie n'a jamais qu'une seule reine régnante à la fois, mais au cours de sa vie elle en aura plusieurs. Lorsqu'une reine est superséée, essaime, meurt, ou que vous remérez délibérément, vous ne supprimez pas son enregistrement. Au lieu de cela, vous commencez un nouveau règne.
+Une colonie n'a qu'une reine régnante à la fois, mais elle en aura beaucoup au cours de sa vie. Lorsqu'une reine est supersédée, part avec un essaim, meurt, ou que vous remérez délibérément, ne supprimez pas sa fiche. Touchez **Remplacer la reine** sur la page de la ruche et saisissez la nouvelle. Openbeehive :
 
-Lorsque vous ajoutez une nouvelle reine à une ruche, Openbeehive :
-
-1. Clôture le règne de la reine précédente, en enregistrant sa date de fin.
-2. Ouvre le règne de la nouvelle reine à partir de sa date de début.
-3. Conserve l'ancienne reine dans l'historique de la ruche, de sorte que rien n'est perdu.
-
-Cela donne à chaque ruche un historique de reines complet et ordonné. Vous pouvez remonter dans le temps et voir exactement qui pondait au cours d'une saison donnée, combien de temps chaque reine a duré, et quelles lignées ont bien performé pour vous.
+1. Clôt le règne de la reine précédente en y apposant sa date de remplacement.
+2. Enregistre la nouvelle reine avec sa date d'introduction.
+3. Conserve l'ancienne reine sous **Historique des reines** sur la page de la ruche, avec ses dates d'introduction et de remplacement.
 
 :::tip Remérage
-Lorsque vous remérez, notez *pourquoi* dans l'enregistrement de la nouvelle reine ou dans une inspection : ponte médiocre, abeilles agressives, âge, ou amélioration planifiée de la lignée. Les tendances observées sur plusieurs ruches révèlent souvent plus que n'importe quelle colonie isolée.
+Notez *pourquoi* vous avez remété dans le commentaire de la nouvelle reine : ponte médiocre, abeilles défensives, âge, amélioration planifiée de la lignée. Les tendances sur plusieurs ruches en révèlent souvent plus qu'une colonie seule.
 :::
 
-## Entrées antidatées et reine régnante
+## Entrées antidatées
 
-L'apiculture se déroule rarement dans un ordre parfait. Vous pourriez consigner une inspection des jours après la visite, ou ne consigner un remérage qu'une fois la nouvelle reine bien en ponte.
+Les visites, récoltes et traitements portent leur propre date et sont attribués à la reine dont le règne couvrait cette date, pas nécessairement à celle qui est à la tête de la ruche aujourd'hui. Si un remérage et une visite antidatée tombent à des dates proches, vérifiez les dates pour que chaque enregistrement atterrisse sous le bon règne.
 
-Openbeehive gère cela avec élégance. Chaque règne de reine a une plage temporelle, et les inspections, événements et autres enregistrements portent leur propre date. Lorsque vous antidatez une entrée, l'application la rapporte à la reine qui régnait réellement à cette date, et non simplement à la reine à la tête de la ruche aujourd'hui.
-
-Ainsi, si vous consignez une inspection d'il y a trois semaines, elle est associée à la reine qui était en charge à ce moment-là, même si elle a depuis été remplacée. Votre historique reste exact, quel que soit le moment où vous effectuez la saisie.
-
-:::caution Vérifiez vos dates
-Parce que les enregistrements antidatés se rattachent à la reine qui régnait à ce moment-là, la date que vous saisissez a son importance. Si un remérage et une inspection tombent à des dates proches, vérifiez les dates afin que chaque enregistrement se rattache au bon règne.
-:::
-
-## Comment cela se synchronise
-
-Les enregistrements de reines se synchronisent comme tout le reste dans Openbeehive : les modifications sont enregistrées localement et instantanément, puis fusionnées en arrière-plan. Les règnes sont un historique en ajout seul, ils n'entrent donc jamais en conflit entre appareils. Si deux personnes modifient les notes de la même reine, la modification la plus récente de chaque champ l'emporte, et les champs de type liste fusionnent plutôt que d'être écrasés.
-
-Vous pouvez travailler au rucher sans réseau et avoir la certitude que votre historique de reines se réconciliera proprement une fois de retour en ligne. Pour en savoir plus à ce sujet, consultez [Hors ligne et synchronisation](/using-the-app/offline-and-sync).
-
-## Pages associées
-
-- [Ruches](/using-the-app/hives) — où vivent les reines.
-- [Inspections](/using-the-app/inspections) — consigner les visites et ce que vous avez constaté.
-- [Élevage de reines](/beekeeping/queen-rearing) — élever vos propres reines.
-- [Couleurs de marquage des reines](/knowledge-base/queen-marking-colours) — le code international complet.
+Les fiches de reines se synchronisent comme tout le reste ; voir [Hors ligne et synchronisation](/using-the-app/offline-and-sync).

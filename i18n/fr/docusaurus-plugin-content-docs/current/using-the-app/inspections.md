@@ -5,117 +5,94 @@ title: "Inspections (visites)"
 
 # Inspections (visites)
 
-Une inspection est le compte rendu d'une seule visite à une ruche : ce que vous avez observé, ce que vous avez fait et tout ce qui mérite d'être retenu pour la prochaine fois. Au fil d'une saison, ces visites construisent un récit clair de l'évolution de chaque colonie.
-
-Comme Openbeehive fonctionne en mode hors ligne d'abord, vous pouvez tout enregistrer au rucher sans aucun signal. Les saisies sont sauvegardées instantanément sur votre appareil et se synchronisent avec le serveur en arrière-plan dès que vous êtes de nouveau à portée. Consultez [Hors ligne et synchronisation](/using-the-app/offline-and-sync) pour découvrir comment cela fonctionne.
+Une inspection est le compte rendu d'une seule visite à une ruche : ce que vous avez observé, ce que vous avez fait et tout ce qui mérite d'être retenu. Au fil d'une saison, les visites dessinent une image de l'évolution de chaque colonie. Fonctionne hors ligne ; voir [Hors ligne et synchronisation](/using-the-app/offline-and-sync).
 
 :::tip
-Pour savoir _quoi_ rechercher pendant une visite et à quelle fréquence inspecter, lisez [Inspecter une colonie](/beekeeping/inspecting). Cette page explique comment l'enregistrer.
+Pour savoir quoi observer lors d'une visite et à quelle fréquence inspecter, lisez [Inspecter une colonie](/beekeeping/inspecting). Cette page explique comment l'enregistrer.
 :::
 
-## Démarrer une inspection
+## Démarrer une visite
 
-Ouvrez une ruche et appuyez sur **Ajouter une inspection** (ou scannez l'[étiquette QR](/using-the-app/qr-labels) de la ruche pour y accéder directement). Une nouvelle visite est créée et horodatée à la date et à l'heure actuelles.
+Ouvrez une ruche (ou scannez son [étiquette QR](/using-the-app/qr-labels)) et touchez **Enregistrer une visite** au-dessus du journal des visites. Le formulaire s'ouvre avec la date du jour.
 
-Chaque champ est facultatif. Enregistrez autant ou aussi peu que vous le souhaitez — un rapide « tout va bien » est une saisie parfaitement valable.
+Chaque champ est facultatif. Un simple « tout va bien » sans rien d'autre est une entrée valide.
 
 ## Date et météo
 
-| Champ | Remarques |
+| Champ | Notes |
 | --- | --- |
-| Date | Par défaut, l'instant présent ; modifiez-la si vous consignez une visite passée. |
-| Météo | Les conditions du moment, par exemple ensoleillé, couvert, venteux. Un contexte utile, car les abeilles se comportent différemment par mauvais temps. |
+| Date | Par défaut aujourd'hui ; modifiez-la pour consigner une visite passée. |
+| Météo | Texte libre, par exemple « ensoleillé, 22°C ». |
 
-## Colonie et comportement
-
-Cette section saisit l'état de la colonie le jour même.
+## Colonie & comportement
 
 | Champ | Ce qu'il enregistre |
 | --- | --- |
-| Reine vue | Si vous avez réellement repéré la reine. |
-| Œufs vus | Les œufs sont le meilleur signe rapide d'une reine ayant pondu récemment. |
-| Couvain operculé | Si du couvain d'ouvrières operculé est présent. |
-| Plus jeune larve | Le stade de couvain le plus jeune que vous avez trouvé — un signal plus fin d'une ponte récente. |
+| Reine vue | Si vous avez repéré la reine. |
+| Œufs vus | Le signe le plus rapide d'une reine qui a pondu récemment. |
+| Couvain operculé vu | Si du couvain d'ouvrières operculé est présent. |
+| Larve la plus jeune | Âge en jours du stade de couvain le plus jeune que vous avez trouvé. |
 | Cadres occupés | Combien de cadres les abeilles couvrent. |
 | Cadres de couvain | Combien de cadres contiennent du couvain. |
-| Réserves de nourriture | Votre appréciation des réserves : faibles, suffisantes ou abondantes. |
-| Cellules d'essaimage | Si des cellules royales suggérant une préparation à l'essaimage sont présentes. |
-| Douceur | À quel point la colonie est calme dans l'ensemble. |
-| Calme sur le rayon | Si les abeilles se tiennent tranquillement sur le rayon ou si elles courent et bouillonnent. |
-| Comptage varroa | Comptage d'acariens à partir d'un lange ou d'un lavage, si vous en avez fait un. |
+| Réserves de nourriture | Bonnes, Moyennes, Faibles ou Nulles. |
+| Cellules royales | Combien de cellules royales vous avez trouvées. |
+| Douceur | Très douce, Douce, Normale, Nerveuse ou Agressive. |
+| Tenue au cadre | Quitte le cadre, Agitée, Calme ou Très calme. |
+| Varroa | Texte libre pour votre comptage, par exemple « 3 varroas/jour ». |
+| Poids de la ruche | En kg, si vous pesez la ruche. |
 
 :::note
-Vous remplirez rarement tous les champs à chaque visite. Le trio « reine vue / œufs vus / plus jeune larve » suffit généralement à confirmer la présence d'une reine pondeuse en bonne santé sans avoir à la retrouver à chaque fois.
+Le trio « œufs vus / larve la plus jeune / couvain operculé » confirme généralement une reine en ponte et en bonne santé sans avoir à la trouver à chaque fois.
 :::
 
-## Activités lors de la visite
-
-Enregistrez tout ce que vous avez fait pendant que la ruche était ouverte. Ces activités alimentent aussi les registres plus larges de la ruche — par exemple, le miel prélevé peut alimenter les [Récoltes](/using-the-app/harvests).
+## Activités lors de cette visite
 
 | Activité | Enregistre |
 | --- | --- |
-| Nourrissement | Quantité nourrie, en kg. |
-| Cadres ajoutés / retirés | Cadres que vous avez mis en place ou retirés. |
-| Cadre à mâles découpé | Si vous avez découpé un cadre de couvain de mâles (une mesure de contrôle du varroa). |
-| Hausse ajoutée | Si vous avez ajouté une hausse pour le stockage du miel. |
-| Poids de la ruche | Le poids pesé de la ruche, si vous le suivez. |
-| Miel récolté | Miel prélevé lors de cette visite. |
+| Nourri | Quantité donnée, en kg. |
+| Miel récolté | Miel prélevé lors de cette visite, en kg. |
+| Cadres ajoutés / retirés | Cadres que vous avez mis ou enlevés. |
+| Cadre à mâles découpé | Si vous avez découpé un cadre de couvain de mâles (une mesure de lutte contre le varroa). |
+| Hausse ajoutée | Si vous avez ajouté une hausse. |
 
-Pour une vue d'ensemble sur la gestion des acariens et la récolte, consultez [Varroa](/beekeeping/varroa) et [Récolte du miel](/beekeeping/honey-harvest).
+Pour une vue d'ensemble de la gestion du varroa et de la récolte, consultez [Varroa](/beekeeping/varroa) et [Récolte de miel](/beekeeping/honey-harvest). Le miel que vous prélevez pour la mise en pot est enregistré séparément comme une [récolte](/using-the-app/harvests), avec la variété, la teneur en eau et le numéro de lot.
 
-## Climat : température et humidité
+## Climat
 
-Chaque inspection peut enregistrer la température et l'humidité relative, à la fois **à l'intérieur de la
-ruche** et **à l'extérieur** — utile pour suivre la chaleur du nid à couvain, la ventilation et
-l'hivernage.
+| Champ | Unité |
+| --- | --- |
+| Température de la ruche | °C |
+| Température extérieure | °C |
+| Humidité de la ruche | % |
+| Humidité extérieure | % |
 
-| Champ | Enregistre | Unité |
-| --- | --- | --- |
-| Température de la ruche | Température à l'intérieur de la ruche | °C |
-| Température extérieure | Température ambiante au rucher | °C |
-| Humidité de la ruche | Humidité relative à l'intérieur de la ruche | % |
-| Humidité extérieure | Humidité relative extérieure | % |
-
-Les quatre sont facultatifs — renseignez ce que vous avez mesuré. Au fil du temps, ils apparaissent dans les
-**graphiques de développement** de la ruche, aux côtés du poids et de la force de la colonie.
-
-:::tip Laissez les capteurs s'en charger
-Vous n'avez pas besoin de saisir ces valeurs. Une balance de ruche ou une sonde de température/humidité peut
-transmettre des relevés automatiquement via l'API — voir
-[Trackers automatisés](/using-the-api/automated-trackers).
-:::
-
-## Notes et photos
-
-Ajoutez des **notes** en texte libre pour tout ce que les champs structurés ne couvrent pas — une cellule de supersédure repérée, un caractère à surveiller, un rappel pour remérer.
-
-Joignez des **photos** pour capturer les motifs de couvain, une maladie suspectée ou des cellules royales. Les images sont stockées avec la visite et se synchronisent avec le reste de vos registres.
+Les quatre sont facultatifs. Avec le temps, ils apparaissent dans les graphiques **Évolution** de la ruche aux côtés du poids et de la force de la colonie.
 
 :::tip
-Si quelque chose nécessite un suivi, créez une [Tâche](/using-the-app/tasks) à partir de la visite pour ne pas l'oublier.
+Une balance de ruche ou un capteur climatique peut envoyer ces champs via l'API ; chaque relevé devient une visite sur la ruche et se synchronise vers vos appareils. Voir [Trackers automatisés](/using-the-api/automated-trackers).
 :::
 
-## Le journal de visites par ruche
+## Note et photos
 
-Chaque inspection est conservée, jamais écrasée. Sur la page de la ruche, vous disposez d'un **journal de visites** chronologique — l'historique complet de cette colonie, les plus récentes en premier.
+Ajoutez une **note** en texte libre pour tout ce que les champs structurés ne couvrent pas : une cellule de supersédure repérée, un tempérament à surveiller, un rappel de remérage.
 
-Ce journal vous permet de repérer les tendances d'un coup d'œil : le couvain qui se développe au printemps, les réserves qui s'épuisent avant l'hiver, un comptage varroa en hausse ou un problème de caractère qui s'installe. Comme chaque visite est un événement en ajout seul, la synchronisation entre appareils ne perd ni n'entre jamais en conflit avec un enregistrement.
+**Ajouter une photo** joint une ou plusieurs images (aspect du couvain, maladie suspectée, cellules royales). Elles sont stockées avec la visite et se synchronisent avec le reste de vos enregistrements. Si quelque chose demande un suivi, ajoutez une [tâche](/using-the-app/tasks) avec une échéance.
+
+## Le journal des visites
+
+Chaque visite est conservée. La page de la ruche affiche les cinq visites les plus récentes, la plus récente en premier, chacune résumée par des vignettes ; **Voir les N visites** ouvre le journal complet, et **Fiche de ruche** imprime toutes les visites sous forme de tableau.
+
+Le journal vous permet de repérer des tendances : le couvain qui se développe au printemps, les réserves qui diminuent avant l'hiver, un comptage de varroa qui augmente. Les visites ne font que s'ajouter, la synchronisation entre appareils n'en écrase donc jamais une.
 
 ## Conseils pour une saisie rapide sur le terrain
 
-Les inspections se font gants enfilés, en plein soleil, avec des abeilles dans l'air. Quelques habitudes permettent de garder la saisie rapide :
-
-- **Scannez l'étiquette QR** pour ouvrir instantanément la bonne ruche — sans faire défiler une liste.
-- **Consignez au fur et à mesure.** Renseignez les champs entre les cadres plutôt que d'essayer de tout mémoriser après coup.
-- **Appuyez-vous sur le trio rapide.** Œufs vus, plus jeune larve et couvain operculé confirment une reine pondeuse plus vite que de partir à sa recherche.
-- **Utilisez la voix ou des notes courtes.** Déposez une brève note maintenant ; peaufinez-la plus tard, au calme à la maison.
-- **Ne vous souciez pas des blancs.** Les champs vides ne posent pas de problème. N'enregistrez que ce que vous avez vérifié.
-- **Photographiez ce qui est douteux.** Une photo d'un motif de couvain inhabituel ou d'une cellule royale vaut mieux qu'une description tapée.
+- **Scannez l'étiquette QR** pour ouvrir la bonne ruche sans faire défiler.
+- **Consignez au fur et à mesure.** Touchez les champs entre deux cadres plutôt que de tout reconstituer après coup.
+- **Appuyez-vous sur le trio rapide.** Œufs vus, larve la plus jeune et couvain operculé confirment une reine en ponte plus vite que de la traquer.
+- **Gardez les notes courtes.** Notez brièvement maintenant ; développez à la maison.
+- **Laissez des champs vides.** N'enregistrez que ce que vous avez vérifié.
+- **Photographiez ce qui est douteux.** Une photo d'un couvain à l'aspect étrange vaut plus qu'une description tapée.
 
 :::caution
-Si vous soupçonnez une maladie à déclaration obligatoire telle que la loque américaine ou européenne, photographiez-la, refermez et suivez les règles de signalement locales. Les obligations de déclaration varient selon le pays et la région. Consultez [Maladies et nuisibles](/knowledge-base/diseases-and-pests).
+Si vous suspectez une maladie à déclaration obligatoire comme la loque américaine ou européenne, photographiez, refermez et suivez vos règles locales de déclaration. Voir [Maladies et parasites](/knowledge-base/diseases-and-pests).
 :::
-
----
-
-Voir aussi : [Inspecter une colonie](/beekeeping/inspecting) pour la technique de terrain, et [Ruches](/using-the-app/hives) pour l'emplacement du journal de visites.

@@ -27,9 +27,9 @@ d'une reine est la chose la plus utile pour juger plus tard de sa performance.
 Une reine pondeuse est généralement la seule femelle fertile de la ruche. Ses tâches
 principales sont :
 
-- **Pondre des œufs** — jusqu'à 1 500 à 2 000 par jour au pic du printemps, selon un
+- **Pondre des œufs** : jusqu'à 1 500 à 2 000 par jour au pic du printemps, selon un
   schéma serré et régulier sur le rayon.
-- **Produire des phéromones** — des signaux chimiques (notamment la phéromone
+- **Produire des phéromones** : des signaux chimiques (notamment la phéromone
   mandibulaire de la reine) qui suppriment les ovaires des ouvrières, signalent sa
   présence, et maintiennent la cohésion de la colonie.
 
@@ -52,7 +52,7 @@ Surveillez ces schémas lors des visites de routine.
 | Cellules royales sur la face du rayon | Remérage (la colonie la remplace) |
 
 :::caution Confirmez avant d'agir
-Une brève interruption de ponte peut être normale — par exemple, juste après un essaim,
+Une brève interruption de ponte peut être normale, par exemple juste après un essaim,
 ou pendant qu'une nouvelle reine se fait féconder. Avant de décider qu'une colonie est
 orpheline, recherchez des œufs et de très jeunes larves, et envisagez de vérifier à
 nouveau dans quelques jours.
@@ -64,7 +64,7 @@ trois derniers jours. Vous n'avez pas toujours besoin de la trouver.
 
 ## Le remérage
 
-Le remérage consiste à remplacer la reine de la colonie — parce qu'elle est défaillante,
+Le remérage consiste à remplacer la reine de la colonie, parce qu'elle est défaillante,
 que la colonie est agressive ou improductive, ou simplement selon un calendrier planifié.
 
 1. **Procurez-vous une reine.** Achetez une reine fécondée auprès d'un éleveur réputé, ou
@@ -78,7 +78,7 @@ que la colonie est agressive ou improductive, ou simplement selon un calendrier 
    bouchon de candi. Placez-la entre les cadres de couvain. Les ouvrières mangent le candi
    sur quelques jours, la libérant progressivement afin qu'elles acceptent son odeur.
 5. **Vérifiez l'acceptation.** Après environ une semaine, confirmez qu'elle pond. Évitez de
-   déranger la colonie entre-temps — des visites brutales provoquent le rejet.
+   déranger la colonie entre-temps : des visites brutales provoquent le rejet.
 
 :::note L'introduction est la partie risquée
 Les colonies rejettent parfois une nouvelle reine, surtout si elles ont déjà des cellules
@@ -107,10 +107,10 @@ Vous n'avez pas besoin de greffer pour élever de bonnes reines.
   de larves sélectionnées.
 
 La règle d'or de toutes les méthodes : les reines sont élevées à partir de **très jeunes
-larves** (jusqu'à environ 24 à 36 heures). Plus jeune, c'est mieux — les larves plus âgées
+larves** (jusqu'à environ 24 à 36 heures). Plus jeune, c'est mieux : les larves plus âgées
 donnent de moins bonnes reines.
 
-### Le greffage — la voie avancée
+### Le greffage : la voie avancée
 
 Le greffage est la norme commerciale et offre le plus de contrôle. Vous transférez des
 larves d'un jour d'une reine éleveuse choisie dans des cupules artificielles à l'aide d'un
@@ -121,7 +121,7 @@ les œufs et juger de l'âge des larves.
 
 ### Timing et fécondation
 
-Une reine se développe vite — grossièrement 16 jours de l'œuf à l'émergence. Après
+Une reine se développe vite : grossièrement 16 jours de l'œuf à l'émergence. Après
 l'émergence :
 
 - Elle mûrit pendant plusieurs jours, puis effectue un ou plusieurs **vols de
@@ -134,7 +134,7 @@ l'émergence :
 
 Vous ne pouvez pas contrôler où les reines à fécondation libre s'accouplent. Pour des
 caractères spécifiques, les apiculteurs utilisent des ruchers de fécondation isolés ou
-l'insémination instrumentale — deux sujets avancés.
+l'insémination instrumentale, deux sujets avancés.
 
 ## Marquer la couleur de l'année
 
@@ -162,11 +162,3 @@ Lorsque vous marquez une reine, consignez sa couleur de marquage dans l'applicat
 attendue d'après l'année, afin que vous puissiez confirmer d'un coup d'œil si une reine a
 bien l'âge que vous pensez.
 :::
-
-## Pour aller plus loin
-
-- Découvrez la saison dans son ensemble dans [L'année apicole](/beekeeping/beekeeping-year).
-- Comprenez l'impulsion à créer de nouvelles reines dans
-  [Essaimage](/beekeeping/swarming).
-- Voyez comment les colonies sont organisées dans
-  [La colonie](/beekeeping/the-colony).

@@ -15,7 +15,7 @@ Le service hébergé sur [app.openbeehive.org](https://app.openbeehive.org) est 
 
 ## Mes données sont-elles privées ?
 
-Vos archives résident d'abord sur votre propre appareil. Openbeehive fonctionne **hors ligne d'abord** : l'application stocke tout dans une base de données locale sur votre téléphone, tablette ou ordinateur, et ne se synchronise au serveur qu'en arrière-plan.
+Vos archives résident d'abord sur votre propre appareil : l'application stocke tout dans une base de données locale sur votre téléphone, tablette ou ordinateur et se synchronise au serveur en arrière-plan.
 
 Si vous l'hébergez vous-même, vos données ne quittent jamais votre propre infrastructure. Sur le service hébergé, vos archives sont stockées sur nos serveurs afin de pouvoir se synchroniser entre vos appareils, mais elles restent les vôtres.
 
@@ -39,10 +39,7 @@ Il n'y a pas aujourd'hui d'application native distincte sur l'App Store ou le Pl
 
 ## Puis-je exporter mes données ?
 
-Oui. Comme le projet est open source et que vos données sont stockées dans une base de données SQLite standard, vous n'êtes jamais captif.
-
-- Les **auto-hébergeurs** peuvent sauvegarder directement la base de données. Voir [Sauvegardes](/self-hosting/backups).
-- Sur le **service hébergé**, des outils d'export font partie de la feuille de route. Vos archives sont aussi conservées localement sur chaque appareil synchronisé.
+Oui. **Paramètres → Données & sauvegarde** exporte tout ce qui se trouve sur votre appareil sous forme de sauvegarde JSON complète, de feuille de calcul (XLSX), de fichiers CSV dans un ZIP, de BeeXML ou de rapport PDF imprimable, et importe du JSON, du BeeXML et du CSV depuis d'autres applications. Voir [Import et export](/using-the-app/import-export). Les auto-hébergeurs peuvent aussi sauvegarder directement la base de données du serveur ; voir [Sauvegardes](/self-hosting/backups).
 
 ## Puis-je l'héberger moi-même ?
 
@@ -61,9 +58,7 @@ Pour une instance privée à utilisateur unique, vous pouvez désactiver entièr
 
 ## Comment fonctionne le partage ?
 
-Le partage se fait au niveau du **rucher** via des « portées » (scopes). Lorsque vous partagez un rucher, les personnes avec qui vous le partagez peuvent voir et contribuer à tout ce qu'il contient : ses ruches, reines, inspections, tâches et plus encore.
-
-La synchronisation est sans conflit par conception, si bien que deux personnes modifiant le même rucher sur des appareils différents n'écraseront pas le travail l'une de l'autre. Les modifications fusionnent proprement même après de longues périodes hors ligne. Les détails techniques sont traités dans le [protocole de synchronisation](/developers/sync-protocol).
+Les archives sont partagées par l'intermédiaire des **espaces** (tenants). Chaque compte possède un espace personnel et peut être invité dans d'autres, par exemple celui d'un club. Tous les membres d'un espace voient et modifient l'ensemble de ses ruchers, ruches et archives ; il n'y a pas de partage par rucher. La synchronisation est sans conflit, si bien que deux personnes modifiant le même espace sur des appareils différents n'écrasent pas le travail l'une de l'autre. Voir [Comptes et espaces](/using-the-app/accounts-tenants).
 
 ## Quels types de ruches sont pris en charge ?
 
@@ -99,7 +94,7 @@ Chaque ruche peut avoir une étiquette QR imprimable. La scanner ouvre Openbeehi
 
 ## En quelles langues est-il disponible ?
 
-Openbeehive est conçu avec l'internationalisation à l'esprit, l'allemand et l'anglais étant les premières priorités compte tenu des origines du projet. Les langues supplémentaires sont les bienvenues sous forme de contributions communautaires.
+Cinq langues sont livrées dans l'application : anglais, allemand, français, espagnol et italien. Changez de langue sous **Paramètres → Langue**. D'autres traductions sont les bienvenues sous forme de contributions.
 
 ## Quelles bases de données et quels stockages sont pris en charge ?
 
@@ -110,11 +105,11 @@ En auto-hébergement, le backend est modulaire :
 
 ## Comment me connecter ?
 
-Le service hébergé utilise la connexion OIDC (connexion via un fournisseur pris en charge), avec des clés d'accès (WebAuthn) facultatives pour une expérience sans mot de passe. Les auto-hébergeurs peuvent configurer leurs propres fournisseurs OIDC, activer les clés d'accès, ou désactiver entièrement la connexion pour les installations à utilisateur unique. Voir [Authentification](/self-hosting/authentication).
+Le service hébergé utilise des comptes avec e-mail et mot de passe. Les auto-hébergeurs peuvent activer les comptes e-mail/mot de passe, ajouter des fournisseurs OIDC (Google, Keycloak, Authentik et similaires), activer les passkeys, ou désactiver entièrement la connexion pour une installation à utilisateur unique. Voir [Authentification](/self-hosting/authentication).
 
 ## Comment signaler un bug ou demander une fonctionnalité ?
 
-Veuillez ouvrir un ticket sur notre [organisation GitHub](https://github.com/johnnycube/openbeehive-app). Des étapes de reproduction claires, votre plateforme et votre navigateur, ainsi qu'une capture d'écran aident énormément.
+Veuillez ouvrir un ticket dans le [dépôt GitHub](https://github.com/johnnycube/openbeehive-app). Des étapes de reproduction claires, votre plateforme et votre navigateur, ainsi qu'une capture d'écran aident.
 
 La [page de dépannage](/knowledge-base/troubleshooting) couvre peut-être déjà les problèmes courants.
 
@@ -122,8 +117,6 @@ La [page de dépannage](/knowledge-base/troubleshooting) couvre peut-être déj�
 
 Les contributions de toutes sortes sont les bienvenues : code, documentation, traductions, rapports de bugs et idées. La pile technique est Go pour le backend et une PWA SvelteKit pour le frontend.
 
-Lisez le [guide de contribution](/developers/contributing) pour commencer, et jetez un œil à la [vue d'ensemble de l'architecture](/developers/architecture) pour comprendre comment les pièces s'assemblent.
-
 ## Quelle est cette version ?
 
-La version actuelle est la **v0.1.0**, notre première version publique. Attendez-vous à des améliorations rapides, et consultez le [guide de mise à niveau](/self-hosting/upgrading) à la sortie de nouvelles versions.
+Les versions sont étiquetées sur [GitHub](https://github.com/johnnycube/openbeehive-app/releases). Les auto-hébergeurs exécutent le tag qu'ils ont compilé ou le tag d'image qu'ils ont téléchargé ; consultez le [guide de mise à niveau](/self-hosting/upgrading) à la sortie de nouvelles versions.

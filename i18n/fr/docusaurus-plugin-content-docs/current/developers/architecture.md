@@ -49,6 +49,8 @@ Le schéma ci-dessous montre comment un changement voyage d'une pression dans l'
 
 Le moteur de synchronisation n'échange que les enregistrements qui appartiennent aux scopes auxquels un utilisateur a accès, de sorte qu'un appareil ne télécharge jamais le monde entier : seulement les ruchers auxquels il a droit.
 
+Les scripts et les capteurs entrent dans le même schéma via les services CRUD du serveur ([Utiliser l'API](/using-the-api/overview)). Leurs écritures ne contournent pas ce flux : le serveur applique chacune d'elles avec la même fusion champ par champ et l'ajoute au même journal des changements qu'un changement poussé, de sorte qu'un relevé envoyé par une balance de ruche n'est qu'un changement de plus que les appareils récupèrent à leur prochaine synchronisation.
+
 ## Résolution des conflits
 
 Deux appareils peuvent modifier la même ruche alors qu'ils sont tous deux hors ligne. Lorsqu'ils se reconnectent, Openbeehive fusionne leurs changements de manière déterministe, sans aucune invite de conflit manuelle. Trois techniques rendent cela exempt de conflit.
@@ -63,11 +65,11 @@ Pour les champs scalaires simples, comme le nom d'une ruche, son type ou la coul
 
 ### OR-Sets pour les champs de liste
 
-Les champs de type liste, comme les étiquettes, utilisent un ensemble à suppression observée (OR-Set) avec une sémantique « l'ajout gagne ». Les ajouts concurrents survivent tous, et une suppression ne prend effet que contre les entrées spécifiques qu'elle a observées. Cela évite le problème classique où l'ajout d'une personne efface silencieusement celui d'une autre.
+Les champs de type liste (actuellement uniquement les clés de photos d'une inspection) utilisent un ensemble à suppression observée (OR-Set) avec une sémantique « l'ajout gagne ». Les ajouts concurrents survivent tous, et une suppression ne prend effet que contre les entrées spécifiques qu'elle a observées. Cela évite le problème classique où l'ajout d'une personne efface silencieusement celui d'une autre.
 
 ### Événements en ajout seul
 
-Les enregistrements qui décrivent des choses qui se sont produites, comme les inspections, les événements, les récoltes et les traitements, sont en ajout seul. Les nouvelles entrées sont simplement ajoutées ; elles ne sont jamais modifiées sur place par la couche de synchronisation, de sorte qu'elles ne peuvent pas entrer en conflit. Le résultat est un historique immuable et ordonné. Voir [historique et événements](/developers/history-and-events) pour les détails.
+La table `event` est en ajout seul par convention : chaque écriture dans l'historique insère une nouvelle ligne avec un nouvel identifiant, et rien ne modifie ni ne supprime une ligne existante, de sorte que deux appareils ajoutant des événements hors ligne ne touchent jamais la même ligne. Voir [historique et événements](/developers/history-and-events) pour les détails.
 
 :::tip
 Parce que les fusions sont déterministes, deux appareils ayant vu le même ensemble de changements calculeront toujours exactement le même résultat, quel que soit l'ordre dans lequel ces changements sont arrivés.
@@ -88,10 +90,6 @@ L'application est une Progressive Web App, conçue d'abord pour le téléphone d
 - Un **service worker** met en cache la coque de l'application et les ressources, de sorte que l'application se charge instantanément et fonctionne entièrement hors ligne après la première visite.
 - **SQLite-WASM sur OPFS** fournit une véritable base de données relationnelle dans le navigateur, avec un stockage durable et privé à l'origine qui survit aux rechargements.
 - L'application est installable sur l'écran d'accueil et se comporte comme une application native, y compris le flux de scan QR qui ouvre l'application sur une ruche précise.
-
-:::note
-Pour les utilisateurs qui souhaitent une application empaquetée depuis les boutiques d'applications, le même code peut être emballé avec **Capacitor** pour livrer des builds natifs iOS et Android. C'est facultatif ; la PWA est le canal de distribution principal.
-:::
 
 ## Comment tout s'assemble
 

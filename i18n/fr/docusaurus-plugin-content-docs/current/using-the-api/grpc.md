@@ -5,84 +5,110 @@ title: "gRPC"
 
 # gRPC
 
-Pour des clients typés, le streaming et la synchronisation à fort volume,
-communiquez avec Openbeehive via **gRPC**. Le serveur est construit avec
-[Connect-RPC](https://connectrpc.com/), de sorte qu'un seul point de terminaison
-parle trois protocoles de communication compatibles :
+Le serveur est construit avec [Connect-RPC](https://connectrpc.com/), de sorte que
+les mêmes handlers répondent à gRPC (HTTP/2), gRPC-Web et au protocole Connect. Il
+écoute en h2c, donc gRPC fonctionne sans TLS en frontal ; en production, un reverse
+proxy termine TLS.
 
-- **gRPC** (HTTP/2) — le protocole classique, pour les clients gRPC dans
-  n'importe quel langage.
-- **gRPC-Web** — pour les navigateurs et les clients gRPC-Web.
-- **Connect** — le protocole propre à Connect (unaire sur HTTP/1.1 ou HTTP/2).
+## Générer un client
 
-Le serveur fonctionne en HTTP/2 en clair (h2c) ainsi qu'en TLS, donc gRPC
-fonctionne avec ou sans HTTPS en frontal.
+Le contrat se trouve dans
+[`proto/openbeehive/v1`](https://github.com/johnnycube/openbeehive-app/tree/main/proto/openbeehive/v1)
+et est construit avec [buf](https://buf.build). Le `buf.gen.yaml` du dépôt génère
+du Go (`protocolbuffers/go` + `connectrpc/go`) dans `server/internal/gen` et du
+TypeScript (`bufbuild/es` v2) dans `app/src/lib/proto`. Les deux répertoires de
+sortie sont ignorés par git ; exécutez `make proto` après le clonage. Pour un autre
+langage, copiez le répertoire `proto/` et faites pointer votre propre `buf.gen.yaml`
+vers les plugins dont vous avez besoin.
 
-## Le contrat est la source de vérité
-
-L'API est définie en Protocol Buffers sous
-[`proto/openbeehive/v1`](https://github.com/johnnycube/openbeehive-app/tree/main/proto).
-Générez un client pour votre langage à partir de ce contrat avec
-[buf](https://buf.build) :
-
-```bash
-# fetch the proto contract, then generate (example: Go + TypeScript)
-buf generate
-```
-
-Le fichier `buf.gen.yaml` du dépôt configure déjà les stubs Go
-(`protoc-gen-connect-go`) et TypeScript (`protoc-gen-connect-es`) ; faites
-pointer votre propre `buf.gen.yaml` vers les plugins de votre langage.
-
-## Exemple : un appel unaire (Go)
+## Go
 
 ```go
-client := openbeehivev1connect.NewApiaryServiceClient(
-    http.DefaultClient, "https://app.openbeehive.org",
+import (
+    "connectrpc.com/connect"
+    obv1 "github.com/johnnycube/openbeehive-app/server/internal/gen/openbeehive/v1"
+    "github.com/johnnycube/openbeehive-app/server/internal/gen/openbeehive/v1/openbeehivev1connect"
 )
-res, err := client.ListApiaries(ctx, connect.NewRequest(&apiaryv1.ListApiariesRequest{}))
+
+client := openbeehivev1connect.NewApiaryServiceClient(http.DefaultClient, "https://bees.example.com")
+req := connect.NewRequest(&obv1.ListApiariesRequest{})
+req.Header().Set("Authorization", "Bearer "+token)
+res, err := client.ListApiaries(ctx, req)
 ```
 
-## Exemple : appel rapide depuis le shell
+Chacun des dix services a son propre constructeur de client
+(`NewApiaryServiceClient`, `NewHiveServiceClient`, `NewQueenServiceClient`,
+`NewInspectionServiceClient`, `NewTaskServiceClient`,
+`NewTreatmentServiceClient`, `NewHarvestServiceClient`,
+`NewEventServiceClient`, `NewStatsServiceClient`, `NewSyncServiceClient`). Une balance de ruche, par
+exemple, envoie ses relevés via `InspectionService` :
 
-Vous pouvez interroger les points de terminaison gRPC sans écrire de code en
-utilisant [`buf curl`](https://buf.build/docs/curl) ou `grpcurl` :
+```go
+insp := openbeehivev1connect.NewInspectionServiceClient(http.DefaultClient, "https://bees.example.com")
+req := connect.NewRequest(&obv1.CreateInspectionRequest{HiveId: hiveID, WeightKg: 42.5, TempHive: 34.2})
+req.Header().Set("Authorization", "Bearer "+token)
+res, err := insp.CreateInspection(ctx, req)
+```
+
+Le paquet généré est `internal` au module serveur ; un programme Go distinct doit
+donc générer sa propre copie à partir des fichiers `.proto`.
+
+## TypeScript
+
+Le client propre à l'application se trouve dans `app/src/lib/client.ts` :
+
+```ts
+import { createClient } from '@connectrpc/connect';
+import { createConnectTransport } from '@connectrpc/connect-web';
+import { SyncService } from './proto/openbeehive/v1/sync_pb';
+
+const transport = createConnectTransport({ baseUrl: origin, interceptors: [authInterceptor] });
+export const syncClient = createClient(SyncService, transport);
+```
+
+`authInterceptor` définit `Authorization: Bearer <token>` à partir de la session
+stockée.
+
+## Depuis le shell
+
+[`buf curl`](https://buf.build/docs/curl) parle les trois protocoles en utilisant le
+schéma du dépôt :
 
 ```bash
+cd openbeehive-app
 buf curl --schema . \
-  --data '{"hiveId":"h-7","tempHive":34.6,"humidityHive":55}' \
-  https://app.openbeehive.org/openbeehive.v1.InspectionService/CreateInspection
+  --header "Authorization: Bearer $TOKEN" \
+  --data '{"apiaryId":"2b1f6c0e-..."}' \
+  https://bees.example.com/openbeehive.v1.HiveService/ListHives
 ```
 
-## Streaming : mises à jour en direct
-
-`SyncService.Subscribe` est une méthode de **streaming côté serveur** : ouvrez-la
-une fois et le serveur pousse un événement léger chaque fois que quelque chose
-change dans une portée que vous pouvez lire. C'est la base des mises à jour
-multi-appareils en quasi temps réel.
-
-```
-rpc Subscribe(SubscribeRequest) returns (stream SubscribeEvent);
-```
-
-L'exactitude ne dépend jamais du flux — c'est un « coup de pouce » pour tirer les
-données plus tôt. Consultez le [protocole de synchronisation](/developers/sync-protocol)
-pour les détails sur `Pull` / `Push`.
+Ajoutez `--protocol grpc` pour forcer gRPC au lieu de Connect.
 
 ## Authentification
 
-Envoyez la session en tant que métadonnée de requête (en-tête)
-`Authorization: Bearer <token>`, exactement comme pour
-[HTTP/JSON](/using-the-api/rest). Les instances auto-hébergées mono-utilisateur
-n'en ont pas besoin.
+Envoyez une clé API (`obhk_...`, créée sous **Paramètres → Clés API**) ou un
+jeton de session dans l'en-tête `Authorization: Bearer <token>` (métadonnée
+gRPC) ; `token` dans les extraits ci-dessus désigne l'un ou l'autre. Le cookie
+`obh_session` est accepté aussi pour les jetons de session. Le même
+intercepteur vérifie les deux types et couvre aussi bien les appels unaires que
+le flux `Subscribe`. Une instance sans méthode de connexion configurée n'a
+besoin d'aucun en-tête. Voir la
+[vue d'ensemble](./overview.md#authentication).
 
-## Quand choisir gRPC plutôt que HTTP/JSON
+## Subscribe
 
-- Vous voulez un **client typé et généré** et une sécurité à la compilation.
-- Vous avez besoin de **streaming** (`Subscribe`).
-- Vous déplacez **beaucoup de données** (synchronisation, import en masse) et
-  souhaitez un cadrage efficace.
+```protobuf
+rpc Subscribe(SubscribeRequest) returns (stream SubscribeEvent);
+message SubscribeRequest { string cursor = 1; }
+message SubscribeEvent { string server_cursor = 1; }
+```
 
-Pour des scripts ponctuels, des capteurs et des webhooks,
-[HTTP + JSON](/using-the-api/rest) est généralement plus simple — et c'est la
-même API.
+Le serveur interroge son compteur global de changements toutes les deux secondes et
+envoie un `SubscribeEvent` chaque fois que le compteur a dépassé le curseur que vous
+avez envoyé (et la dernière valeur qu'il a envoyée). L'événement ne transporte aucune
+donnée ; appelez `Pull` avec votre curseur stocké lorsque vous en recevez un. Les
+lignes hors de vos portées font aussi avancer le compteur, donc un `Pull` après un
+événement peut revenir vide.
+
+L'application n'utilise pas `Subscribe`. Elle pousse et tire toutes les 15 secondes,
+après chaque écriture locale, et lors de l'événement `online` du navigateur.

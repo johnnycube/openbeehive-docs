@@ -5,204 +5,118 @@ title: "Historique et événements"
 
 # Historique et événements
 
-Openbeehive traite vos enregistrements apicoles comme une histoire qui se
-déroule dans le temps. Une ruche est déplacée entre des ruchers, une reine règne
-puis est remplacée plus tard, une récolte est enregistrée un jour donné. Pour
-rendre cet historique précis et utile, le modèle de données garde deux choses au
-clair : ce qui s'est passé, et la situation qui était vraie au moment où cela
-s'est produit.
-
-Cette page explique comment les événements figent leur contexte, comment les
-historiques par intervalle enregistrent les règnes et les placements, comment les
-enregistrements de détail typés se rattachent aux événements, et comment le
-client écrit et interroge tout cela hors ligne.
+Une ruche est déplacée entre des ruchers, une reine règne puis est remplacée,
+du miel est prélevé un jour donné. Pour que cet historique reste correct après
+que le monde a changé, chaque écriture d'historique fige le contexte qui était
+vrai à ce moment-là. Le code se trouve dans `app/src/lib/local/history.ts`.
 
 ## Les événements figent leur contexte
 
-Un événement est un fait en ajout seul : il enregistre que quelque chose s'est
-produit à un instant donné. Surtout, chaque événement stocke un instantané du
-contexte pertinent tel qu'il était au moment de l'événement, plutôt qu'un simple
-pointeur vers l'état actuel.
+La table `event` est en ajout seul. Chaque ligne stocke, sous forme de colonnes
+ordinaires, les `apiary_id`, `hive_id` et `queen_id` qui s'appliquaient à la
+`date` de l'événement. Déplacez la ruche le mois prochain et l'inspection de la
+semaine dernière appartient toujours à l'ancien rucher ; remérez et une ancienne
+récolte reste attribuée à la reine qui l'a produite.
 
-Lorsqu'un événement est écrit, le client résout et stocke :
-
-- le rucher auquel appartenait la ruche,
-- la ruche elle-même,
-- la reine qui régnait dans cette ruche à cette date.
-
-Cet instantané est dénormalisé sur la ligne de l'événement. L'avantage est que
-l'historique reste véridique même après que le monde a changé. Si vous déplacez
-une ruche vers un nouveau rucher le mois prochain, l'inspection de la semaine
-dernière se lit toujours comme ayant eu lieu dans le rucher où elle s'est
-réellement déroulée. Si vous remérez, une ancienne récolte attribue toujours le
-miel à la reine qui était en charge à l'époque.
-
-:::note
-Parce que les événements sont en ajout seul et portent leur propre contexte, ils
-n'entrent jamais en conflit pendant la synchronisation. Deux appareils peuvent
-chacun ajouter des événements hors ligne et les deux ensembles sont conservés.
-Voir le [protocole de synchronisation](/developers/sync-protocol) pour les règles
-exemptes de conflit.
-:::
-
-## La table des événements est aussi une table de faits
-
-Les mêmes lignes d'événement font office de table de faits pour les
-statistiques. Les mesures numériques vivent directement sur l'événement, la plus
-importante étant `amount_kg` pour les récoltes, aux côtés des dimensions figées
-(rucher, ruche, reine, date, `scope_id`, type d'événement).
-
-Cela signifie que les rapports courants sont une simple requête groupée sur une
-seule table, sans aucune jointure requise pour attribuer un nombre au rucher, à
-la ruche ou à la reine qui l'a produit. Le contexte figé est ce qui rend « le
-miel par rucher en 2025 » ou « le rendement par reine » correct par
-construction.
+Les mêmes lignes servent de table de faits pour les statistiques : `amount_kg`
+est copié sur les événements de récolte, de sorte que le miel par rucher, par
+reine ou par année est un seul `GROUP BY` sur `event`, sans jointure.
 
 ## Historiques par intervalle
 
-Certains faits s'expriment mieux comme des intervalles plutôt que comme des
-points. Openbeehive utilise des intervalles semi-ouverts, notés `[start, end)` :
-le début est inclus, la fin est exclue. Cela permet aux intervalles de se
-juxtaposer proprement sans chevauchement ni lacune lorsqu'une période se termine
-exactement au début de la suivante.
+Deux tables contiennent des intervalles semi-ouverts `[start, end)` :
 
-| Historique | Intervalle | Signification |
+| Table | Intervalle | Signification |
 | --- | --- | --- |
-| Règne d'une reine | `[installed, replaced)` | La reine est à la tête de la colonie depuis sa date d'installation jusqu'à, mais sans inclure, la date où elle est remplacée. |
-| Placement d'une ruche | `[from, to)` | La ruche se trouve dans un rucher donné depuis `from` jusqu'à, mais sans inclure, `to`. |
+| `queen` | `[introduced_at, replaced_at)` | La reine est à la tête de la colonie de son introduction jusqu'à son remplacement. `replaced_at` est nul tant qu'elle règne ; `active` est aussi positionné. |
+| `placement` | `[start_at, end_at)` | La ruche se trouve dans `apiary_id` de `start_at` jusqu'à son déplacement. `end_at` est nul pour le placement courant. |
 
-Un règne ou un placement courant a une fin ouverte (pas encore de `replaced` /
-`to`). Lorsqu'une reine est remplacée, l'intervalle de la reine sortante est
-fermé à la date d'installation de la nouvelle reine, et le nouveau règne s'ouvre
-à ce moment. Les déplacements de ruche fonctionnent de la même façon.
+Les intervalles semi-ouverts se juxtaposent sans chevauchement : un jour de
+changement, exactement une ligne correspond.
 
-:::tip
-Les intervalles semi-ouverts font de « qui régnait à la date D ? » un test
-simple : trouver la ligne où `installed <= D` et (`replaced` est nul ou
-`replaced > D`). Exactement une ligne correspond, même un jour de changement.
-:::
+## resolveContext
 
-## Enregistrements de détail typés
+Les entrées sont souvent antidatées (la visite de samedi saisie le lundi), le
+contexte est donc résolu pour la date propre de l'entrée, pas pour maintenant :
 
-Les événements existent en plusieurs types, et les détails propres à chaque type
-vivent dans leurs propres enregistrements liés à l'événement :
-
-- Détail d'**inspection** : observations d'une visite (couvain, réserves,
-  caractère, reine vue, et ainsi de suite).
-- Détail de **récolte** : ce qui a été prélevé, y compris la mesure `amount_kg`
-  utilisée pour les statistiques.
-- Détail de **traitement** : le produit appliqué, la dose et le calendrier d'un
-  traitement contre le varroa ou une maladie.
-
-Garder les champs partagés de l'événement (date, contexte figé, `scope_id`) à un
-seul endroit et les champs propres au type dans des enregistrements typés
-maintient la table de faits propre tout en permettant des formulaires et des
-écrans riches et conscients du type. Les formes de ces enregistrements sont
-décrites dans le [modèle de données](/developers/data-model).
-
-## resolveContext pour les entrées antidatées
-
-Les apiculteurs n'enregistrent pas toujours les choses au moment où elles se
-produisent. Vous pourriez saisir l'inspection de samedi dernier le lundi soir. Le
-contexte doit donc être résolu pour la date propre de l'événement, pas pour
-« maintenant ».
-
-Le client utilise un assistant, conceptuellement :
-
-```text
-resolveContext(hiveId, date) -> { apiaryId, hiveId, queenId, scopeId }
+```ts
+resolveContext(hiveId: string, date: string) -> { apiaryId, queenId }
 ```
 
-Il recherche la ruche, puis consulte les historiques par intervalle pour trouver
-le placement du rucher et le règne de la reine qui couvrent `date`, et lit le
-`scope_id` de la ruche. Le résultat est figé sur l'événement.
+Elle exécute deux requêtes sur la base de données locale et se replie sur les
+valeurs courantes lorsqu'aucun intervalle ne couvre la date :
 
 ```sql
--- Find the queen reigning in a hive on a given date.
-SELECT id
-FROM queens
-WHERE hive_id = :hiveId
-  AND installed <= :date
-  AND (replaced IS NULL OR replaced > :date)
-LIMIT 1;
+-- Where the hive lived on the date (falls back to hive.apiary_id).
+SELECT apiary_id FROM placement
+WHERE hive_id = ? AND deleted = 0 AND start_at <= ?
+  AND (end_at IS NULL OR end_at > ?)
+ORDER BY start_at DESC LIMIT 1;
+
+-- Who reigned on the date (falls back to the queen with active = 1).
+SELECT id FROM queen
+WHERE hive_id = ? AND deleted = 0 AND introduced_at <= ?
+  AND (replaced_at IS NULL OR replaced_at > ?)
+ORDER BY introduced_at DESC LIMIT 1;
 ```
+
+## Fonctions qui écrivent l'historique
+
+| Fonction | Écrit |
+| --- | --- |
+| `createHive` | ligne `hive`, un `placement` ouvert, événement `CREATED` |
+| `setQueen` | ferme la reine active (`active = 0`, `replaced_at`), insère la nouvelle, événements `QUEEN_REPLACED` et `QUEEN_INTRODUCED` |
+| `moveHive` | ferme le `placement` ouvert, en ouvre un nouveau, met à jour `hive.apiary_id`, événement `MOVED` avec `detail = {from, to}` |
+| `recordHarvest` | ligne `harvest` avec `apiary_id` / `queen_id` figés, événement `HARVEST` avec `amount_kg` et `ref_id` |
+| `recordTreatment` | ligne `treatment` avec contexte figé, événement `TREATMENT` |
+| `recordInspection` | ligne `inspection`, événement `INSPECTION` |
+
+`recordHarvest`, `recordTreatment` et `recordInspection` appellent d'abord
+`resolveContext`. Toutes les écritures passent par `patch()` dans
+`app/src/lib/local/repo.ts`, elles atterrissent donc dans la table locale et
+dans l'outbox de synchronisation comme tout autre changement. Les lignes de
+détail (`harvest`, `treatment`, `inspection`) sont des lignes synchronisées
+normales ; seule `event` est traitée en ajout seul, par convention. Rien dans
+l'application ne modifie ni ne supprime un événement.
+
+Les numéros de type d'événement sont listés dans le
+[modèle de données](/developers/data-model#event).
+
+## Lire l'historique
+
+```ts
+historyForHive(hiveId)     // SELECT * FROM event WHERE deleted = 0 AND hive_id = ?   ORDER BY date DESC
+historyForApiary(apiaryId) // ... WHERE apiary_id = ?
+historyForQueen(queenId)   // ... WHERE queen_id = ?
+```
+
+Statistiques :
 
 ```sql
--- Find the apiary the hive was placed in on a given date.
-SELECT apiary_id
-FROM hive_placements
-WHERE hive_id = :hiveId
-  AND from_date <= :date
-  AND (to_date IS NULL OR to_date > :date)
-LIMIT 1;
+-- honeyByApiary
+SELECT apiary_id AS key, SUM(amount_kg) AS kg
+FROM event WHERE type = 7 AND deleted = 0
+GROUP BY apiary_id ORDER BY kg DESC;
+
+-- honeyByQueen
+SELECT queen_id AS key, SUM(amount_kg) AS kg
+FROM event WHERE type = 7 AND deleted = 0
+GROUP BY queen_id ORDER BY kg DESC;
+
+-- honeyByYear
+SELECT substr(date, 1, 4) AS year, SUM(amount_kg) AS kg
+FROM event WHERE type = 7 AND deleted = 0
+GROUP BY year ORDER BY year;
 ```
 
-:::caution
-Résolvez toujours le contexte par rapport à la date de l'événement. Utiliser le
-rucher actuel ou la reine actuelle de la ruche attribuerait silencieusement de
-façon erronée les entrées antidatées et corromprait vos statistiques.
-:::
+`type = 7` est `HARVEST`. Comme les dimensions sont figées sur la ligne, aucune
+jointure vers l'état courant n'est nécessaire.
 
-## Quelles fonctions client écrivent l'historique
+## Synchronisation
 
-Trois sortes d'écritures touchent l'historique, et il est utile de les garder
-distinctes :
-
-1. **Ajouter un événement.** Les écrivains d'inspection, de récolte, de
-   traitement et autres événements appellent d'abord
-   `resolveContext(hiveId, date)`, puis ajoutent l'événement avec son contexte
-   figé (et `amount_kg` le cas échéant) plus l'enregistrement de détail typé.
-2. **Remplacer une reine.** Ferme le règne actuel à la nouvelle date
-   d'installation et ouvre un nouvel intervalle `[installed, replaced)`. Les
-   événements existants conservent leur reine figée d'origine.
-3. **Déplacer une ruche.** Ferme le placement actuel à la date du déplacement et
-   ouvre un nouvel intervalle `[from, to)` dans le rucher de destination. Les
-   événements existants conservent leur rucher figé d'origine.
-
-Les règnes et les placements sont des lignes d'intervalle dont les champs
-scalaires (la date de fermeture) suivent le « dernier écrivain gagne » par champ ;
-les événements sont en ajout seul et immuables une fois écrits. Les nouvelles
-corrections se font en ajoutant d'autres événements, pas en modifiant les
-anciens.
-
-## Requêtes statistiques
-
-Parce que les mesures et les dimensions sont figées sur l'événement, les rapports
-se groupent directement :
-
-```sql
--- Total honey per apiary for a season.
-SELECT apiary_id, SUM(amount_kg) AS total_kg
-FROM events
-WHERE type = 'harvest'
-  AND date >= '2025-01-01' AND date < '2026-01-01'
-GROUP BY apiary_id;
-```
-
-```sql
--- Yield attributed to each queen.
-SELECT queen_id, SUM(amount_kg) AS total_kg
-FROM events
-WHERE type = 'harvest'
-GROUP BY queen_id;
-```
-
-Aucune jointure vers l'état actuel n'est nécessaire : les `apiary_id` et
-`queen_id` figés sont déjà les bons pour le moment de la récolte.
-
-## Hors ligne et partage via scope_id
-
-Chaque ligne d'événement et d'historique porte le `scope_id` de son rucher. Les
-scopes sont l'unité de partage dans Openbeehive : accorder à quelqu'un l'accès à
-un rucher partage tous les événements et historiques sous ce scope.
-
-Parce que les écritures sont locales et instantanées, l'historique est d'abord
-écrit dans la base de données SQLite sur l'appareil puis synchronisé en arrière-
-plan. Le contexte figé signifie qu'une entrée antidatée faite hors ligne porte le
-bon rucher, la bonne ruche et la bonne reine même si l'appareil n'a pas vu les
-changements récents d'ailleurs ; les événements en ajout seul fusionnent sans
-conflit lorsque l'appareil se reconnecte.
-
-Voir [hors ligne et synchronisation](/using-the-app/offline-and-sync) pour le
-comportement côté utilisateur et [Développeurs](/category/developers) pour
-l'architecture plus large.
+Les lignes `event` portent `scope_id` (l'id du rucher) comme colonne et se
+synchronisent comme toute autre table, avec le « dernier écrivain gagne » par
+champ. Comme chaque événement a un UUID neuf et n'est jamais modifié, deux
+appareils qui ajoutent des événements hors ligne ne touchent jamais la même
+ligne et les deux ensembles sont conservés. Voir le
+[protocole de synchronisation](/developers/sync-protocol).

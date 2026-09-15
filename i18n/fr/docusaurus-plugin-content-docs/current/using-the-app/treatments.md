@@ -35,7 +35,7 @@ Lorsque vous ajoutez un traitement à une ruche, notez autant des éléments sui
 | Date d'application | Quand vous avez traité la colonie. |
 | Délai d'attente jusqu'au | La date à laquelle le miel de cette ruche peut de nouveau être récolté sans risque. |
 | Motif | La raison du traitement (par ex. le varroa). |
-| Notes | Météo, état du couvain, résultats observés, ou tout autre élément à retenir. |
+| Note | Météo, état du couvain, résultats observés, ou tout autre élément à retenir. |
 
 :::tip
 Notez le numéro de lot directement depuis l'emballage au moment où vous traitez. Il est presque impossible à reconstituer plus tard, et c'est précisément le détail qu'un inspecteur ou un auditeur vous demandera.
@@ -44,12 +44,12 @@ Notez le numéro de lot directement depuis l'emballage au moment où vous traite
 ## Ajouter un traitement
 
 1. Ouvrez la ruche que vous avez traitée.
-2. Choisissez **Ajouter un traitement** (les traitements peuvent aussi être consignés depuis une inspection si vous traitez pendant une visite).
-3. Saisissez le produit, la dose, la méthode et la date, ainsi que le numéro de lot si vous l'avez.
+2. Touchez **Enregistrer un traitement** sous **Traitements**.
+3. Saisissez la date, le produit, la substance active, la méthode, la dose, le numéro de lot et le motif.
 4. Définissez la date du **délai d'attente jusqu'au** si le produit prévoit un délai d'attente.
 5. Enregistrez.
 
-Comme Openbeehive fonctionne en mode hors ligne d'abord, vous pouvez faire cela au pied de la ruche sans réseau. L'enregistrement est écrit instantanément dans la base de données locale et se synchronise avec le serveur en arrière-plan dès que vous êtes de nouveau en ligne. Rien n'est perdu si vous consignez les traitements debout dans le rucher.
+Fonctionne hors ligne ; consultez [Hors ligne et synchronisation](/using-the-app/offline-and-sync).
 
 ## Délais d'attente et récolte
 
@@ -70,14 +70,8 @@ Quelques habitudes permettent de garder vos enregistrements dignes de confiance.
 - **Ne réécrivez pas l'historique pour le faire paraître plus propre.** Si quelque chose a changé, ajoutez un suivi plutôt que de réécrire le passé.
 - **Traitez chaque ruche individuellement.** Même lorsque vous appliquez le même produit à tout un rucher, consignez-le ruche par ruche afin que les doses et les délais d'attente soient exacts pour chaque colonie.
 
-Comme les entrées de traitement se synchronisent sur tous vos appareils, le registre que vous constituez sur le terrain est le même que celui que vous pourrez consulter plus tard chez vous, ou partager avec toute personne ayant accès au rucher.
+Comme les entrées de traitement se synchronisent sur tous vos appareils, le registre que vous constituez sur le terrain est le même que celui que vous consultez chez vous, et celui que voient les autres membres de votre espace (tenant).
 
 ## Traitements et varroa
 
 L'acarien varroa est la raison pour laquelle la plupart des apiculteurs ont recours à un traitement en premier lieu, et bien gérer le calendrier tout au long de la saison est un sujet à part entière. Pour une vision plus complète de la surveillance du niveau d'infestation, du choix d'une approche et de la planification des traitements au fil de l'année apicole, consultez [le guide du varroa](/beekeeping/varroa).
-
-## Pages associées
-
-- [Inspections](/using-the-app/inspections) consignent ce que vous voyez ; les traitements consignent ce que vous faites en réponse.
-- [Récoltes](/using-the-app/harvests) est l'endroit où les délais d'attente comptent le plus.
-- [Le guide du varroa](/beekeeping/varroa) couvre la surveillance et le calendrier.

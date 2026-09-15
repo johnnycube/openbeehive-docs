@@ -40,7 +40,7 @@
     "description": "The label for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Developers.link.generated-index.description": {
-    "message": "Architecture et fonctionnement interne — le modèle de synchronisation hors ligne d'abord, la conception événements/historique et les liens profonds QR.",
+    "message": "Architecture et fonctionnement interne : le modèle de synchronisation hors ligne d'abord, la conception événements/historique et les liens profonds QR.",
     "description": "The generated-index page description for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API": {
@@ -48,7 +48,7 @@
     "description": "The label for category 'Using the API' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API.link.generated-index.description": {
-    "message": "Openbeehive est ouvert et concu selon une approche API-first : tout ce que fait l'application passe par une API Connect-RPC publique (gRPC et HTTP/JSON simple). Creez des integrations, des scripts, des tableaux de bord et des capteurs automatises sur le meme contrat que celui utilise par l'application.",
+    "message": "L'API Connect-RPC à laquelle l'application parle : quels services sont exposés, comment s'authentifier et comment les appeler en HTTP/JSON ou en gRPC.",
     "description": "The generated-index page description for category 'Using the API' in sidebar 'tutorialSidebar'"
   }
 }

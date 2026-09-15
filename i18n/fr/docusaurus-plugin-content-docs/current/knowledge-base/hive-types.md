@@ -7,9 +7,9 @@ title: "Référence des types de ruches"
 
 Lorsque vous créez une ruche dans Openbeehive, vous choisissez un **type**. Cette unique valeur enregistre le système de ruche que vous utilisez, ce qui vous aide à garder cadres, hausses et pièces de rechange compatibles à travers votre rucher.
 
-Le type est purement une étiquette pour vos propres archives. Il ne change rien au fonctionnement des inspections, des traitements ou des récoltes, alors ne craignez pas de vous « tromper » — vous pouvez le modifier à tout moment depuis les réglages de la ruche. Voir [Ruches](/using-the-app/hives) pour savoir comment ajouter et modifier une ruche.
+Le type est purement une étiquette pour vos propres archives. Il ne change rien au fonctionnement des inspections, des traitements ou des récoltes, alors ne craignez pas de vous « tromper » : vous pouvez le modifier à tout moment en modifiant la ruche. Voir [Ruches](/using-the-app/hives) pour savoir comment ajouter et modifier une ruche.
 
-Openbeehive propose sept options : **Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar** et **Autre**.
+Openbeehive propose sept options : **Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar** et **Autre**.
 
 ## Comparaison rapide
 
@@ -21,10 +21,10 @@ Openbeehive propose sept options : **Zander, Dadant, Deutsch Normal, Langstroth,
 | **Langstroth** | États-Unis (Rév. L. L. Langstroth) | Caisses standardisées profondes/moyennes/basses ; la conception de référence mondiale | La ruche à cadres mobiles la plus répandue au monde, en loisir comme en professionnel |
 | **Warré** | France (Abbé Émile Warré) | « Ruche populaire » verticale ; petites caisses carrées ajoutées par le bas (nadirage) ; barrettes plutôt que cadres complets | Apiculture peu interventionniste, à rayons naturels |
 | **Top-bar** | Kenya / conceptions horizontales | Ruche horizontale ; les abeilles bâtissent des rayons naturels à partir de barrettes, sans cire gaufrée | Apiculture de loisir sans cire gaufrée, économique et ménageant le dos |
-| **Autre** | — | Tout ce qui n'est pas listé ci-dessus | Constructions personnalisées, conceptions régionales ou systèmes que vous préférez décrire vous-même |
+| **Autre** | - | Tout ce qui n'est pas listé ci-dessus | Constructions personnalisées, conceptions régionales ou systèmes que vous préférez décrire vous-même |
 
 :::note
-Les dimensions exactes des cadres varient selon le fabricant et le pays. Les chiffres ci-dessus sont des tailles de référence typiques — vérifiez toujours par rapport à votre propre matériel avant d'acheter des cadres ou de la cire gaufrée.
+Les dimensions exactes des cadres varient selon le fabricant et le pays. Les chiffres ci-dessus sont des tailles de référence typiques : vérifiez toujours par rapport à votre propre matériel avant d'acheter des cadres ou de la cire gaufrée.
 :::
 
 ## Choisir le bon type
@@ -33,7 +33,7 @@ Quelques repères pratiques pour choisir une valeur :
 
 - **Adaptez-vous à vos cadres, pas à vos ambitions.** Choisissez le système dont les cadres entrent physiquement dans vos caisses aujourd'hui. La compatibilité des cadres et des hausses est la principale raison pour laquelle ce champ a de l'importance.
 - **Restez cohérent au sein d'un rucher.** Utiliser un seul système par rucher rend bien plus facile l'échange de cadres entre colonies, le partage de hausses de rechange et la gestion de vos réserves.
-- **Matériel hérité ou hétéroclite ?** Si une ruche ne correspond à aucun standard, choisissez **Autre** et notez les détails dans la description de la ruche.
+- **Matériel hérité ou hétéroclite ?** Si une ruche ne correspond à aucun standard, choisissez **Autre** et notez les détails dans une note de visite.
 
 ### Ruches verticales à cadres
 
@@ -57,10 +57,10 @@ Les ruches à rayons naturels peuvent compliquer certaines tâches. Le rayon est
 ## Questions fréquentes
 
 **Puis-je changer le type d'une ruche par la suite ?**
-Oui. Ouvrez la ruche, modifiez ses réglages et choisissez un nouveau type. Comme Openbeehive fonctionne hors ligne d'abord, le changement est enregistré localement aussitôt et se synchronise en arrière-plan — voir [Hors ligne et synchronisation](/using-the-app/offline-and-sync).
+Oui. Ouvrez la ruche, touchez **Modifier** et choisissez un nouveau type.
 
 **Mon système n'est pas listé. Que faire ?**
-Choisissez **Autre** et notez les particularités (taille des cadres, nombre de caisses, fournisseur) dans les notes de la ruche pour que vos archives restent claires.
+Choisissez **Autre** et notez les particularités (taille des cadres, nombre de caisses, fournisseur) dans une note de visite pour que vos archives restent claires.
 
 **Le type influe-t-il sur les traitements ou les récoltes ?**
 Non. C'est une étiquette descriptive. Toutes les inspections, traitements, tâches et récoltes fonctionnent de la même manière quel que soit le type.

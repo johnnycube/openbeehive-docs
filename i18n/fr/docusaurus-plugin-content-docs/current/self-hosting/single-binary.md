@@ -5,7 +5,7 @@ title: "Binaire unique"
 
 # Binaire unique
 
-La façon la plus simple d'exécuter Openbeehive sur votre propre machine est le **binaire unique**. Dans le profil `selfhost`, Openbeehive sert l'application web et l'API depuis un seul processus, stocke ses données dans un fichier SQLite local et conserve les photos téléversées sur le système de fichiers. Pas de Docker, pas de Postgres, pas de stockage objet — juste un exécutable.
+La façon la plus simple d'exécuter Openbeehive sur votre propre machine est le **binaire unique**. Dans le profil `selfhost`, Openbeehive sert l'application web et l'API depuis un seul processus, stocke ses données dans un fichier SQLite local et conserve les photos téléversées sur le système de fichiers. Pas de Docker, pas de Postgres, pas de stockage objet, juste un exécutable.
 
 Cette page vous guide pour compiler ce binaire à partir des sources et l'exécuter comme un service de longue durée.
 
@@ -20,16 +20,16 @@ Vous aurez besoin de quelques outils de compilation installés sur la machine qu
 | Outil | Version | Rôle |
 | --- | --- | --- |
 | Go | 1.25+ | Compile le serveur |
-| Node.js | 20+ | Construit l'application web SvelteKit |
+| Node.js | 24+ | Construit l'application web SvelteKit |
 | buf | latest | Génère le code Connect-RPC à partir des définitions protobuf |
 
-Une fois compilé, le binaire lui-même n'a aucune dépendance d'exécution — vous pouvez le copier sur un serveur qui n'a aucun des outils ci-dessus installé.
+Une fois compilé, le binaire lui-même n'a aucune dépendance d'exécution : vous pouvez le copier sur un serveur qui n'a aucun des outils ci-dessus installé.
 
 ## Récupérer le code
 
 ```bash
 git clone https://github.com/johnnycube/openbeehive-app.git
-cd openbeehive
+cd openbeehive-app
 ```
 
 ## Configurer
@@ -54,7 +54,7 @@ BEEHIVE_BLOB_DIR=./data/blobs
 BEEHIVE_SESSION_SECRET=
 ```
 
-Générez un secret de session — ne le laissez jamais vide ailleurs que dans un test jetable :
+Générez un secret de session, ne le laissez jamais vide ailleurs que dans un test jetable :
 
 ```bash
 openssl rand -base64 32
@@ -63,10 +63,10 @@ openssl rand -base64 32
 Collez le résultat dans `BEEHIVE_SESSION_SECRET=`.
 
 :::note Aucune connexion par défaut
-Laissez `BEEHIVE_OIDC_PROVIDERS` vide **et** `BEEHIVE_WEBAUTHN_ENABLED=false` pour fonctionner en mono-utilisateur sans étape de connexion. Lorsque vous serez prêt à ajouter des comptes ou des passkeys, voir [Authentification](/self-hosting/authentication).
+Le profil selfhost n'active aucune méthode de connexion : `BEEHIVE_PASSWORD_AUTH` est désactivé, `BEEHIVE_OIDC_PROVIDERS` est vide et `BEEHIVE_WEBAUTHN_ENABLED=false`. Laissez-les ainsi pour fonctionner en mono-utilisateur sans étape de connexion. Lorsque vous voudrez des comptes, des passkeys ou un fournisseur, voir [Authentification](/self-hosting/authentication).
 :::
 
-Si vous comptez accéder à l'instance depuis un autre appareil de votre réseau, définissez `BEEHIVE_PUBLIC_BASE_URL` sur une adresse que cet appareil peut réellement résoudre (par exemple `http://192.168.1.20:8080` ou votre domaine derrière un [reverse proxy](/self-hosting/reverse-proxy)). Cette valeur est aussi intégrée aux liens profonds utilisés par les [étiquettes QR](/using-the-app/qr-labels).
+Si vous comptez accéder à l'instance depuis un autre appareil de votre réseau, définissez `BEEHIVE_PUBLIC_BASE_URL` sur une adresse que cet appareil peut réellement résoudre (par exemple `http://192.168.1.20:8080` ou votre domaine derrière un [reverse proxy](/self-hosting/reverse-proxy)). Les étiquettes QR encodent l'adresse à laquelle vous ouvrez l'application, utilisez donc cette même adresse de manière cohérente.
 
 ## Compiler
 
@@ -102,7 +102,7 @@ Au premier démarrage, le serveur :
 Ouvrez `http://localhost:8080` dans votre navigateur. L'application se charge, construit sa base de données locale dans le navigateur, et vous êtes prêt à ajouter votre premier rucher.
 
 :::tip Le répertoire de travail compte
-Les chemins relatifs comme `file:openbeehive.db` et `./data/blobs` sont résolus par rapport au répertoire depuis lequel le binaire est lancé, et non par rapport à l'emplacement du binaire. Choisissez délibérément un répertoire de travail — l'unité systemd ci-dessous le définit explicitement avec `WorkingDirectory`.
+Les chemins relatifs comme `file:openbeehive.db` et `./data/blobs` sont résolus par rapport au répertoire depuis lequel le binaire est lancé, et non par rapport à l'emplacement du binaire. Choisissez délibérément un répertoire de travail : l'unité systemd ci-dessous le définit explicitement avec `WorkingDirectory`.
 :::
 
 ## Exécuter en tant que service systemd
@@ -162,7 +162,7 @@ journalctl -u openbeehive -f
 ```
 
 :::caution Liaison au port 80 ou 443
-L'exemple se lie à `:8080`, ce qu'un utilisateur non privilégié peut utiliser. N'exécutez pas le service en tant que root pour atteindre les ports 80/443 — gardez plutôt Openbeehive sur `:8080` et placez un [reverse proxy](/self-hosting/reverse-proxy) (tel que Caddy ou nginx) devant lui pour gérer TLS et le port public.
+L'exemple se lie à `:8080`, ce qu'un utilisateur non privilégié peut utiliser. N'exécutez pas le service en tant que root pour atteindre les ports 80/443 ; gardez plutôt Openbeehive sur `:8080` et placez un [reverse proxy](/self-hosting/reverse-proxy) (tel que Caddy ou nginx) devant lui pour gérer TLS et le port public.
 :::
 
 ## Où se trouvent vos données
@@ -192,4 +192,4 @@ Pour les sauvegardes planifiées, la rétention et les techniques sûres de sauv
 
 ## Mise à niveau
 
-Pour passer à une version plus récente, récupérez le dernier code, recompilez et remplacez le binaire — votre base de données et votre répertoire `data/` restent en place et les migrations s'exécutent au démarrage suivant. La procédure complète, y compris comment revenir en arrière, est décrite dans [Mise à niveau](/self-hosting/upgrading).
+Pour passer à une version plus récente, récupérez le dernier code, recompilez et remplacez le binaire : votre base de données et votre répertoire `data/` restent en place et les migrations s'exécutent au démarrage suivant. La procédure complète, y compris comment revenir en arrière, est décrite dans [Mise à niveau](/self-hosting/upgrading).

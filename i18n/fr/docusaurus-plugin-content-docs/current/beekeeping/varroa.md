@@ -157,14 +157,10 @@ Chaque comptage de surveillance et chaque traitement méritent d'être consigné
 pour suivre les tendances et pour respecter les règles de tenue de registres qui
 s'appliquent aux apiculteurs dans de nombreux pays.
 
-Dans Openbeehive, vous pouvez enregistrer chaque application en tant que **Traitement** sur
-une ruche : le produit utilisé, la substance active, la dose, et les dates de début et de
-fin. Au fil du temps, cela construit un historique clair afin que vous puissiez voir ce que
-vous avez utilisé, quand, et comment la colonie a réagi.
-
-Consultez [Traitements](/using-the-app/treatments) pour savoir comment ajouter et gérer ces
-enregistrements. Comme l'application fonctionne en mode hors ligne d'abord, vous pouvez
-consigner un traitement au rucher sans signal et cela se synchronisera plus tard.
+Dans Openbeehive, vous enregistrez chaque application en tant que **Traitement** sur une
+ruche : la date, le produit, la substance active, la méthode, la dose, le numéro de lot, le
+motif et la date de fin du délai d'attente. Au fil du temps, cela construit un historique
+clair de ce que vous avez utilisé et quand. Consultez [Traitements](/using-the-app/treatments).
 
 :::note
 Tenir des registres de traitement précis est souvent une obligation légale, surtout là où
