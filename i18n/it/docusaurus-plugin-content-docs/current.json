@@ -40,7 +40,7 @@
     "description": "The label for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Developers.link.generated-index.description": {
-    "message": "Architettura e funzionamento interno — il modello di sincronizzazione offline-first, la progettazione di eventi/cronologia e i deep link QR.",
+    "message": "Architettura e funzionamento interno: il modello di sincronizzazione offline-first, la progettazione di eventi/cronologia e i deep link QR.",
     "description": "The generated-index page description for category 'Developers' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API": {
@@ -48,7 +48,7 @@
     "description": "The label for category 'Using the API' in sidebar 'tutorialSidebar'"
   },
   "sidebar.tutorialSidebar.category.Using the API.link.generated-index.description": {
-    "message": "Openbeehive è API-first e aperto: tutto ciò che fa l'app passa attraverso una API pubblica Connect-RPC (gRPC e HTTP/JSON semplice). Crea integrazioni, script, dashboard e sensori automatizzati sullo stesso contratto utilizzato dall'app.",
+    "message": "L'API Connect-RPC con cui dialoga l'app: quali servizi sono esposti, come autenticarsi e come chiamarli tramite HTTP/JSON o gRPC.",
     "description": "The generated-index page description for category 'Using the API' in sidebar 'tutorialSidebar'"
   }
 }

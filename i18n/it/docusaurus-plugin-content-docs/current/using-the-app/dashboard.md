@@ -5,105 +5,52 @@ title: "La dashboard"
 
 # La dashboard
 
-La dashboard è il tuo punto di riferimento in Openbeehive. È la prima schermata che vedi quando apri l'app, ed è progettata per rispondere a una semplice domanda: di cosa devo occuparmi oggi?
+La **Panoramica** è la prima schermata che vedi quando apri l'app. Tutto ciò che contiene viene letto dal database locale sul tuo dispositivo, quindi si carica all'istante con o senza segnale.
 
-Poiché Openbeehive è offline-first, tutto ciò che vedi nella dashboard viene letto direttamente dal database locale sul tuo dispositivo. Si carica all'istante e funziona che tu abbia o meno segnale in apiario. Le modifiche che apporti vengono sincronizzate con il server silenziosamente in background.
+Il pulsante **+ Nuovo** nell'intestazione ti porta all'elenco degli Apiari per crearne uno.
 
 ## Riquadri statistici
 
-Nella parte superiore della dashboard trovi una riga di riquadri statistici che ti offrono un conteggio rapido di ciò che è presente nei tuoi registri:
-
 | Riquadro | Cosa mostra |
 | --- | --- |
-| **Apiari** | Il numero di apiari che gestisci, inclusi quelli condivisi con te. |
-| **Arnie** | Totale delle arnie in tutti i tuoi apiari. |
+| **Apiari** | Numero di apiari nel tenant attivo. |
+| **Arnie** | Numero di arnie. |
 | **Regine** | Regine attualmente registrate a capo di una colonia. |
-| **Attività aperte** | Attività non ancora contrassegnate come completate. |
+| **Attività aperte** | Attività non ancora spuntate. |
+| **Miele in questa stagione** | Totale dei chilogrammi raccolti registrati nell'anno solare corrente. |
 
-Ogni riquadro è toccabile e ti porta alla sezione corrispondente dell'app, così puoi passare direttamente da un conteggio al dettaglio che vi sta dietro.
+I riquadri sono solo conteggi; usa la navigazione per aprire la sezione corrispondente.
 
-## Cosa c'è da fare
+## Visite in scadenza
 
-Sotto i riquadri, la dashboard raggruppa le cose che hanno una scadenza.
+Elenca fino a cinque arnie, prima quelle non visitate da più tempo, con il numero di giorni trascorsi dall'ultima visita ("mai" per le arnie senza alcuna visita). Il badge è evidenziato a partire da 21 giorni, o quando non c'è nessuna visita. Tocca un'arnia per aprirla e registrare una visita. Quando non ci sono arnie il pannello mostra "Tutto aggiornato".
 
-### Ispezioni in scadenza
+Non esiste un intervallo configurabile: l'elenco è ordinato per tempo trascorso dall'ultima visita registrata.
 
-Elenca le arnie la cui prossima ispezione è in scadenza o scaduta, in base all'intervallo che imposti durante l'ispezione. È il tuo promemoria per pianificare una visita. Tocca un'arnia per aprirla e avviare una nuova ispezione.
+## Prossime attività
 
-### Attività imminenti
-
-Mostra le attività con una data di scadenza in arrivo, prima le più vicine. Le attività possono essere collegate a un'arnia o a un apiario specifico, oppure essere autonome (ad esempio "ordinare nuovi telaini"). Spuntane una qui senza uscire dalla dashboard.
-
-### Ispezioni recenti
-
-Un breve elenco delle tue visite più recenti, così puoi vedere a colpo d'occhio cosa hai riscontrato l'ultima volta in ciascuna colonia. Tocca una voce qualsiasi per leggere le note complete dell'ispezione.
-
-### Miele di questa stagione
-
-Un totale progressivo del miele che hai raccolto nella stagione corrente, ricavato dai tuoi registri di smielatura. È un modo rapido e gratificante per monitorare come sta andando l'anno.
-
-:::tip
-La dashboard riflette solo ciò che è presente nei tuoi registri. Più costantemente registri ispezioni, attività e raccolti, più utili diventano questi riepiloghi.
-:::
+Mostra fino a cinque attività aperte con le loro scadenze. Le attività la cui scadenza è passata sono contrassegnate con **!**. Spunta le attività nella vista **Attività**; vedi [Attività](/using-the-app/tasks).
 
 ## Come orientarsi
 
-Il modo in cui navighi dipende dalle dimensioni dello schermo. Le stesse funzioni sono disponibili in entrambi i casi; cambia solo il layout.
+Le stesse destinazioni sono disponibili ovunque: **Panoramica, Apiari, Scansiona, Arnie, Attività** e **Impostazioni**.
 
-### Su dispositivi mobili
+- Su un telefono, una **barra delle schede inferiore** le contiene tutte e sei.
+- Su desktop o tablet, una **barra laterale** a sinistra elenca Panoramica, Apiari, Scansiona, Arnie e Attività, con il tuo account (e-mail e stato online) in fondo che rimanda alle Impostazioni.
 
-Una **barra delle schede inferiore** ti dà accesso con un tocco alle aree principali dell'app: la dashboard, i tuoi apiari e arnie, le attività e così via. Resta fissa in fondo allo schermo, sempre a portata di pollice mentre lavori all'arnia.
+## Impostazioni
 
-### Su desktop e tablet
+**Impostazioni** contiene:
 
-Una **barra laterale** scorre lungo il lato sinistro con lo stesso insieme di destinazioni, oltre a un po' più di spazio per mostrare etichette ed elementi nidificati. Sugli schermi più ampi questo lascia l'area principale libera per i tuoi registri.
+- **Lingua**: inglese, tedesco, francese, spagnolo, italiano. La scelta viene salvata sul dispositivo.
+- **Spazi**: cambia, crea, invita e gestisci (sulle istanze con login). Vedi [Account e tenant](/using-the-app/accounts-tenants).
+- **Passkeys**: aggiungi o rimuovi passkey (quando il server le abilita).
+- **Chiavi API**: crea e rimuovi chiavi per script e dispositivi (sulle istanze con login). Vedi [Account e tenant](./accounts-tenants.md#api-keys).
+- **Dati e backup**: esporta e importa; vedi [Importazione ed esportazione](/using-the-app/import-export).
+- **Account**: con quale utente hai effettuato l'accesso, e **Esci**.
 
-## Account e impostazioni
-
-Il tuo account e le impostazioni si trovano insieme in un unico posto, raggiungibile dalla navigazione. Qui puoi gestire il tuo profilo, disconnetterti e accedere alle preferenze valide per tutta l'app, come la lingua e (se il tuo server le utilizza) le passkey e i provider di accesso collegati.
-
-Se gestisci un'istanza self-hosted a utente singolo senza login configurato, il blocco account mostra semplicemente il tuo profilo locale.
+Su un'istanza self-hosted a utente singolo senza login non c'è nulla da cui disconnettersi; il blocco account mostra l'identità locale.
 
 ## L'indicatore online/offline
 
-Un piccolo indicatore mostra il tuo stato di connessione e sincronizzazione attuale.
-
-- **Online** significa che l'app è connessa e sta sincronizzando le modifiche con il server.
-- **Offline** significa che al momento non c'è connessione. Questo è del tutto normale e non c'è da preoccuparsi: puoi continuare ad aggiungere ispezioni, attività e tutto il resto esattamente come sempre.
-
-Quando torni in copertura, Openbeehive si sincronizza automaticamente. Grazie alla sua progettazione conflict-free, le modifiche apportate su dispositivi diversi mentre eri offline vengono unite in modo pulito quando si ricongiungono.
-
-:::note
-Vedere "offline" **non** significa che perderai dati. Tutto viene salvato prima localmente. L'indicatore ti sta solo dicendo quando la sincronizzazione in background è in pausa. Per saperne di più su come funziona, vedi [Offline e sincronizzazione](/using-the-app/offline-and-sync).
-:::
-
-## Cambiare la lingua
-
-Openbeehive è disponibile in diverse lingue. Per cambiarla:
-
-1. Apri **Impostazioni**.
-2. Trova l'opzione **Lingua**.
-3. Scegli la lingua che preferisci.
-
-Le lingue disponibili sono:
-
-| Codice | Lingua |
-| --- | --- |
-| `en` | Inglese (English) |
-| `de` | Tedesco (Deutsch) |
-| `fr` | Francese (Français) |
-| `es` | Spagnolo (Español) |
-| `it` | Italiano (Italiano) |
-
-La modifica ha effetto immediato e viene ricordata sul tuo dispositivo.
-
-## Dove andare ora
-
-Dalla dashboard puoi diramarti verso il resto dell'app:
-
-- Configura i tuoi [apiari](/using-the-app/apiaries) e le tue [arnie](/using-the-app/hives).
-- Registra una visita nelle [ispezioni](/using-the-app/inspections).
-- Tieni sotto controllo i lavori con le [attività](/using-the-app/tasks).
-- Registra il tuo raccolto nelle [smielature](/using-the-app/harvests).
-
-Per una panoramica più ampia di tutto ciò che l'app può fare, vai alla panoramica [Usare l'app](/category/using-the-app).
+La barra laterale mostra **Online** oppure **Offline** accanto al tuo account, e mentre sei offline una barra in alto dice "Offline: le modifiche vengono salvate e sincronizzate più tardi". Continua a registrare esattamente come sempre; la sincronizzazione riprende quando torna la connessione. Vedi [Offline e sincronizzazione](/using-the-app/offline-and-sync).

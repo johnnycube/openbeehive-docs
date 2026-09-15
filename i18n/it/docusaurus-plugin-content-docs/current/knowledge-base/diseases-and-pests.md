@@ -107,10 +107,3 @@ Molte malattie e parassiti si diffondono tra le colonie attraverso il saccheggio
 :::tip Conosci le tue norme regionali
 Lo stato sanitario, quali condizioni sono soggette a notifica e quali trattamenti sono legali variano tutti per paese e talvolta per regione. Iscriviti al tuo programma nazionale di sanità apistica se ne esiste uno, e impara a conoscere la tua associazione locale e il tuo ispettore apistico prima di averne bisogno.
 :::
-
-## Vedi anche
-
-- [Varroa](/beekeeping/varroa) per le indicazioni complete su monitoraggio e trattamento
-- [Ispezionare](/beekeeping/inspecting) per cosa cercare a ogni visita
-- [Glossario](/knowledge-base/glossary) per i termini usati qui
-- [FAQ](/knowledge-base/faq) e [Risoluzione dei problemi](/knowledge-base/troubleshooting)

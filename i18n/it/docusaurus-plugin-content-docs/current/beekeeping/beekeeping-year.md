@@ -37,8 +37,8 @@ Cosa fare:
 - Applica il metodo di controllo della sciamatura che hai scelto se compaiono celle (vedi [Sciamatura](/beekeeping/swarming)).
 - Considera di allevare nuove regine o di fare aumento da ceppi forti (vedi [Allevamento delle regine](/beekeeping/queen-rearing)).
 
-:::tip Usa un'attività settimanale per restare in ritmo
-Il ciclo di ispezione di sette giorni è facile da perdere di vista su più arnie. Crea un'attività di ispezione ricorrente per apiario così che la prossima visita sia sempre nella tua lista. Vedi [Attività](/using-the-app/tasks).
+:::tip Usa le attività per restare in ritmo
+Il ciclo di sette giorni è facile da perdere di vista su più arnie. Aggiungi un'attività con una scadenza per la prossima visita e, quando la spunti, aggiungi la successiva. Vedi [Attività](/using-the-app/tasks).
 :::
 
 ## Estate: l'importazione del miele

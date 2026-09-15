@@ -5,237 +5,220 @@ title: "Modello dei dati"
 
 # Modello dei dati
 
-Questa pagina descrive le entità principali che Openbeehive memorizza, come si
-relazionano tra loro e come gli **scope** decidono cosa viene sincronizzato e con
-chi. È scritta dal punto di vista offline-first: la stessa struttura risiede nel
-database SQLite-WASM del dispositivo e nel database modulare del server, e il
-[protocollo di sincronizzazione](/developers/sync-protocol) li mantiene allineati.
+Le tabelle qui sotto sono prese dalle migrazioni del server
+(`server/internal/storage/sql/migrations/`) e dallo schema speculare del client
+(`app/src/lib/local/schema.ts`). I nomi delle colonne sono identici da entrambe
+le parti e sono le chiavi usate nei payload di sincronizzazione. Le colonne enum
+memorizzano il numero proto; l'etichetta visualizzata è quella che mostra l'app
+(`app/src/lib/i18n/locales/en.json`).
 
-Se ti interessano i meccanismi del tracciamento delle modifiche (timestamp HLC,
-last-writer-wins, OR-Set, eventi append-only), leggi prima
-[Storico ed eventi](/developers/history-and-events) — questa pagina si concentra
-sulle entità stesse.
+Ogni tabella sincronizzata porta tre colonne di gestione non ripetute sotto:
+`organization_id` (tenant), `field_hlc` (orologio dei campi in JSON, vedi il
+[protocollo di sincronizzazione](/developers/sync-protocol)) e `deleted` (flag di
+cancellazione logica). Gli id sono UUID, generati sul dispositivo oppure dal
+server per le righe create tramite l'[API](/using-the-api/overview). I
+timestamp sono memorizzati come stringhe ISO 8601 sul client e come
+`TIMESTAMP` sul server.
 
-## La gerarchia
-
-In cima si trova l'**Apiario** (una postazione o un luogo). Ogni apiario contiene
-**Arnie**; ogni arnia ha una **Regina** attuale e accumula nel tempo un flusso di
-registrazioni.
-
-```text
-Apiary
- ├── Hive ──────── Queen (current; queens form a succession over time)
- │     ├── Inspection   (a visit: what you saw)
- │     ├── Task         (something to do, with a due date)
- │     ├── Event        (append-only fact: requeened, split, died, moved…)
- │     ├── Harvest      (honey/wax taken off)
- │     └── Treatment    (varroa or disease treatment applied)
- │
- └── Placement (hive ↔ apiary, time-bounded — where a hive lived, and when)
-
-ApiaryShare (apiary ↔ user — grants another beekeeper access via a scope)
-```
-
-Un'arnia appartiene a un solo apiario alla volta, ma **Placement** registra lo
-storico completo dei luoghi in cui un'arnia ha vissuto, così un'arnia può spostarsi
-tra le postazioni senza perdere le sue registrazioni.
-
-## Entità e campi chiave
-
-Ogni entità condivide un involucro comune usato dalla sincronizzazione: un `id`
-stabile (un UUID generato offline), uno `scope_id` (vedi **Scope**), colonne di
-gestione HLC e un flag di cancellazione logica. I campi elencati di seguito sono
-quelli con significato di dominio.
-
-### Apiary
-
-Il contenitore e l'unità di condivisione.
-
-| Campo | Note |
-|---|---|
-| `id` | UUID |
-| `name` | es. "Postazione di casa" |
-| `location` | testo libero oppure lat/long |
-| `notes` | testo libero |
-| `scope_id` | coincide con l'`id` dell'apiario stesso (vedi sotto) |
-
-### Hive
-
-L'alloggiamento di una colonia all'interno di un apiario.
-
-| Campo | Note |
-|---|---|
-| `id` | UUID; codificato anche nell'[etichetta QR dell'arnia](/using-the-app/qr-labels) |
-| `apiary_id` | apiario attuale (la collocazione attiva) |
-| `name` / `short_code` | etichetta leggibile e codice breve stampato sul QR |
-| `type` | uno tra Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar, Other — vedi [Tipi di arnia](/knowledge-base/hive-types) |
-| `status` | es. attiva, morta, venduta |
-| `notes` | testo libero |
-| `scope_id` | l'id dell'apiario |
-
-### Queen
-
-La regina regnante di un'arnia. Le regine formano una **successione**: quando una
-colonia viene risottoposta a nuova regina, la regina precedente viene chiusa e si
-apre una nuova registrazione, così mantieni l'intera discendenza.
-
-| Campo | Note |
-|---|---|
-| `id` | UUID |
-| `hive_id` | l'arnia che guida |
-| `year` | anno di introduzione/nascita |
-| `marking_colour` | segue lo [schema internazionale dei colori](/knowledge-base/queen-marking-colours) (1/6 bianco, 2/7 giallo, 3/8 rosso, 4/9 verde, 5/0 blu) |
-| `origin` | allevata, acquistata, sciame, sostituzione spontanea… |
-| `clipped` | con ali tarpate (booleano) |
-| `scope_id` | l'id dell'apiario della sua arnia |
-
-### Inspection
-
-Una visita datata: l'istantanea di ciò che hai osservato.
-
-| Campo | Note |
-|---|---|
-| `id`, `hive_id`, `date` | chi e quando |
-| `brood`, `stores`, `temperament` | osservazioni tipiche |
-| `queen_seen`, `eggs_seen`, `queen_cells` | controlli rapidi |
-| `varroa_count` | caduta di acari / conteggio da lavaggio, se rilevato |
-| `temp_hive`, `temp_outside` | temperatura (°C) all'interno dell'arnia e all'esterno |
-| `humidity_hive`, `humidity_outside` | umidità relativa (%) all'interno dell'arnia e all'esterno |
-| `notes` | testo libero |
-| `scope_id` | l'id dell'apiario |
-
-I campi climatici sono semplici scalari opzionali, quindi si sincronizzano per
-campo come qualsiasi altra colonna e possono essere compilati a mano o da un
-sensore automatico — vedi [Tracker automatici](/using-the-api/automated-trackers).
-
-### Task
-
-Qualcosa da fare per un'arnia o un apiario, con una data di scadenza e uno stato
-di completamento.
-
-| Campo | Note |
-|---|---|
-| `id` | UUID |
-| `hive_id` / `apiary_id` | il soggetto (un task può riferirsi a uno dei due livelli) |
-| `title`, `due_date`, `done` | gli elementi di base |
-| `scope_id` | l'id dell'apiario |
-
-### Event
-
-Un fatto **append-only** relativo a un'arnia — nuova regina, divisione, sciamatura,
-morte, spostamento, nutrizione. Gli eventi non vengono mai modificati né uniti; si
-limitano ad accumularsi, motivo per cui non entrano mai in conflitto durante la
-sincronizzazione. Sono la spina dorsale della cronologia dell'arnia.
-
-| Campo | Note |
-|---|---|
-| `id`, `hive_id`, `occurred_at` | quando è accaduto |
-| `kind` | il tipo di evento |
-| `payload` | dettaglio specifico del tipo (JSON) |
-| `scope_id` | l'id dell'apiario |
-
-Vedi [Storico ed eventi](/developers/history-and-events) per il catalogo completo
-degli eventi e per il modo in cui viene assemblata la cronologia.
-
-### Harvest
-
-Miele (o cera) prelevato da un'arnia.
-
-| Campo | Note |
-|---|---|
-| `id`, `hive_id`, `date` | il prelievo |
-| `product` | miele, cera, propoli… |
-| `quantity`, `unit` | es. 12,5 kg |
-| `notes` | es. fonte di bottinatura, umidità |
-| `scope_id` | l'id dell'apiario |
-
-### Treatment
-
-Un trattamento contro la varroa o una malattia applicato a un'arnia.
-
-| Campo | Note |
-|---|---|
-| `id`, `hive_id`, `date` | soggetto e data di applicazione |
-| `product`, `active_ingredient` | es. Oxuvar / acido ossalico |
-| `dose`, `method` | es. 50 ml, gocciolamento |
-| `batch_number` | lotto / carica (spesso obbligatorio per legge) |
-| `withdrawal_until` | data a partire dalla quale il miele può essere raccolto in sicurezza |
-| `reason` | es. varroa |
-| `note` | testo libero |
-| `apiary_id`, `queen_id` | contesto fissato al momento dell'applicazione |
-| `scope_id` | l'id dell'apiario |
-
-:::note
-Le regole di trattamento e dosaggio variano in base al paese e all'autorizzazione
-del prodotto. Openbeehive registra ciò che hai fatto; non prescrive nulla. Segui
-sempre le autorizzazioni locali — vedi [Varroa](/beekeeping/varroa).
-:::
-
-### Placement
-
-Il collegamento limitato nel tempo tra un'arnia e un apiario: dove un'arnia ha
-vissuto e per quanto tempo. Una nuova collocazione si apre quando un'arnia si
-sposta; la precedente si chiude.
-
-| Campo | Note |
-|---|---|
-| `id`, `hive_id`, `apiary_id` | il collegamento |
-| `from` / `until` | intervallo; `until` è null finché è in corso |
-| `scope_id` | l'id dell'apiario |
-
-### ApiaryShare
-
-Concede a un altro apicoltore l'accesso a un apiario (e a tutto ciò che vi è
-contenuto).
-
-| Campo | Note |
-|---|---|
-| `id`, `apiary_id` | cosa viene condiviso |
-| `user_id` | con chi viene condiviso |
-| `role` | es. visualizzatore, editor |
-
-## Scope e controllo della sincronizzazione
-
-La condivisione avviene a livello di **apiario**, e un unico valore la governa:
-ogni registrazione porta uno `scope_id`.
-
-- Per i dati di proprietà dell'apiario — arnie, regine, ispezioni, task, eventi,
-  raccolti, trattamenti, collocazioni e l'apiario stesso — lo `scope_id` è l'**id
-  dell'apiario**.
-- Per i dati che appartengono a un singolo utente e non vengono mai condivisi (es.
-  le preferenze personali), lo `scope_id` assume la forma `user:<id>`.
-
-Quando due dispositivi si sincronizzano, si scambiano solo gli scope a cui l'utente
-ha diritto. Il server risolve l'insieme degli scope di un utente come:
+## Gerarchia
 
 ```text
-scopes(user) = { "user:<their id>" }
-             ∪ { apiary.id  for each apiary they own }
-             ∪ { share.apiary_id  for each ApiaryShare granting them access }
+apiary
+ └── hive ── queen (one active, older ones kept with replaced_at set)
+       ├── inspection
+       ├── task        (task.hive_id and task.apiary_id are both optional)
+       ├── harvest
+       ├── treatment
+       ├── placement   (which apiary the hive lived in, and when)
+       └── event       (append-only history with frozen apiary/hive/queen)
 ```
 
-Aggiungere un `ApiaryShare` fa quindi comparire un intero apiario — ogni arnia e
-ogni registrazione sotto di esso — sui dispositivi del destinatario alla
-sincronizzazione successiva; revocarlo interrompe il flusso di ulteriori modifiche.
-Poiché il controllo è la colonna `scope_id`, la condivisione è tutto-o-niente per
-apiario e non richiede permessi per singola registrazione.
+La condivisione e il partizionamento della sincronizzazione usano `scope_id`:
+l'id dell'apiario stesso per l'apiario e per tutto ciò che vi è contenuto. Solo
+`event` memorizza `scope_id` come colonna; per le altre tabelle viene trasportato
+nel messaggio `Change`.
 
-:::tip
-L'id di un'arnia da solo non concede nulla. La scansione di un'[etichetta QR](/developers/qr-codes)
-apre l'app su un'arnia solo se lo scope di quell'arnia è stato effettivamente
-sincronizzato sul tuo dispositivo.
-:::
+## apiary
 
-## Perché si fonde in modo pulito
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | |
+| `name` | text | obbligatorio |
+| `address` | text | testo libero |
+| `lat`, `lng` | real | `0` quando non impostati |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
 
-Le strutture descritte sopra sono scelte in modo che la sincronizzazione non
-richieda mai l'intervento di una persona per risolvere un conflitto:
+## hive
 
-- I **campi scalari** (il colore di marcatura di una regina, il nome di un'arnia)
-  usano il last-writer-wins per campo, deciso dai timestamp HLC.
-- I **campi lista/insieme** usano OR-Set add-wins, così le aggiunte concorrenti
-  sopravvivono tutte.
-- Gli **eventi** sono append-only e immutabili, quindi si limitano ad accumularsi.
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | codificato anche nell'[etichetta QR](/developers/qr-codes) |
+| `apiary_id` | text | apiario attuale |
+| `name` | text | |
+| `type` | int | `HiveType`, vedi sotto |
+| `status` | int | `HiveStatus`, vedi sotto; le nuove arnie partono da `1` |
+| `boxes` | int | numero di corpi |
+| `colony_origin` | text | es. "sciame 2024" |
+| `note` | text | |
+| `qr_code` | text | riservato; il codice stampato è derivato da `id` da `shortCode()` in `app/src/lib/qr.ts` |
+| `photo` | text | data URL o chiave blob |
+| `created_at`, `updated_at` | timestamp | |
 
-Per l'algoritmo completo, prosegui con il
-[protocollo di sincronizzazione](/developers/sync-protocol).
+`HiveType`: 0 Non specificato, 1 Zander, 2 Dadant, 3 Deutsch Normal, 4 Langstroth,
+5 Warré, 6 Top-bar, 99 Altro.
+
+`HiveStatus`: 0 Non specificato, 1 Attiva, 2 Nucleo, 3 Orfana, 4 Persa,
+5 Sciolta.
+
+## queen
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | |
+| `hive_id` | text | |
+| `year` | int | l'anno della regina; determina il colore di marcatura predefinito |
+| `marking` | int | `MarkingColor`: 1 bianco (anni che finiscono in 1/6), 2 giallo (2/7), 3 rosso (3/8), 4 verde (4/9), 5 blu (5/0); predefinito da `year` |
+| `origin` | text | |
+| `breeder_number` | text | |
+| `introduced_at` | timestamp | inizio del regno |
+| `replaced_at` | timestamp | fine del regno, null finché regna |
+| `active` | bool | true per la regina attuale |
+| `note` | text | |
+| `created_at`, `updated_at` | timestamp | |
+
+Un cambio di regina imposta `active = 0` e `replaced_at` sulla vecchia riga e ne
+inserisce una nuova; le vecchie regine non vengono mai eliminate.
+
+## inspection
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id`, `hive_id` | text | |
+| `date` | timestamp | |
+| `weather` | text | |
+| `queen_seen`, `eggs_seen` | bool | |
+| `temperament` | int | 1 Molto docile, 2 Docile, 3 Normale, 4 Nervosa, 5 Aggressiva |
+| `calmness` | int | 1 Fugge dal favo, 2 Irrequieta, 3 Calma, 4 Molto calma |
+| `frames` | int | telaini occupati |
+| `brood_frames` | int | |
+| `stores` | int | 1 Buone, 2 Medie, 3 Scarse, 4 Assenti |
+| `queen_cells` | int | celle reali di sciamatura contate |
+| `youngest_larva` | int | età in giorni della larva più giovane vista |
+| `covered_larva` | bool | covata opercolata vista |
+| `varroa` | text | |
+| `honey_kg`, `fed_kg`, `weight_kg` | real | |
+| `frames_added`, `frames_removed` | int | |
+| `drone_frame_cut`, `super_added` | bool | |
+| `temp_hive`, `temp_outside` | real | °C, null quando non misurata nell'app; `CreateInspection` memorizza `0` per i campi omessi |
+| `humidity_hive`, `humidity_outside` | real | %, stessa regola delle temperature |
+| `note` | text | |
+| `photo_keys` | text | JSON OR-Set, l'unica colonna insieme |
+| `created_at` | timestamp | |
+
+## task
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | |
+| `title` | text | |
+| `hive_id`, `apiary_id` | text | opzionali |
+| `due_at` | timestamp | |
+| `done` | bool | |
+| `priority` | int | `TaskPriority`: 1 Bassa, 2 Normale, 3 Alta; la colonna del server ha 2 come predefinito, l'app scrive 0 |
+| `note`, `recurrence`, `assigned_to` | text | presenti nello schema; il modulo attività compila solo `title` e `due_at` |
+| `created_at` | timestamp | |
+
+## placement
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id`, `hive_id`, `apiary_id` | text | |
+| `start_at` | timestamp | |
+| `end_at` | timestamp | null per la collocazione attuale |
+
+Creare un'arnia apre una collocazione; spostarla chiude la riga aperta al
+momento dello spostamento e ne apre una nuova.
+
+Un'attività senza `apiary_id` si sincronizza sotto lo scope personale
+`user:<user id>` invece che sotto l'id di un apiario.
+
+## harvest
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | fissati al momento del raccolto |
+| `date` | timestamp | |
+| `variety` | text | |
+| `amount_kg` | real | |
+| `water_content` | real | % |
+| `batch_number` | text | |
+| `best_before` | timestamp | |
+| `note` | text | |
+
+## treatment
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | |
+| `apiary_id`, `hive_id`, `queen_id` | text | fissati al momento del trattamento |
+| `date` | timestamp | |
+| `product`, `active_ingredient` | text | |
+| `dose`, `method` | text | |
+| `batch_number` | text | |
+| `withdrawal_until` | timestamp | |
+| `reason` | text | predefinito `varroa` |
+| `note` | text | |
+
+## event
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | |
+| `scope_id` | text | id dell'apiario |
+| `type` | int | `EventType`, vedi sotto |
+| `date` | timestamp | |
+| `apiary_id`, `hive_id`, `queen_id` | text | fissati al momento dell'evento |
+| `ref_entity`, `ref_id` | text | la riga di dettaglio, es. `harvest` / il suo id |
+| `title` | text | |
+| `amount_kg` | real | copiato dal raccolto così le query sulla resa non richiedono join |
+| `detail` | text | JSON |
+| `author_id` | text | |
+
+`EventType`: 1 Creata, 2 Regina introdotta, 3 Regina sostituita, 4 Spostata,
+5 Ispezione, 6 Trattamento, 7 Raccolto, 8 Stato, 9 Sciolta. L'app scrive i
+tipi da 1 a 7 (`app/src/lib/local/history.ts`). Vedi
+[Storia ed eventi](/developers/history-and-events).
+
+## Tabelle solo server
+
+`organization`, `users`, `member`, `invite`, `user_passkey`, `api_key`,
+`apiary_share`, `change_log` e `seq_counter` esistono solo sul server.
+`member.role` è `owner` o `member`; `users.role` è `admin` o `user`.
+`apiary_share` viene letta dal controllo degli scope di sincronizzazione ma
+nulla nell'app la scrive. Il client aggiunge `outbox` e `sync_meta` per il
+motore di sincronizzazione.
+
+### api_key
+
+Chiavi a lunga durata per script e integrazioni (migrazione `0014_api_keys.sql`,
+`server/internal/auth/apikey.go`). Non sincronizzata.
+
+| Colonna | Tipo | Note |
+| --- | --- | --- |
+| `id` | text | |
+| `user_id` | varchar(64) | proprietario; indicizzata |
+| `organization_id` | varchar(64) | il tenant in cui la chiave agisce, fissato alla creazione |
+| `name` | text | etichetta mostrata nelle Impostazioni |
+| `key_prefix` | text | i primi 12 caratteri del testo in chiaro, per la visualizzazione |
+| `key_hash` | varchar(64) | SHA-256 in esadecimale del token `obhk_...` in chiaro, univoco; il testo in chiaro non viene mai memorizzato |
+| `scope` | text | `write` (predefinito) o `read`; una chiave `read` può chiamare solo `Get*`, `List*`, `Pull` e `Subscribe` |
+| `created_at` | timestamp | |
+| `expires_at` | timestamp | null per le chiavi che non scadono mai; una chiave oltre questo istante viene rifiutata |
+| `last_used_at` | timestamp | aggiornato a ogni utilizzo verificato, null fino ad allora |
+
+Una chiave viene verificata calcolando l'hash del bearer token e cercando
+`key_hash`; la riga viene eliminata alla rimozione, e una chiave il cui
+proprietario non è più `member` di `organization_id`, o il cui `expires_at` è
+passato, viene rifiutata senza essere eliminata.

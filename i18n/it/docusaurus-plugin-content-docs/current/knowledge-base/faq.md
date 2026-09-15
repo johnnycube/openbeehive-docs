@@ -15,7 +15,7 @@ Il servizio ospitato su [app.openbeehive.org](https://app.openbeehive.org) è gr
 
 ## I miei dati sono privati?
 
-I tuoi registri risiedono prima di tutto sul tuo dispositivo. Openbeehive è **offline-first**: l'app memorizza tutto in un database locale sul tuo telefono, tablet o computer, e si sincronizza con il server solo in background.
+I tuoi registri risiedono prima di tutto sul tuo dispositivo: l'app memorizza tutto in un database locale sul tuo telefono, tablet o computer e si sincronizza con il server in background.
 
 Se ospiti autonomamente, i tuoi dati non lasciano mai la tua infrastruttura. Sul servizio ospitato, i tuoi registri sono memorizzati sui nostri server così da poter sincronizzare tra i tuoi dispositivi, ma restano tuoi.
 
@@ -39,10 +39,7 @@ Oggi non esiste un'app nativa separata nell'App Store o nel Play Store, e non te
 
 ## Posso esportare i miei dati?
 
-Sì. Poiché il progetto è open source e i tuoi dati sono memorizzati in un database SQLite standard, non sei mai vincolato.
-
-- Chi **ospita autonomamente** può effettuare il backup del database direttamente. Vedi [Backup](/self-hosting/backups).
-- Sul **servizio ospitato**, gli strumenti di esportazione fanno parte della roadmap. I tuoi registri sono inoltre conservati localmente su ciascun dispositivo sincronizzato.
+Sì. **Impostazioni → Dati e backup** esporta tutto ciò che è sul tuo dispositivo come backup completo JSON, foglio di calcolo (XLSX), file CSV in uno ZIP, BeeXML o report PDF stampabile, e importa JSON, BeeXML e CSV da altre app. Vedi [Importazione ed esportazione](/using-the-app/import-export). Chi ospita autonomamente può anche effettuare il backup del database del server direttamente; vedi [Backup](/self-hosting/backups).
 
 ## Posso ospitarlo autonomamente?
 
@@ -61,9 +58,7 @@ Per un'istanza privata a utente singolo puoi disabilitare del tutto il login. Ve
 
 ## Come funziona la condivisione?
 
-La condivisione avviene a livello di **apiario** tramite gli "scope". Quando condividi un apiario, le persone con cui lo condividi possono vedere e contribuire a tutto ciò che contiene: i suoi alveari, le regine, le ispezioni, le attività e altro ancora.
-
-La sincronizzazione è priva di conflitti per progettazione, quindi due persone che modificano lo stesso apiario su dispositivi diversi non sovrascriveranno il lavoro l'una dell'altra. Le modifiche si fondono in modo pulito anche dopo lunghi periodi offline. I dettagli tecnici sono trattati nel [protocollo di sincronizzazione](/developers/sync-protocol).
+I registri si condividono tramite i **tenant**. Ogni account ha un tenant personale e può essere invitato in altri, per esempio quello di un club. Tutti i membri di un tenant vedono e modificano tutti i suoi apiari, alveari e registri; non esiste una condivisione per singolo apiario. La sincronizzazione è priva di conflitti, quindi due persone che modificano nello stesso tenant su dispositivi diversi non sovrascrivono il lavoro l'una dell'altra. Vedi [Account e tenant](/using-the-app/accounts-tenants).
 
 ## Quali tipi di alveare sono supportati?
 
@@ -99,7 +94,7 @@ Ogni alveare può avere un'etichetta QR stampabile. Scansionandola si apre Openb
 
 ## In quali lingue è disponibile?
 
-Openbeehive viene sviluppato pensando all'internazionalizzazione, con tedesco e inglese come primo focus date le origini del progetto. Lingue aggiuntive sono benvenute come contributi della community.
+L'app include cinque lingue: inglese, tedesco, francese, spagnolo e italiano. Cambia lingua da **Impostazioni → Lingua**. Ulteriori traduzioni sono benvenute come contributi.
 
 ## Quali database e backend di archiviazione sono supportati?
 
@@ -110,11 +105,11 @@ In self-hosting, il backend è modulare:
 
 ## Come accedo?
 
-Il servizio ospitato usa il login OIDC (accedi con un provider supportato), con passkey opzionali (WebAuthn) per un'esperienza senza password. Chi ospita autonomamente può configurare i propri provider OIDC, abilitare le passkey o disattivare del tutto il login per le configurazioni a utente singolo. Vedi [Autenticazione](/self-hosting/authentication).
+Il servizio ospitato usa account con e-mail e password. Chi ospita autonomamente può abilitare gli account con e-mail e password, aggiungere provider OIDC (Google, Keycloak, Authentik e simili), abilitare le passkey o disattivare del tutto il login per una configurazione a utente singolo. Vedi [Autenticazione](/self-hosting/authentication).
 
 ## Come segnalo un bug o richiedo una funzionalità?
 
-Apri una issue sulla nostra [organizzazione GitHub](https://github.com/johnnycube/openbeehive-app). Passaggi chiari per riprodurre il problema, la tua piattaforma e il tuo browser, e uno screenshot aiutano enormemente.
+Apri una issue nel [repository GitHub](https://github.com/johnnycube/openbeehive-app). Passaggi chiari per riprodurre il problema, la tua piattaforma e il tuo browser, e uno screenshot aiutano.
 
 La [pagina di risoluzione dei problemi](/knowledge-base/troubleshooting) potrebbe già coprire i problemi comuni.
 
@@ -122,8 +117,6 @@ La [pagina di risoluzione dei problemi](/knowledge-base/troubleshooting) potrebb
 
 Sono benvenuti contributi di ogni tipo: codice, documentazione, traduzioni, segnalazioni di bug e idee. Lo stack è Go nel backend e una PWA SvelteKit nel frontend.
 
-Leggi la [guida per i contributori](/developers/contributing) per iniziare, e dai un'occhiata alla [panoramica dell'architettura](/developers/architecture) per capire come si incastrano i pezzi.
-
 ## Quale versione è questa?
 
-La versione attuale è la **v0.1.0**, il nostro primo rilascio pubblico. Aspettati miglioramenti rapidi, e consulta la [guida all'aggiornamento](/self-hosting/upgrading) quando arriveranno nuove versioni.
+Le versioni sono taggate su [GitHub](https://github.com/johnnycube/openbeehive-app/releases). Chi ospita autonomamente esegue il tag che ha compilato o il tag dell'immagine che ha scaricato; consulta la [guida all'aggiornamento](/self-hosting/upgrading) quando arrivano nuove versioni.

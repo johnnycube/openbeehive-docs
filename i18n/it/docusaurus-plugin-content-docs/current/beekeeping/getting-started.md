@@ -97,10 +97,4 @@ Il calendario di ogni regione è diverso, quindi consideralo come una forma più
 Punta a mantenere la tua colonia viva e sana per tutto il suo primo inverno. Questo, non il miele, è la vera misura di un primo anno di successo.
 :::
 
-## Dove andare dopo
-
-- [Capire la colonia](/beekeeping/the-colony) — chi è chi all'interno dell'arnia e come funziona il tutto.
-- [Attrezzatura](/beekeeping/equipment) — arnie, attrezzi e abbigliamento protettivo spiegati.
-- [L'anno apistico](/beekeeping/beekeeping-year) — cosa fare, stagione per stagione.
-
 Procedi con calma, tieni buoni registri, appoggiati alla tua comunità locale e rispetta le regole del posto in cui vivi. Benvenuto nell'apicoltura.

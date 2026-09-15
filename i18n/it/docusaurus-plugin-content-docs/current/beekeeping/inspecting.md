@@ -101,6 +101,6 @@ Ogni ispezione è una piccola perturbazione. Mantienila proporzionata. Se devi s
 
 ## Registrare ciò che trovi
 
-Un'ispezione è utile solo quanto le note che conservi. Registra temperamento, scorte, spazio, covata ed eventuali celle reali o segni di malattia mentre i dettagli sono freschi, idealmente accanto all'arnia sul tuo telefono. Poiché Openbeehive funziona offline-first, puoi registrare tutto nell'apiario senza segnale e si sincronizzerà in seguito.
+Un'ispezione è utile solo quanto le note che conservi. Registra temperamento, scorte, spazio, covata ed eventuali celle reali o segni di malattia mentre i dettagli sono freschi, idealmente accanto all'arnia sul tuo telefono.
 
 Vedi [registrare le ispezioni](/using-the-app/inspections) per catturare i tuoi rilievi, e la [sezione apicoltura](/category/beekeeping-basics) per il contesto stagionale più ampio.

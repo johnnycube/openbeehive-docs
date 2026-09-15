@@ -23,7 +23,7 @@ in difficoltà.
 
 | Termine | Significato |
 | --- | --- |
-| **Apiario** | Un luogo in cui si tengono uno o più alveari; un "apiario". In Openbeehive l'apiario è il vertice della gerarchia e l'unità di condivisione. Vedi [apiari](/using-the-app/apiaries). |
+| **Apiario** | Un luogo in cui si tengono uno o più alveari; un "apiario". In Openbeehive l'apiario è il vertice della gerarchia. Vedi [apiari](/using-the-app/apiaries). |
 | **Spazio d'ape** | Lo spazio di circa 6-9 mm che le api lasciano come passaggio. Gli spazi più piccoli vengono riempiti con propoli; quelli più grandi con favo. Uno spazio d'ape corretto mantiene i telaini mobili. |
 | **Covata** | I giovani in sviluppo: uova, larve e pupe. Una "configurazione della covata" sana è compatta e con poche lacune. |
 | **Nido** | La cassetta (o le cassette) inferiore in cui la regina depone e si alleva la covata, in contrapposizione ai melari soprastanti. |
@@ -75,9 +75,9 @@ di riferimento e verifica le norme nazionali.
 | **OR-Set** | Un insieme "add-wins" usato per i campi a lista, così che le aggiunte concorrenti da dispositivi diversi sopravvivano tutte a una fusione. Vedi [protocollo di sincronizzazione](/developers/sync-protocol). |
 | **PWA** | Progressive Web App - l'app web installabile e utilizzabile offline che esegui su telefono, tablet o desktop. Vedi [installazione](/using-the-app/install). |
 | **Etichetta QR** | Un codice stampabile su un alveare che codifica un deep link; scansionandolo si apre l'app direttamente su quell'alveare. Vedi [etichette QR](/using-the-app/qr-labels). |
-| **Scope (ambito)** | Il confine di condivisione in Openbeehive. La condivisione avviene a livello di apiario: uno scope concede ad altri l'accesso a un apiario e a tutto ciò che contiene. |
 | **Sincronizzazione** | La fusione in background, senza conflitti, delle tue modifiche locali con il server e i tuoi altri dispositivi. Vedi [offline e sincronizzazione](/using-the-app/offline-and-sync). |
-| **Attività** | Un promemoria o una cosa da fare legata a un alveare o a un apiario - per esempio "aggiungere un melario" o "trattare contro la varroa". Vedi [attività](/using-the-app/tasks). |
+| **Attività** | Un promemoria con un titolo e una scadenza facoltativa, per esempio "aggiungere un melario" o "trattare contro la varroa". Vedi [attività](/using-the-app/tasks). |
+| **Tenant** | Una raccolta di apiari, alveari e registri condivisa dai suoi membri. Ogni account ha un tenant personale e può essere invitato in altri; non esiste una condivisione più granulare. Vedi [account e tenant](/using-the-app/accounts-tenants). |
 
 :::note
 I meccanismi più approfonditi di HLC, OR-Set ed eventi di sola aggiunta sono

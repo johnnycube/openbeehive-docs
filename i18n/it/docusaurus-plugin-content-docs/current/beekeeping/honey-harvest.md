@@ -128,14 +128,10 @@ che causano il botulismo infantile. Questa avvertenza è obbligatoria per legge 
 Registra ogni lotto come una **Raccolta** così da poter risalire da ogni partita al suo apiario,
 arnia e data — esattamente il tipo di tracciabilità che le tue etichette promettono.
 
-Per ogni raccolta, registra dettagli come l'arnia o l'apiario di origine, la data,
-la quantità (peso o numero di vasetti), il tipo di miele e il tuo numero di lotto. Aggiungi
-note su contenuto di acqua, gusto o cristallizzazione, e allega una foto se vuoi.
-
-Poiché Openbeehive funziona offline-first, puoi registrare le raccolte direttamente all'arnia o
-nella stanza di smielatura senza segnale — tutto si sincronizza in seguito. Il numero di lotto che
-salvi qui è lo stesso da stampare sul vasetto, chiudendo il cerchio dal favo allo
-scaffale.
+Per ogni raccolta, registra la data, la quantità in chilogrammi, la varietà, il
+contenuto d'acqua, il tuo numero di lotto e la data di consumo preferibile, più una
+nota per gusto o cristallizzazione. Il numero di lotto che salvi qui è quello da
+stampare sul vasetto, chiudendo il cerchio dal favo allo scaffale.
 
 Vedi [Raccolte nell'app](/using-the-app/harvests) per come inserire e gestire
 i tuoi registri di raccolta, e la più ampia [guida apistica](/category/beekeeping-basics) per la

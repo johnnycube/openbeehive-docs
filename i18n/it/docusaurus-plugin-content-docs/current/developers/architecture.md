@@ -49,6 +49,8 @@ Il diagramma seguente mostra come una modifica viaggia da un tocco nell'interfac
 
 Il motore di sincronizzazione scambia solo i record che appartengono agli ambiti a cui un utente può accedere, quindi un dispositivo non scarica mai il mondo intero: solo gli apiari a cui ha diritto.
 
+Script e sensori entrano nello stesso quadro tramite i servizi CRUD del server ([Utilizzo dell'API](/using-the-api/overview)). Le loro scritture non aggirano questo flusso: il server applica ciascuna con la stessa unione per campo e la aggiunge allo stesso registro delle modifiche di una modifica inviata con push, quindi una lettura inviata da una bilancia per arnie è solo un'altra modifica che i dispositivi scaricano alla sincronizzazione successiva.
+
 ## Risoluzione dei conflitti
 
 Due dispositivi possono modificare la stessa arnia mentre sono entrambi offline. Quando si riconnettono, Openbeehive unisce le loro modifiche in modo deterministico, senza richieste manuali di risoluzione dei conflitti. Tre tecniche rendono tutto privo di conflitti.
@@ -63,11 +65,11 @@ Per i campi scalari semplici, come il nome o il tipo di un'arnia o il colore di 
 
 ### OR-Set per i campi di tipo elenco
 
-I campi simili a elenchi, come i tag, usano un observed-remove set (OR-Set) con semantica add-wins. Le aggiunte concorrenti sopravvivono tutte, e una rimozione ha effetto solo sulle voci specifiche che ha osservato. Questo evita il classico problema in cui l'aggiunta di una persona cancella silenziosamente quella di un'altra.
+I campi simili a elenchi (attualmente solo le chiavi delle foto di un'ispezione) usano un observed-remove set (OR-Set) con semantica add-wins. Le aggiunte concorrenti sopravvivono tutte, e una rimozione ha effetto solo sulle voci specifiche che ha osservato. Questo evita il classico problema in cui l'aggiunta di una persona cancella silenziosamente quella di un'altra.
 
 ### Eventi append-only
 
-I record che descrivono cose accadute, come ispezioni, eventi, raccolti e trattamenti, sono append-only. Le nuove voci vengono semplicemente aggiunte; non vengono mai modificate sul posto dal livello di sincronizzazione, quindi non possono entrare in conflitto. Il risultato è una storia immutabile e ordinata. Vedi [storia ed eventi](/developers/history-and-events) per i dettagli.
+La tabella `event` è append-only per convenzione: ogni scrittura nella storia inserisce una nuova riga con un id nuovo e nulla la modifica o la elimina, quindi due dispositivi che aggiungono eventi offline non toccano mai la stessa riga. Vedi [storia ed eventi](/developers/history-and-events) per i dettagli.
 
 :::tip
 Poiché le unioni sono deterministiche, due dispositivi qualsiasi che hanno visto lo stesso insieme di modifiche calcoleranno sempre esattamente lo stesso risultato, indipendentemente dall'ordine in cui tali modifiche sono arrivate.
@@ -88,10 +90,6 @@ L'app è una Progressive Web App, progettata innanzitutto per il telefono che ha
 - Un **service worker** memorizza nella cache lo scheletro dell'applicazione e le risorse, in modo che l'app si carichi all'istante e funzioni completamente offline dopo la prima visita.
 - **SQLite-WASM su OPFS** fornisce un vero database relazionale nel browser, con un archiviazione durevole e privata per l'origine che sopravvive ai ricaricamenti.
 - L'app è installabile sulla schermata principale e si comporta come un'app nativa, incluso il flusso di scansione QR che apre l'app su una specifica arnia.
-
-:::note
-Per gli utenti che desiderano un'app pacchettizzata dagli app store, la stessa base di codice può essere incapsulata con **Capacitor** per distribuire build native iOS e Android. Questo è opzionale; la PWA è il canale di distribuzione principale.
-:::
 
 ## Come tutto si incastra
 

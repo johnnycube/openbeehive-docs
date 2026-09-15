@@ -100,9 +100,3 @@ Anche colonie dall'aspetto sano possono morire durante l'inverno per fame, malat
 :::note Variazione regionale
 Il comportamento della colonia varia con il clima e la sottospecie. Il ciclo descritto sopra riguarda una colonia di clima temperato; nelle regioni più calde l'allevamento della covata potrebbe non cessare mai del tutto, e i tempi si spostano di conseguenza. Calibra sempre in base alla tua posizione e ai mentori locali.
 :::
-
-## Dove andare dopo
-
-- Nuovo con le api? Inizia con [Iniziare](/beekeeping/getting-started).
-- Pronto a guardare dentro? Leggi [Ispezionare](/beekeeping/inspecting).
-- Curioso sull'attrezzatura? Vedi [Attrezzatura](/beekeeping/equipment).

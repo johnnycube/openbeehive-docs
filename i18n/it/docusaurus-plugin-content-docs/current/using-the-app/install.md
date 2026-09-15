@@ -20,13 +20,11 @@ tuoi registri disponibili anche quando sei in apiario senza segnale.
 - **Un'icona dell'app** sulla tua schermata iniziale o nell'avvio applicazioni.
 - **Una finestra a schermo intero** senza elementi del browser, così c'è più
   spazio per le tue arnie e ispezioni.
-- **Accesso offline-first.** I tuoi registri vivono in un database locale sul
-  dispositivo e si sincronizzano in background. Letture e scritture sono
-  istantanee, con o senza segnale. Vedi
-  [Offline e sincronizzazione](/using-the-app/offline-and-sync) per capire come
-  funziona.
+- **Accesso offline.** I tuoi registri vivono in un database locale sul
+  dispositivo e si sincronizzano in background. Vedi
+  [Offline e sincronizzazione](/using-the-app/offline-and-sync).
 - **Scansione QR rapida.** Scansionare l'[etichetta QR](/using-the-app/qr-labels)
-  di un'arnia apre direttamente l'app installata su quell'arnia.
+  di un'arnia apre quell'arnia.
 
 :::tip
 Puoi continuare a usare Openbeehive in una normale scheda del browser senza
@@ -129,11 +127,3 @@ database locale del dispositivo e potrebbero andare persi. Assicurati che l'app 
 sia sincronizzata prima di rimuoverla. Vedi
 [Offline e sincronizzazione](/using-the-app/offline-and-sync).
 :::
-
-## Una nota sulle app native
-
-Openbeehive è prima di tutto una PWA, e per quasi tutti la PWA installata è
-indistinguibile da un'app nativa. Un wrapper nativo (che usa Capacitor) per
-l'Apple App Store e Google Play è in fase di valutazione per una versione futura,
-principalmente per raggiungere chi preferisce gli store. La PWA resterà il modo
-principale per installare e manterrà tutte le sue capacità offline-first.

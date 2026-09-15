@@ -7,22 +7,22 @@ title: "Risoluzione dei problemi"
 
 La maggior parte dei problemi con Openbeehive rientra in poche categorie: sincronizzazione, archiviazione locale, fotocamera/scanner QR o login. Questa pagina passa in rassegna ciascuna di esse, con controlli pratici che puoi eseguire da solo prima di chiedere aiuto.
 
-La buona notizia: poiché Openbeehive è offline-first, i tuoi registri risiedono in un database locale sul tuo dispositivo. Quasi nulla di ciò che fai qui può far perdere dati già sincronizzati con il server.
+I tuoi registri risiedono in un database locale sul tuo dispositivo, quindi quasi nulla di ciò che fai qui può far perdere dati già sincronizzati con il server.
 
 ## I dati non si sincronizzano
 
 Le tue modifiche vengono salvate all'istante sul dispositivo. La sincronizzazione con il server avviene silenziosamente in background, quindi un ritardo è normale e raramente motivo di preoccupazione. Se le modifiche fatte su un dispositivo non compaiono su un altro, segui questa lista.
 
-**1. Verifica di essere online.** La sincronizzazione funziona solo quando hai una connessione di rete. Guarda l'indicatore di stato della sincronizzazione nell'app. Se hai lavorato sul campo senza segnale, le tue modifiche sono in coda in modo sicuro e verranno inviate appena ti riconnetti.
+**1. Verifica di essere online.** La barra laterale mostra **Online** oppure **Offline** accanto al tuo account. Se hai lavorato sul campo senza segnale, le tue modifiche sono in coda e vengono inviate appena ti riconnetti.
 
-**2. Verifica di aver effettuato l'accesso.** La sincronizzazione richiede una sessione autenticata. Se la tua sessione è scaduta potrai comunque leggere e modificare localmente, ma nulla si sincronizzerà finché non accederai di nuovo. Apri il menu account e conferma di aver effettuato l'accesso.
+**2. Verifica di aver effettuato l'accesso.** La sincronizzazione richiede una sessione. Se è scaduta puoi comunque leggere e modificare localmente, ma nulla si sincronizza finché non accedi di nuovo. **Impostazioni → Account** mostra con quale account hai effettuato l'accesso.
 
-**3. Verifica lo scope dell'apiario.** La condivisione in Openbeehive avviene a livello di apiario tramite gli **scope**. Se un alveare o un'ispezione manca su un altro dispositivo o per un'altra persona, conferma che l'apiario pertinente sia condiviso con quell'account. I registri in un apiario a cui non hai accesso non compariranno mai.
+**3. Verifica il tenant attivo.** I registri appartengono a un tenant. Se un alveare manca su un altro dispositivo, apri lì **Impostazioni → Tenant** e assicurati che sia attivo lo stesso tenant. Se manca per un'altra persona, quella persona non è membro di quel tenant; un amministratore del tenant può invitarla.
 
 **4. Aspetta un momento, poi riapri.** La sincronizzazione in background viene eseguita periodicamente. Chiudere e riaprire l'app, o passarvi dal background, avvia un nuovo tentativo di sincronizzazione.
 
 :::note
-La sincronizzazione è priva di conflitti per progettazione. Openbeehive usa gli Hybrid Logical Clock con last-writer-wins per i singoli campi e insiemi add-wins per le liste, e gli eventi di sola aggiunta (ispezioni, trattamenti, raccolte) non entrano mai in conflitto. Non perderai il lavoro perché due dispositivi hanno modificato contemporaneamente. La modifica più recente a un dato campo vince; entrambe le aggiunte a una lista vengono conservate.
+La sincronizzazione è priva di conflitti per progettazione. La modifica più recente a un campo vince, le aggiunte (foto, visite, raccolte, trattamenti) vengono conservate, e non perderai il lavoro perché due dispositivi hanno modificato contemporaneamente.
 :::
 
 Se ospiti autonomamente e la sincronizzazione fallisce per tutti, il problema è più probabilmente lato server. Vedi [Configurazione del Self-Hosting](/self-hosting/configuration) e controlla i log del server.
@@ -98,8 +98,8 @@ Su iPhone e iPad lo scanner integrato nell'app può essere limitato. Se la scans
 
 - **Bloccato sulla schermata di accesso.** Conferma di raggiungere l'indirizzo corretto (l'app ospitata è su app.openbeehive.org). Dopo l'accesso con il tuo provider dovresti essere reindirizzato automaticamente; in caso contrario, ricarica la pagina.
 - **Il reindirizzamento fallisce o errori "invalid redirect" (self-host).** Questo significa quasi sempre che l'URL di reindirizzamento OIDC o `BEEHIVE_PUBLIC_BASE_URL` è configurato male. Vedi [Autenticazione e configurazione](/self-hosting/authentication).
-- **La passkey non viene offerta.** WebAuthn/passkey devono essere abilitate e devi aver registrato una passkey su quel dispositivo. Se non disponibile, accedi invece con il tuo provider abituale.
-- **Self-host a utente singolo senza login.** Se esegui senza provider OIDC e con WebAuthn disabilitato, non c'è alcun passaggio di accesso. Se vedi inaspettatamente una schermata di accesso, controlla la configurazione del tuo server.
+- **La passkey non viene offerta.** Le passkey devono essere abilitate sul server e devi averne aggiunta una in Impostazioni → Passkeys. Altrimenti accedi con un altro metodo.
+- **Self-host a utente singolo senza login.** Con l'autenticazione a password disattivata, nessun provider OIDC e WebAuthn disabilitato, non c'è alcun passaggio di accesso. Se vedi inaspettatamente una schermata di accesso, controlla la configurazione del tuo server.
 
 ## Inviare una buona segnalazione di bug
 
@@ -110,7 +110,7 @@ Se nulla di quanto sopra aiuta, apri una issue su [github.com/johnnycube/openbee
 | Cosa hai fatto | "Toccato Salva su una nuova ispezione" |
 | Cosa ti aspettavi | "L'ispezione compare nella cronologia dell'alveare" |
 | Cosa è successo invece | "Spinner, poi la voce è sparita" |
-| Versione dell'app | v0.1.0 (mostrata nella schermata Informazioni dell'app) |
+| Versione dell'app | La versione che esegui: il tag dell'immagine o il tag git su un'istanza self-hosted |
 | Piattaforma e browser | iPhone 14, iOS 17, Safari |
 | Ospitato o self-hosted | Self-hosted, profilo `selfhost`, SQLite |
 | Online o offline | "Ero offline sul campo, ora sto sincronizzando" |
@@ -120,4 +120,4 @@ Se nulla di quanto sopra aiuta, apri una issue su [github.com/johnnycube/openbee
 Per favore non incollare segreti. Oscura i segreti di sessione, i segreti client OIDC, le password dei database e i dati personali prima di condividere log o configurazioni.
 :::
 
-Per domande sul self-hosting riguardo a database, archiviazione, autenticazione e variabili d'ambiente, la [sezione Self-Hosting](/category/self-hosting) e il [riferimento di configurazione](/self-hosting/configuration) sono i punti di partenza migliori. Vedi anche le [FAQ](/knowledge-base/faq).
+Per domande sul self-hosting, parti dal [riferimento di configurazione](/self-hosting/configuration).

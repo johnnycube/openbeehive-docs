@@ -8,7 +8,7 @@ title: "Backup e ripristino"
 Pochi minuti spesi ora a configurare i backup ti risparmieranno molte preoccupazioni in seguito. Questa pagina copre cosa sottoporre a backup, come farlo in sicurezza e come ripristinare quando necessario.
 
 :::tip Il server è la fonte di verità
-Openbeehive è offline-first, quindi ogni dispositivo che usa il tuo alveare mantiene una copia locale completa dei suoi dati nel browser. Quella copia è una comodità, non un backup: risiede nell'archiviazione del browser e può essere cancellata svuotando i dati del sito, reinstallando o perdendo il dispositivo.
+Ogni dispositivo che usa la tua istanza mantiene una copia locale dei suoi dati nel browser. Quella copia è una comodità, non un backup: può essere cancellata svuotando i dati del sito, reinstallando o perdendo il dispositivo.
 
 Per tutto ciò che è condiviso tra persone o dispositivi, il **server** è la copia autoritativa. Esegui il backup del server e proteggi i registri di tutti in una volta sola.
 :::
@@ -96,7 +96,7 @@ Esegui il mirror del bucket con il client MinIO o l'AWS CLI:
 
 ```bash
 mc mirror --overwrite myminio/openbeehive /backups/blobs/
-# oppure
+# or
 aws s3 sync s3://openbeehive /backups/blobs/
 ```
 
@@ -112,7 +112,7 @@ Ripristina il database e i blob insieme, poi riavvia il servizio.
 systemctl stop openbeehive
 
 cp /backups/openbeehive.db ./openbeehive.db
-rm -f ./openbeehive.db-wal ./openbeehive.db-shm   # lascia che SQLite li ricostruisca
+rm -f ./openbeehive.db-wal ./openbeehive.db-shm   # let SQLite rebuild these
 rsync -a --delete /backups/blobs/ ./data/blobs/
 
 systemctl start openbeehive
@@ -139,7 +139,7 @@ Dopo un ripristino, i dispositivi connessi si riconciliano con il server in back
 Un job notturno che fa un'istantanea del database e fa il mirror dei blob è sufficiente per la maggior parte dei self-hoster. Aggiungi questo al tuo crontab con `crontab -e`:
 
 ```bash
-# Backup notturno di Openbeehive alle 02:30
+# Nightly Openbeehive backup at 02:30
 30 2 * * * sqlite3 /srv/openbeehive/openbeehive.db ".backup '/backups/openbeehive-$(date +\%F).db'" && rsync -a --delete /srv/openbeehive/data/blobs/ /backups/blobs/
 ```
 
@@ -148,9 +148,3 @@ I caratteri `%` devono essere preceduti da escape come `\%` all'interno del cron
 :::tip Testa i tuoi ripristini
 Un backup che non hai mai ripristinato è solo una speranza. Di tanto in tanto, ripristina in una directory usa e getta o in un'istanza di test e conferma di poter aprire l'app e vedere le tue arnie. Conserva almeno alcuni giorni di copie datate e tienine una off-site (un disco esterno o un bucket remoto).
 :::
-
-## Dove andare dopo
-
-- Imposta o controlla `BEEHIVE_DATABASE_DSN` e `BEEHIVE_BLOB_DIR` nella pagina [Configurazione](/self-hosting/configuration).
-- Pianifica gli aggiornamenti di versione nella pagina [Aggiornamento](/self-hosting/upgrading) — esegui sempre prima il backup.
-- Torna alla [Panoramica del self-hosting](/category/self-hosting) per il quadro completo del deployment.

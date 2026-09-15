@@ -5,7 +5,7 @@ title: "Configurazione"
 
 # Configurazione
 
-Openbeehive viene configurato interamente tramite variabili d'ambiente. Questa pagina è il riferimento completo, raggruppate esattamente come appaiono in `.env.example`.
+Openbeehive viene configurato interamente tramite variabili d'ambiente. Questa pagina è il riferimento completo.
 
 Puoi impostare queste variabili nella tua shell, in un file `.env` accanto al binario, nel tuo file `docker compose` o tramite il gestore di segreti della tua piattaforma di hosting. Il server le legge una volta all'avvio, quindi le modifiche hanno effetto dopo un riavvio.
 
@@ -39,15 +39,15 @@ I due profili sono documentati in dettaglio nelle rispettive pagine: [Binario si
 | Variabile          | Predefinito                  | Descrizione                                                                 |
 | ----------------- | ------------------------ | --------------------------------------------------------------------------- |
 | `BEEHIVE_ADDR`            | `:8080`                  | Indirizzo e porta su cui il server è in ascolto. Usa `127.0.0.1:8080` per associarlo solo a localhost dietro un reverse proxy. |
-| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | L'URL pubblico tramite cui gli utenti raggiungono l'app. Usato per i deep link dei QR, i reindirizzamenti OIDC e i link assoluti. Impostalo sul tuo dominio reale in produzione. |
+| `BEEHIVE_PUBLIC_BASE_URL` | `http://localhost:8080`  | L'URL pubblico tramite cui gli utenti raggiungono l'app. Usato per i reindirizzamenti OIDC, i link di invito e di verifica e i valori predefiniti delle passkey. Impostalo sul tuo dominio reale in produzione. |
 | `BEEHIVE_HTTP_READ_HEADER_TIMEOUT` | `10s` | Tempo concesso per leggere le intestazioni di una richiesta. |
-| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Limite di lettura dell'intera richiesta; `0` significa nessuno, ed è ciò di cui ha bisogno la sottoscrizione di sincronizzazione in streaming. |
-| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Limite di scrittura della risposta; `0` significa nessuno, per lo stesso motivo. |
+| `BEEHIVE_HTTP_READ_TIMEOUT` | `0` | Limite di lettura dell'intera richiesta; `0` significa nessuno. |
+| `BEEHIVE_HTTP_WRITE_TIMEOUT` | `0` | Limite di scrittura della risposta; `0` significa nessuno. |
 | `BEEHIVE_HTTP_IDLE_TIMEOUT` | `120s` | Per quanto tempo una connessione keep-alive inattiva resta aperta. |
 | `BEEHIVE_HTTP_SHUTDOWN_TIMEOUT` | `15s` | Periodo di tolleranza per le richieste in corso allo spegnimento. |
 
 :::caution
-`BEEHIVE_PUBLIC_BASE_URL` deve corrispondere all'indirizzo che gli utenti visitano effettivamente. Se è errato, le etichette QR, i reindirizzamenti di login e i link condivisi punteranno al posto sbagliato.
+`BEEHIVE_PUBLIC_BASE_URL` deve corrispondere all'indirizzo che gli utenti visitano effettivamente. Se è errato, i reindirizzamenti di login e i link di invito puntano al posto sbagliato.
 :::
 
 ## App web integrata
@@ -144,7 +144,7 @@ che si registra. Consulta [Autenticazione](/self-hosting/authentication).
 | `BEEHIVE_PASSWORD_AUTH` | attivo per `cloud`, disattivo per `selfhost` | Abilita la registrazione e l'accesso tramite email/password. Implicito anche da `BEEHIVE_DEMO=true`. |
 | `BEEHIVE_ADMIN_EMAIL` | (vuoto) | Email dell'amministratore dell'istanza. **Obbligatoria ogni volta che l'autenticazione con password è abilitata.** L'account viene garantito a ogni avvio: creato se manca e con il ruolo forzato ad amministratore. La registrazione non concede mai il ruolo di amministratore. |
 | `BEEHIVE_ADMIN_PASSWORD` | (vuoto) | Password dell'amministratore dell'istanza, almeno 8 caratteri. Fa fede a ogni avvio: la password memorizzata viene reimpostata a questo valore, il che funge anche da recupero della password. |
-| `BEEHIVE_REGISTRATION` | `true` | Registrazione autonoma aperta. Imposta `false` per un'istanza solo su invito: oltre all'amministratore del primo avvio, gli account possono essere creati solo tramite link di invito, e la schermata di accesso mostra un avviso che l'istanza è solo su invito. |
+| `BEEHIVE_REGISTRATION` | `true` | Registrazione autonoma aperta. Imposta `false` per un'istanza solo su invito: a parte l'amministratore configurato, gli account possono essere creati solo tramite link di invito, e la schermata di accesso mostra un avviso che l'istanza è solo su invito. |
 | `BEEHIVE_EMAIL_VERIFICATION` | `false` | Richiede la conferma via email prima che un nuovo account possa accedere. |
 | `BEEHIVE_SMTP_HOST` | (vuoto) | Server SMTP per le email di verifica/invito. Se vuoto, i link vengono scritti nel log. |
 | `BEEHIVE_SMTP_PORT` | `587` | Porta SMTP. |
@@ -203,7 +203,7 @@ BEEHIVE_OIDC_KEYCLOAK_CLIENT_SECRET=...
 ```
 
 :::tip Utente singolo, nessun login
-Per un'istanza personale self-hosted puoi saltare del tutto il login. Lascia vuoto `BEEHIVE_OIDC_PROVIDERS` **e** imposta `BEEHIVE_WEBAUTHN_ENABLED=false`. L'app viene quindi eseguita in modalità a utente singolo senza alcun passaggio di accesso.
+Per un'istanza personale self-hosted puoi saltare del tutto il login: lascia `BEEHIVE_PASSWORD_AUTH` disattivato (il valore predefinito di selfhost), `BEEHIVE_OIDC_PROVIDERS` vuoto e `BEEHIVE_WEBAUTHN_ENABLED=false`. L'app viene quindi eseguita in modalità a utente singolo senza alcun passaggio di accesso.
 :::
 
 Per le procedure guidate di configurazione dei provider, gli URL di reindirizzamento e i consigli sulla sicurezza, consulta [Autenticazione](/self-hosting/authentication).
@@ -224,8 +224,8 @@ aggiungi anche l'amministratore dedicato:
 
 ```bash
 BEEHIVE_PASSWORD_AUTH=true
-BEEHIVE_ADMIN_EMAIL=tu@example.com
-BEEHIVE_ADMIN_PASSWORD=una-password-lunga-che-puoi-recuperare
+BEEHIVE_ADMIN_EMAIL=you@example.com
+BEEHIVE_ADMIN_PASSWORD=a-long-password-you-can-recover-with
 ```
 
 Questo è tutto ciò di cui ha bisogno un singolo apicoltore. Aggiungi un reverse proxy davanti per l'HTTPS e sei pronto a tenere i tuoi registri.

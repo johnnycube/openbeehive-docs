@@ -29,13 +29,13 @@ Quando aggiungi un trattamento a un'arnia, annota quanto più possibile di quant
 | --- | --- |
 | Nome del prodotto | Identifica esattamente cosa è stato applicato. |
 | Principio attivo | Utile quando i prodotti vengono rinominati o variano in base alla regione. |
-| Metodo | Come è stato applicato — gocciolamento, sublimazione, strisce, evaporazione. |
+| Metodo | Come è stato applicato: gocciolamento, sublimazione, strisce, evaporazione. |
 | Dose / quantità | La quantità applicata per arnia. |
 | Numero di lotto / partita | Spesso richiesto per legge; lega la dose a una confezione specifica. |
 | Data di applicazione | Quando hai trattato la colonia. |
 | Sospensione fino al | La data in cui il miele di quest'arnia è di nuovo sicuro da raccogliere. |
 | Motivo | Per cosa hai trattato (ad es. varroa). |
-| Note | Meteo, stato della covata, risultati osservati o qualsiasi altra cosa valga la pena ricordare. |
+| Nota | Meteo, stato della covata, risultati osservati o qualsiasi altra cosa valga la pena ricordare. |
 
 :::tip
 Registra il numero di lotto direttamente dalla confezione nel momento in cui tratti. È quasi impossibile da ricostruire in seguito, ed è esattamente il dettaglio che un ispettore o un revisore richiederà.
@@ -44,12 +44,12 @@ Registra il numero di lotto direttamente dalla confezione nel momento in cui tra
 ## Aggiungere un trattamento
 
 1. Apri l'arnia che hai trattato.
-2. Scegli **Aggiungi trattamento** (i trattamenti possono essere registrati anche da un'ispezione, se tratti durante una visita).
-3. Inserisci il prodotto, la dose, il metodo e la data, e il numero di lotto se ce l'hai.
+2. Tocca **Registra trattamento** sotto **Trattamenti**.
+3. Inserisci data, prodotto, principio attivo, metodo, dose, numero di lotto e motivo.
 4. Imposta la data di **sospensione fino al** se il prodotto specifica un tempo di sospensione.
 5. Salva.
 
-Poiché Openbeehive è offline-first, puoi farlo a bordo arnia senza segnale. Il registro viene scritto all'istante nel database locale e si sincronizza con il server in background non appena torni online. Nulla va perduto se registri i trattamenti stando in apiario.
+Funziona offline; vedi [Offline e sincronizzazione](/using-the-app/offline-and-sync).
 
 ## Tempi di sospensione e raccolta
 
@@ -70,14 +70,8 @@ Alcune abitudini mantengono affidabili i tuoi registri.
 - **Non modificare la cronologia per fare ordine.** Se qualcosa è cambiato, aggiungi un seguito anziché riscrivere il passato.
 - **Tratta ogni arnia individualmente.** Anche quando applichi lo stesso prodotto su tutto un apiario, registralo per arnia, così le dosi e le finestre di sospensione sono accurate per ciascuna colonia.
 
-Poiché le voci dei trattamenti si sincronizzano tra i tuoi dispositivi, il registro che costruisci sul campo è lo stesso che puoi rivedere più tardi a casa, o condividere con chiunque abbia accesso all'apiario.
+Poiché le voci dei trattamenti si sincronizzano tra i tuoi dispositivi, il registro che costruisci sul campo è lo stesso che rivedi a casa, e lo stesso che vedono gli altri membri del tuo tenant.
 
 ## Trattamenti e varroa
 
 L'acaro varroa è il motivo per cui la maggior parte degli apicoltori ricorre a un trattamento in primo luogo, e azzeccare i tempi nel corso della stagione è un argomento a sé. Per un quadro più completo sul monitoraggio dei livelli di acari, sulla scelta di un approccio e sulla pianificazione dei trattamenti nel corso dell'anno apistico, vedi [la guida alla varroa](/beekeeping/varroa).
-
-## Pagine correlate
-
-- Le [Ispezioni](/using-the-app/inspections) registrano ciò che vedi; i trattamenti registrano ciò che fai al riguardo.
-- Le [Smielature](/using-the-app/harvests) sono il punto in cui i tempi di sospensione contano di più.
-- [La guida alla varroa](/beekeeping/varroa) tratta il monitoraggio e i tempi.

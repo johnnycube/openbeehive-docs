@@ -77,7 +77,7 @@ La nutrizione aperta (lasciare sciroppo all'aperto perché qualsiasi colonia lo 
 
 Ogni nutrizione merita di essere registrata. Sapere quanto sciroppo o candito ha preso una colonia, e quando, ti aiuta a giudicare se le scorte sono adeguate, a individuare le colonie che restano costantemente a corto e a pianificare più accuratamente la nutrizione autunnale dell'anno prossimo.
 
-In Openbeehive, registra la nutrizione come parte della visita pertinente così che stia accanto a tutto il resto di ciò che hai visto quel giorno. Annota il tipo di alimento (sciroppo leggero, sciroppo pesante o candito) e la quantità somministrata. Poiché l'app funziona offline-first, puoi registrarlo all'arnia anche senza segnale, e si sincronizzerà in seguito.
+In Openbeehive, registra la nutrizione come parte della visita: inserisci la quantità nel campo **Nutrita (kg)** e indica il tipo di alimento (sciroppo leggero, sciroppo denso o candito) nella nota, così che stia accanto a tutto il resto di ciò che hai visto quel giorno.
 
 Vedi [Ispezioni](/using-the-app/inspections) per come registrare una visita e annotare le quantità di nutrizione.
 

@@ -151,14 +151,10 @@ Ogni conteggio di monitoraggio e ogni trattamento merita di essere registrato, s
 tendenze sia per soddisfare gli obblighi di tenuta dei registri che si applicano agli apicoltori in molti
 Paesi.
 
-In Openbeehive puoi registrare ogni applicazione come un **Trattamento** su un'arnia:
-il prodotto usato, il principio attivo, la dose e le date di inizio e
-fine. Nel tempo questo costruisce una storia chiara così da poter vedere cosa hai usato,
-quando, e come la colonia ha risposto.
-
-Vedi [Trattamenti](/using-the-app/treatments) per come aggiungere e gestire questi
-registri. Poiché l'app funziona offline-first, puoi registrare un trattamento all'
-apiario senza segnale e si sincronizzerà in seguito.
+In Openbeehive registri ogni applicazione come un **Trattamento** su un'arnia: la
+data, il prodotto, il principio attivo, il metodo, la dose, il numero di lotto, il
+motivo e la data di fine del tempo di attesa. Nel tempo questo costruisce una storia
+chiara di cosa hai usato e quando. Vedi [Trattamenti](/using-the-app/treatments).
 
 :::note
 Tenere registri accurati dei trattamenti è spesso un obbligo di legge, soprattutto

@@ -8,7 +8,7 @@ title: "Attrezzatura e tipi di arnia"
 L'apicoltura non richiede una grande quantità di attrezzatura, ma pochi buoni attrezzi rendono ogni visita più tranquilla, più sicura e più rapida. Questa pagina copre l'essenziale, poi offre una panoramica dei principali sistemi di arnia così che tu possa scegliere quello più adatto a te e registrarlo correttamente in Openbeehive.
 
 :::tip
-Quando crei un'arnia in Openbeehive, ne scegli il tipo (Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar o Altro). Scegliere quello giusto mantiene coerenti il conteggio dei telaini e le note sull'attrezzatura in tutto il tuo apiario. Vedi [Arnie](/using-the-app/hives).
+Quando crei un'arnia in Openbeehive, ne scegli il tipo (Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar o Altro). Scegliere quello giusto mantiene coerenti il conteggio dei telaini e le note sull'attrezzatura in tutto il tuo apiario. Vedi [Arnie](/using-the-app/hives).
 :::
 
 ## L'essenziale
@@ -75,7 +75,7 @@ I tipi di arnia differiscono principalmente nelle dimensioni di cassetta e telai
 
 I sistemi a telaino mobile (Langstroth, Dadant, Zander, Deutsch Normal) funzionano tutti nello stesso modo generale — pile verticali di cassette con telaini rettangolari completi — e differiscono soprattutto nelle dimensioni. Le arnie **Top-bar** e **Warré** adottano un approccio a minor intervento: le api costruiscono il favo da semplici barre, il che significa una gestione più delicata ma nessuno smielatore (il favo viene di solito schiacciato e filtrato).
 
-Se la tua arnia non corrisponde a nessuna di queste, scegli **Altro** in Openbeehive e annota i dettagli nella descrizione dell'arnia.
+Se la tua arnia non corrisponde a nessuna di queste, scegli **Altro** in Openbeehive e annota i dettagli in una nota di visita.
 
 :::note
 Non esiste un'unica arnia "migliore". La scelta più pratica è di solito quella usata dalla tua **associazione locale e dagli apicoltori vicini**, così puoi prendere in prestito attrezzatura, scambiare telaini e ottenere aiuto pratico. Per un confronto più approfondito e le dimensioni dei telaini, vedi [Tipi di arnia](/knowledge-base/hive-types).

@@ -16,8 +16,9 @@ Quando è abilitata, Openbeehive crea:
 
 - un account demo (`demo@app.openbeehive.org` / `demo` per impostazione predefinita),
 - un **tenant** demo con **15 arnie distribuite in 4 apiari**,
-- un'intera stagione di dati: regine, ~75 ispezioni (con temperatura, umidità,
-  varroa, peso…), raccolti di miele e trattamenti contro la varroa.
+- una stagione di dati: regine, 105 ispezioni (7 per arnia, distribuite sugli
+  ultimi dieci mesi, con temperatura, umidità, varroa, peso e altro), un raccolto
+  di miele e due trattamenti contro la varroa per arnia.
 
 I dati vengono **rigenerati ogni ora**, così la vetrina appare sempre uguale: un
 visitatore può modificare liberamente e tutto torna all'insieme canonico al

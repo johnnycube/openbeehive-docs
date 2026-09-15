@@ -7,9 +7,9 @@ title: "Riferimento sui tipi di alveare"
 
 Quando crei un alveare in Openbeehive, scegli un **tipo**. Questo singolo valore registra il sistema di arnia che stai utilizzando, il che ti aiuta a mantenere telaini, melari e parti di ricambio compatibili in tutto il tuo apiario.
 
-Il tipo è puramente un'etichetta per i tuoi registri. Non cambia il funzionamento di ispezioni, trattamenti o raccolte, quindi non preoccuparti di "sbagliarlo" — puoi modificarlo in qualsiasi momento dalle impostazioni dell'alveare. Vedi [Alveari](/using-the-app/hives) per come aggiungere e modificare un alveare.
+Il tipo è puramente un'etichetta per i tuoi registri. Non cambia il funzionamento di ispezioni, trattamenti o raccolte, quindi non preoccuparti di "sbagliarlo": puoi modificarlo in qualsiasi momento modificando l'alveare. Vedi [Alveari](/using-the-app/hives) per come aggiungere e modificare un alveare.
 
-Openbeehive offre sette opzioni: **Zander, Dadant, Deutsch Normal, Langstroth, Warre, Top-bar** e **Altro**.
+Openbeehive offre sette opzioni: **Zander, Dadant, Deutsch Normal, Langstroth, Warré, Top-bar** e **Altro**.
 
 ## Confronto rapido
 
@@ -33,7 +33,7 @@ Alcuni consigli pratici per scegliere un valore:
 
 - **Abbina i tuoi telaini, non le tue aspirazioni.** Scegli il sistema i cui telaini si adattano fisicamente alle tue cassette oggi. La compatibilità di telaini e melari è il motivo principale per cui questo campo conta.
 - **Mantieni la coerenza all'interno di un apiario.** Usare un solo sistema per apiario rende molto più facile scambiare telaini tra colonie, condividere melari di scorta e gestire le scorte.
-- **Attrezzatura ereditata o mista?** Se un alveare non rientra in uno standard, scegli **Altro** e annota i dettagli nella descrizione dell'alveare.
+- **Attrezzatura ereditata o mista?** Se un alveare non rientra in uno standard, scegli **Altro** e annota i dettagli in una nota di visita.
 
 ### Alveari a telaini verticali
 
@@ -57,10 +57,10 @@ Gli alveari a favo naturale possono rendere alcune operazioni più difficili. Il
 ## Domande frequenti
 
 **Posso cambiare il tipo di un alveare in seguito?**
-Sì. Apri l'alveare, modifica le sue impostazioni e scegli un nuovo tipo. Poiché Openbeehive è offline-first, la modifica viene salvata localmente all'istante e sincronizzata in background — vedi [Offline e sincronizzazione](/using-the-app/offline-and-sync).
+Sì. Apri l'alveare, tocca **Modifica arnia** e scegli un nuovo tipo.
 
 **Il mio sistema non è elencato. E ora?**
-Scegli **Altro** e registra le specifiche (dimensione del telaino, numero di cassette, fornitore) nelle note dell'alveare, così i tuoi registri restano chiari.
+Scegli **Altro** e registra le specifiche (dimensione del telaino, numero di cassette, fornitore) in una nota di visita, così i tuoi registri restano chiari.
 
 **Il tipo influisce su trattamenti o raccolte?**
 No. È un'etichetta descrittiva. Tutte le ispezioni, i trattamenti, le attività e le raccolte funzionano allo stesso modo indipendentemente dal tipo.

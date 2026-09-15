@@ -149,11 +149,3 @@ Quando marchi una regina, registra il suo colore di marcatura nell'app nella
 [pagina Regine](/using-the-app/queens). Openbeehive imposta automaticamente il colore atteso dall'
 anno, così puoi confermare a colpo d'occhio se una regina ha l'età che pensi.
 :::
-
-## Dove andare dopo
-
-- Impara la stagione più ampia in [L'anno apistico](/beekeeping/beekeeping-year).
-- Comprendi l'impulso a creare nuove regine in
-  [Sciamatura](/beekeeping/swarming).
-- Vedi come sono organizzate le colonie in
-  [La colonia](/beekeeping/the-colony).

@@ -5,174 +5,81 @@ title: "Offline e sincronizzazione"
 
 # Offline e sincronizzazione
 
-Openbeehive è costruita per l'apiario, non per l'ufficio. Sul campo raramente hai
-un segnale affidabile, quindi l'app è **offline-first**: tutto ciò che fai viene
-salvato subito sul tuo dispositivo e sincronizzato con il server più tardi, in
-silenzio, in background.
+Openbeehive è costruita per l'apiario, non per l'ufficio. Sul campo raramente hai un segnale affidabile, quindi l'app è **offline-first**: tutto ciò che fai viene salvato subito sul tuo dispositivo e sincronizzato con il server più tardi, in background.
 
-In pratica questo significa che l'app non ti fa mai aspettare la rete. Apri
-un'arnia, registra un'ispezione, aggiungi un'attività, scatta una nota sulla
-regina: tutto è istantaneo, con o senza segnale.
+L'app non ti fa mai aspettare la rete. Apri un'arnia, registra una visita, aggiungi un'attività, annota qualcosa sulla regina: tutto è istantaneo, con o senza segnale.
 
 ## Tutto viene salvato localmente
 
-Quando installi Openbeehive, essa mantiene una copia completa dei tuoi registri
-in un piccolo database sul tuo dispositivo. Ogni lettura e ogni scrittura avviene
-prima su quella copia locale.
+Openbeehive mantiene una copia completa dei tuoi registri in un piccolo database sul tuo dispositivo. Ogni lettura e ogni scrittura avviene prima su quella copia locale.
 
-Il risultato:
-
-- **È veloce.** Aprire un'arnia o scorrere le ispezioni non si blocca mai su una
-  barra di caricamento.
-- **Funziona senza segnale.** Un bosco, una valle, una cantina piena di melari:
-  non fa alcuna differenza.
-- **I tuoi dati sono tuoi.** I registri vivono sul tuo dispositivo; il server è
-  una copia per la sincronizzazione e la condivisione, non l'unica sede dei tuoi
-  dati.
+- **È veloce.** Aprire un'arnia o scorrere le visite non aspetta mai una barra di caricamento.
+- **Funziona senza segnale.** Un bosco, una valle, una cantina piena di melari.
+- **I tuoi dati sono tuoi.** I registri vivono sul tuo dispositivo; il server è la copia per la sincronizzazione e la condivisione.
 
 :::tip
-Poiché i registri sono memorizzati sul dispositivo, vale la pena installare
-Openbeehive come app anziché usarla in una scheda del browser. Vedi
-[Installare Openbeehive](/using-the-app/install) per come aggiungerla al tuo
-telefono, tablet o desktop.
+Poiché i registri sono memorizzati sul dispositivo, installa Openbeehive come app anziché usarla in una scheda del browser. Vedi [Installare Openbeehive](/using-the-app/install).
 :::
 
-## Il banner offline
+## L'indicatore offline
 
-Quando l'app non riesce a raggiungere il server, compare un piccolo banner per
-farti sapere che stai lavorando offline. È puramente informativo: puoi continuare
-esattamente come prima. Continua a registrare ispezioni, a spuntare attività, a
-registrare un raccolto; nulla è bloccato.
+Quando il dispositivo non ha connessione, il blocco account nella barra laterale passa da **Online** a **Offline** e una barra in cima alla pagina dice "Offline: le modifiche vengono salvate e sincronizzate più tardi". È puramente informativo; continua esattamente come prima.
 
-Nel momento in cui il tuo dispositivo torna online, il banner sparisce e tutte le
-modifiche fatte mentre eri offline vengono inviate automaticamente. Non c'è alcun
-pulsante "sincronizza ora" da ricordare e nessun rischio di dimenticarsi di
-salvare.
+Quando il dispositivo torna online la barra scompare e tutte le modifiche fatte offline vengono inviate automaticamente. Non c'è alcun pulsante "sincronizza ora".
 
 :::note
-Un banner offline persistente di solito significa solo copertura debole là in
-apiario. Se resta visibile anche con una buona connessione a casa, dai
-un'occhiata a [Risoluzione dei problemi](/knowledge-base/troubleshooting).
+Un indicatore offline persistente di solito significa copertura debole in apiario. Se resta attivo anche con una buona connessione a casa, vedi [Risoluzione dei problemi](/knowledge-base/troubleshooting).
 :::
 
 ## La prima sincronizzazione su un nuovo dispositivo
 
-Accedere su un nuovo dispositivo, o riaprire l'app dopo che la sua archiviazione è stata
-cancellata, inizia con un database locale vuoto che si riempie in background. L'app rende
-visibile questo stato invece di fingere che non ci sia nulla da mostrare:
+Accedere su un nuovo dispositivo, o riaprire l'app dopo che la sua archiviazione è stata cancellata, inizia con un database locale vuoto che si riempie in background:
 
 - Le liste mostrano **segnaposto luccicanti** mentre leggono dal database locale.
-- Finché il primo download è ancora in corso, la dashboard e le liste di apiari, arnie e
-  attività mostrano **"Sincronizzazione dei dati…"** anziché uno stato vuoto, così non ti
-  viene mai chiesto di "creare il tuo primo apiario" sopra a registrazioni che stanno per
-  arrivare.
-- I set di dati grandi compaiono **progressivamente**: ogni lotto ricevuto viene mostrato
-  subito, quindi una lunga prima sincronizzazione riempie lo schermo man mano invece che
-  soltanto alla fine.
+- Finché il primo download è ancora in corso, la Panoramica e le liste di apiari, arnie e attività mostrano **"Sincronizzazione dei dati…"** anziché uno stato vuoto.
+- I set di dati grandi compaiono **progressivamente**: ogni lotto ricevuto dall'app viene mostrato subito.
 
-Solo quando l'app sa che i dati sono completi mostra un vero stato vuoto. Se il dispositivo
-è offline o il server non è raggiungibile, l'indicazione lascia il posto a ciò che è
-archiviato localmente, così nulla resta nascosto dietro un indicatore di caricamento.
+Solo quando l'app sa che i dati sono completi mostra un vero stato vuoto. Se il dispositivo è offline o il server non è raggiungibile, l'indicazione lascia il posto a ciò che è archiviato localmente.
 
 ## Sincronizzazione tra i tuoi dispositivi
 
-Puoi usare Openbeehive su diversi dispositivi, ad esempio un telefono sul campo e
-un portatile a casa, e resteranno allineati automaticamente.
-
-Ogni dispositivo mantiene la propria copia locale e scambia le modifiche con il
-server in background. Registra un'ispezione sul telefono in apiario e, quando ti
-siedi al portatile, è già lì. Le modifiche fluiscono in entrambe le direzioni.
-
-Non devi scegliere un dispositivo "principale" né copiare nulla a mano. Finché
-ogni dispositivo accede allo stesso account, vedono tutti gli stessi registri.
+Usa Openbeehive su più dispositivi, un telefono sul campo e un portatile a casa, e restano allineati. Ogni dispositivo mantiene la propria copia locale e scambia le modifiche con il server in background. Registra una visita sul telefono in apiario e, quando ti siedi al portatile, è già lì. Finché ogni dispositivo accede allo stesso account, vedono tutti gli stessi registri.
 
 ## Cosa succede quando due dispositivi cambiano la stessa cosa
 
-Questa è la domanda che ogni apicoltore si pone, e la risposta rassicurante è:
-non devi pensarci. Openbeehive risolve le modifiche sovrapposte
-**automaticamente**, senza richieste del tipo "quale versione vuoi mantenere?" e
-senza perdita di lavoro.
+Openbeehive risolve le modifiche sovrapposte **automaticamente**, senza richieste del tipo "quale versione vuoi mantenere?".
 
-Alcuni esempi di come si comporta:
+- **Tu modifichi la nota di un apiario sul telefono, il tuo co-apicoltore modifica la stessa nota sul suo.** La modifica più recente a quel campo prevale.
+- **Aggiungete entrambi foto alla stessa visita mentre siete offline.** Entrambi i gruppi di foto vengono conservati.
+- **Ciascuno di voi registra una visita separata.** Visite, smielature e trattamenti vengono solo aggiunti, quindi entrambi vengono mantenuti affiancati.
 
-- **Tu modifichi le note di un'arnia sul telefono, il tuo co-apicoltore modifica
-  le stesse note sul suo.** La modifica più recente a quel campo prevale; l'altra
-  viene superata in modo pulito.
-- **Aggiungete entrambi delle attività, o etichettate entrambi l'arnia, mentre
-  siete offline.** Le aggiunte agli elenchi vengono conservate, così l'attività o
-  l'etichetta di nessuno viene persa.
-- **Ciascuno di voi registra un'ispezione separata.** Ispezioni, eventi e registri
-  simili vengono solo aggiunti, mai sovrascritti, così entrambi vengono mantenuti
-  affiancati.
-
-Il risultato è che ogni dispositivo converge sullo stesso stato sensato una volta
-che si sono tutti sincronizzati, e non ottieni mai un registro corrotto o unito a
-metà.
+Ogni dispositivo converge sullo stesso stato una volta che tutti si sono sincronizzati.
 
 :::tip
-In breve: **aggiungi liberamente, modifica con sicurezza, non preoccuparti mai di
-perdere dati.** Se sei curioso di sapere come funziona davvero sotto il cofano,
-le pagine sul [protocollo di sincronizzazione](/developers/sync-protocol) e
-sull'[architettura](/developers/architecture) lo spiegano in dettaglio.
+In breve: aggiungi liberamente, modifica con sicurezza. Come funziona sotto il cofano è spiegato nelle pagine sul [protocollo di sincronizzazione](/developers/sync-protocol) e sull'[architettura](/developers/architecture).
 :::
 
-## Condividere un apiario
+## Condivisione
 
-Openbeehive condivide i registri a livello di **apiario**. Quando condividi un
-apiario, tutto ciò che contiene, le sue arnie, regine, ispezioni, attività,
-eventi, raccolti e trattamenti, viene condiviso insieme ad esso. Questo mantiene
-le cose semplici: concedi l'accesso a una postazione, non a decine di singole
-arnie.
-
-A ogni persona con cui condividi viene assegnato un ruolo:
+I registri si condividono tramite i **tenant**. Ogni membro di un tenant vede e modifica tutti i suoi apiari, arnie e registri; non esiste una condivisione per apiario o per arnia.
 
 | Ruolo | Cosa può fare |
 | --- | --- |
-| **Visualizzatore** | Vedere l'apiario e tutti i suoi registri. Non può apportare modifiche. |
-| **Apicoltore** | Visualizzare e modificare: registrare ispezioni, completare attività, registrare raccolti e trattamenti, aggiornare arnie e regine. |
-| **Proprietario** | Tutto ciò che può fare un apicoltore, più la gestione dell'apiario stesso e di chi vi ha accesso. |
+| **Admin** (proprietario del tenant) | Tutto ciò che può fare un membro, più invitare e revocare, ed eliminare il tenant. |
+| **Membro** | Aggiungere e modificare apiari, arnie, visite, attività, smielature e trattamenti nel tenant. |
 
-Questo funziona bene per un apiario didattico di un'associazione, per un mentore
-che tiene d'occhio le arnie di un nuovo apicoltore, o semplicemente per due
-persone che condividono il lavoro nella stessa postazione. I registri condivisi
-si sincronizzano e risolvono i conflitti esattamente come i tuoi, così le
-modifiche di un partner compaiono automaticamente sui tuoi dispositivi.
-
-:::note
-La condivisione avviene per apiario, così puoi condividere una postazione con un
-mentore mantenendo le altre completamente private.
-:::
+Per condividere una postazione con un mentore mantenendo private le altre, metti quella postazione in un tenant a sé e invita lì il mentore. I registri condivisi si sincronizzano e risolvono i conflitti esattamente come i tuoi. Vedi [Account e tenant](/using-the-app/accounts-tenants).
 
 ## Se qualcosa non può essere salvato
 
-Il salvataggio avviene sul tuo dispositivo, quindi in pratica non fallisce mai. Se dovesse succedere — ad esempio perché l'archiviazione del browser è piena o danneggiata — l'app ora lo dice chiaramente: il modulo resta aperto con tutto ciò che hai digitato e un messaggio di errore spiega cosa è andato storto. Nulla scompare in silenzio.
+Il salvataggio avviene sul tuo dispositivo, quindi in pratica non fallisce mai. Se dovesse succedere (ad esempio perché l'archiviazione del browser è piena o danneggiata) il modulo resta aperto con tutto ciò che hai digitato e un messaggio di errore spiega cosa è andato storto.
 
-Con l'**account demo** pubblico il server non accetta caricamenti (la demo si azzera regolarmente). Puoi comunque provare tutto: le tue modifiche vengono salvate sul dispositivo e semplicemente restano lì invece di sincronizzarsi.
+Con l'**account demo** pubblico il server rifiuta le modifiche (la demo si azzera ogni ora). Le tue modifiche vengono salvate sul dispositivo e semplicemente restano lì invece di sincronizzarsi.
 
-C'è una situazione in cui il salvataggio funziona ma non dura: se il browser non può dare
-all'app la sua archiviazione privata, l'app ripiega su un database in memoria e mostra
-l'avviso **"Archiviazione non disponibile: le modifiche non verranno conservate su questo
-dispositivo."** Tutto continua a funzionare per la sessione, e le modifiche si sincronizzano
-comunque con il server se hai effettuato l'accesso, ma la copia locale sparisce alla chiusura
-della scheda. Succede nelle finestre di navigazione privata e quando una seconda scheda
-dell'app sta ancora trattenendo l'archiviazione; vedi
-[Risoluzione dei problemi](/knowledge-base/troubleshooting#storage-is-unavailable) per cosa
-fare.
+C'è una situazione in cui il salvataggio funziona ma non dura: se il browser non può dare all'app la sua archiviazione privata, l'app ripiega su un database in memoria e mostra l'avviso **"Archiviazione non disponibile: le modifiche non verranno conservate su questo dispositivo."** Tutto continua a funzionare per la sessione, e le modifiche si sincronizzano comunque con il server se hai effettuato l'accesso, ma la copia locale sparisce alla chiusura della scheda. Succede nelle finestre di navigazione privata e quando una seconda scheda dell'app sta ancora trattenendo l'archiviazione; vedi [Risoluzione dei problemi](/knowledge-base/troubleshooting#storage-is-unavailable).
 
 ## Perderò mai dei dati?
 
-No. I tuoi registri vengono scritti prima sul tuo dispositivo e non vengono
-rimossi semplicemente perché sei offline o perché l'app si chiude. Attendono al
-sicuro sul dispositivo finché non possono essere sincronizzati, poi si
-sincronizzano da soli.
+I tuoi registri vengono scritti prima sul tuo dispositivo e non vengono rimossi perché sei offline o perché l'app si chiude. Attendono sul dispositivo finché non possono essere sincronizzati.
 
-Per una tranquillità in più, in particolare se fai self-hosting, è comunque buona
-pratica mantenere backup del server. Vedi [Backup](/self-hosting/backups) per come
-farlo.
-
-## Pagine correlate
-
-- [Installare Openbeehive](/using-the-app/install)
-- [Etichette QR](/using-the-app/qr-labels)
-- [Architettura](/developers/architecture)
-- [Protocollo di sincronizzazione](/developers/sync-protocol)
+Se fai self-hosting, mantieni anche backup del server. Vedi [Backup](/self-hosting/backups).

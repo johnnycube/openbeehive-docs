@@ -20,7 +20,7 @@ Avrai bisogno di alcuni strumenti di build installati sulla macchina che compila
 | Strumento | Versione | Scopo |
 | --- | --- | --- |
 | Go | 1.25+ | Compila il server |
-| Node.js | 20+ | Compila la web app SvelteKit |
+| Node.js | 24+ | Compila la web app SvelteKit |
 | buf | latest | Genera il codice Connect-RPC dalle definizioni protobuf |
 
 Una volta compilato, il binario in sé non ha dipendenze a runtime - puoi copiarlo su un server che non ha nessuno degli strumenti sopra installato.
@@ -29,7 +29,7 @@ Una volta compilato, il binario in sé non ha dipendenze a runtime - puoi copiar
 
 ```bash
 git clone https://github.com/johnnycube/openbeehive-app.git
-cd openbeehive
+cd openbeehive-app
 ```
 
 ## Configura
@@ -63,10 +63,10 @@ openssl rand -base64 32
 Incolla il risultato in `BEEHIVE_SESSION_SECRET=`.
 
 :::note Nessun login per impostazione predefinita
-Lascia `BEEHIVE_OIDC_PROVIDERS` vuoto **e** `BEEHIVE_WEBAUTHN_ENABLED=false` per eseguire come utente singolo senza passaggio di accesso. Quando sei pronto ad aggiungere account o passkey, vedi [Autenticazione](/self-hosting/authentication).
+Il profilo selfhost non abilita alcun metodo di login: `BEEHIVE_PASSWORD_AUTH` è disattivato, `BEEHIVE_OIDC_PROVIDERS` è vuoto e `BEEHIVE_WEBAUTHN_ENABLED=false`. Lasciali così per eseguire come utente singolo senza passaggio di accesso. Quando vuoi account, passkey o un provider, vedi [Autenticazione](/self-hosting/authentication).
 :::
 
-Se intendi raggiungere l'istanza da un altro dispositivo sulla tua rete, imposta `BEEHIVE_PUBLIC_BASE_URL` su un indirizzo che quel dispositivo possa effettivamente risolvere (ad esempio `http://192.168.1.20:8080` o il tuo dominio dietro un [reverse proxy](/self-hosting/reverse-proxy)). Questo valore è anche incorporato nei deep link usati dalle [etichette QR](/using-the-app/qr-labels).
+Se intendi raggiungere l'istanza da un altro dispositivo sulla tua rete, imposta `BEEHIVE_PUBLIC_BASE_URL` su un indirizzo che quel dispositivo possa effettivamente risolvere (ad esempio `http://192.168.1.20:8080` o il tuo dominio dietro un [reverse proxy](/self-hosting/reverse-proxy)). Le etichette QR codificano l'indirizzo con cui apri l'app, quindi usa sempre lo stesso indirizzo.
 
 ## Compila
 
